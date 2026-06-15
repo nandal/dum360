@@ -221,6 +221,7 @@
     <nav class="nav-links">
       <a href="#how">How it works</a>
       <a href="#mesh">The mesh</a>
+      <a href="#inference">AI inference</a>
       <a href="#modes">Modes</a>
       <a href="#providers">For providers</a>
       <a href="#roadmap">Roadmap</a>
@@ -296,10 +297,10 @@
       <p>Enroll once, set your hours, and let DUM360 safely put your spare cycles to work.</p>
     </div>
     <div class="steps">
-      <div class="step reveal"><div class="n">1</div><h3>Install & verify</h3><p>A lightweight, sandboxed node daemon (K3s/KubeEdge) or mobile WASM client. Hardware integrity checked via Secure Enclave.</p></div>
+      <div class="step reveal"><div class="n">1</div><h3>Install & verify</h3><p>Citizens, campuses, enterprises and PSUs install a lightweight sandboxed node daemon (K3s/KubeEdge) or mobile WASM client. Hardware integrity verified via Secure Enclave.</p></div>
       <div class="step reveal"><div class="n">2</div><h3>Pre-inform availability</h3><p>Book recurring windows — e.g. 11 PM–7 AM. The orchestrator maps workloads 6 hours in advance.</p></div>
       <div class="step reveal"><div class="n">3</div><h3>Compute safely</h3><p>Encrypted, confidential containers run jobs you can't read. Tasks mirror across ≥3 machines for resilience.</p></div>
-      <div class="step reveal"><div class="n">4</div><h3>Get paid in UPI</h3><p>Usage is metered to the rupee and paid straight to your VPA. Graceful drain returns your device 30 min before exit.</p></div>
+      <div class="step reveal"><div class="n">4</div><h3>Get paid</h3><p>Usage is metered to the rupee — paid straight to your UPI VPA, or as credits/grants for institutions. Graceful drain returns your device 30 min before exit.</p></div>
     </div>
   </div>
 </section>
@@ -332,6 +333,23 @@
   </div>
 </section>
 
+<!-- INFERENCE -->
+<section id="inference">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">AI at national scale</span>
+      <h2>How big models actually run on the mesh</h2>
+      <p>DUM360 matches model size to interconnect quality — so inference scales without pretending home broadband is a supercomputer fabric.</p>
+    </div>
+    <div class="grid3">
+      <div class="card reveal"><div class="ico">⚡</div><h3>Request-parallel (default)</h3><p>Models that fit on one node (7B–34B quantized) are replicated; whole requests route to whole nodes — scaling linearly to millions of concurrent inferences nationwide.</p></div>
+      <div class="card reveal"><div class="ico">🧩</div><h3>In-cluster sharding</h3><p>Genuinely large models (70B–400B+) are split only inside well-connected clusters — a campus lab, a GPU rig, a PSU data centre — where bandwidth and latency can sustain it.</p></div>
+      <div class="card reveal"><div class="ico">🌐</div><h3>NKN cross-campus</h3><p>For the biggest models, pipeline parallelism spans institutions over the National Knowledge Network — a loosely-coupled national academic grid, not consumer broadband.</p></div>
+    </div>
+    <p class="mesh-hint">Plus speculative decoding — small models draft tokens, big cluster-hosted models verify — to stretch scarce big-model capacity. Built for massively-parallel, latency-tolerant workloads.</p>
+  </div>
+</section>
+
 <!-- FEATURES -->
 <section class="alt">
   <div class="wrap">
@@ -343,10 +361,13 @@
     <div class="grid3">
       <div class="card reveal"><div class="ico">🔒</div><h3>Confidential computing</h3><p>Workloads run inside encrypted sandboxes. Hosts can never read the RAM or data packets being processed on their machine.</p></div>
       <div class="card reveal"><div class="ico">🇮🇳</div><h3>Data stays in India</h3><p>Control planes, metadata and relay traffic run exclusively on domestic clouds. Nothing crosses the border.</p></div>
-      <div class="card reveal"><div class="ico">☀️</div><h3>Solar arbitrage mesh</h3><p>Always-on GPU rigs in Gujarat & Rajasthan get priority 10 AM–4 PM, swinging to consumer devices at night.</p></div>
+      <div class="card reveal"><div class="ico">🎓</div><h3>National academic grid</h3><p>IIT/NIT/IIIT and PSU labs link over the National Knowledge Network (NKN), enabling true cross-campus model parallelism.</p></div>
+      <div class="card reveal"><div class="ico">🧠</div><h3>Tiered AI inference</h3><p>Small models run whole-node nationwide; large models shard inside LAN/NKN clusters — model size matched to interconnect.</p></div>
+      <div class="card reveal"><div class="ico">🌊</div><h3>Green-energy compute</h3><p>Daytime solar in GJ/RJ, plus emerging seawater-cooled tidal &amp; offshore rigs for round-the-clock clean baseload.</p></div>
       <div class="card reveal"><div class="ico">🛡️</div><h3>≥3× redundancy</h3><p>A zero-trust uptime model mirrors each chunk across independent machines, so a closed laptop never fails a job.</p></div>
       <div class="card reveal"><div class="ico">⚡</div><h3>Graceful eviction</h3><p>Cordon-and-drain 30 minutes before your exit — checkpoints upload, tasks finish, your device is yours again.</p></div>
-      <div class="card reveal"><div class="ico">💸</div><h3>Instant UPI payouts</h3><p>Precise metering of CPU-hours, VRAM and bytes maps to rupees, paid directly to your bank via UPI.</p></div>
+      <div class="card reveal"><div class="ico">💸</div><h3>Instant UPI payouts</h3><p>Precise metering of CPU-hours, VRAM and bytes maps to rupees, paid directly to your bank via UPI — or credits for institutions.</p></div>
+      <div class="card reveal"><div class="ico">🚨</div><h3>Rashtra Seva mode</h3><p>A cryptographically-authenticated government trigger remobilizes the entire mesh for national emergencies in seconds.</p></div>
     </div>
   </div>
 </section>
@@ -455,7 +476,8 @@
         <div class="foot-col">
           <h4>Product</h4>
           <a href="#how">How it works</a>
-          <a href="#modes">Modes</a>
+          <a href="#mesh">The mesh</a>
+          <a href="#inference">AI inference</a>
           <a href="#roadmap">Roadmap</a>
         </div>
         <div class="foot-col">
