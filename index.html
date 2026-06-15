@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DUM360 — India's Citizen-Powered Sovereign Supercomputer</title>
+<meta name="description" content="DUM360 (Distributed Unified Mesh 360) aggregates idle compute from consumer devices and solar-powered rigs into India's first decentralized, sovereign edge supercomputer. Earn via UPI. 100% Indian-hosted." />
+<meta name="theme-color" content="#0b1020" />
+<!-- Open Graph -->
+<meta property="og:title" content="DUM360 — India's Citizen-Powered Sovereign Supercomputer" />
+<meta property="og:description" content="Idle devices and solar compute, pooled into a sovereign national supercomputer. Earn via UPI. 100% Indian-hosted." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://dum360.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f6f8fc;
+    --ink: #0b1020;
+    --ink-soft: #475069;
+    --muted: #8089a3;
+    --line: #e7ebf3;
+    --brand: #2f6bff;
+    --brand-2: #00c2a8;
+    --accent: #ff7a1a;
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(11,16,32,.04), 0 12px 32px rgba(11,16,32,.06);
+    --shadow-lg: 0 24px 60px rgba(11,16,32,.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; letter-spacing: .04em;
+    color: var(--brand); text-transform: uppercase;
+    background: rgba(47,107,255,.08); padding: 6px 12px; border-radius: 999px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-weight: 600; font-size: 15px; padding: 12px 22px; border-radius: 12px;
+    border: 1px solid transparent; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, background .2s;
+  }
+  .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 8px 20px rgba(47,107,255,.28); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(47,107,255,.36); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+
+  /* NAV */
+  header.nav {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(12px);
+    background: rgba(255,255,255,.8);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -.02em; }
+  .logo .mark {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 900;
+  }
+  .nav-links { display: flex; align-items: center; gap: 30px; }
+  .nav-links a { font-size: 15px; font-weight: 500; color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta { display: flex; align-items: center; gap: 12px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .nav-links { display: none; }
+    .nav-cta .btn-ghost { display: none; }
+  }
+
+  /* HERO */
+  .hero { position: relative; overflow: hidden; padding: 96px 0 80px; text-align: center; background:
+    radial-gradient(900px 420px at 50% -120px, rgba(47,107,255,.10), transparent 70%),
+    radial-gradient(700px 420px at 90% 0%, rgba(0,194,168,.08), transparent 65%); }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 68px); font-weight: 900; letter-spacing: -.03em;
+    line-height: 1.05; margin: 22px auto 20px; max-width: 920px;
+  }
+  .hero h1 .grad { background: linear-gradient(120deg, var(--brand), var(--brand-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lede { font-size: clamp(17px, 2.2vw, 21px); color: var(--ink-soft); max-width: 680px; margin: 0 auto 34px; }
+  .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .hero-note { margin-top: 18px; font-size: 13px; color: var(--muted); }
+
+  /* STATS */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 64px; }
+  .stat { text-align: center; }
+  .stat .num { font-size: clamp(28px, 4vw, 40px); font-weight: 900; letter-spacing: -.02em;
+    background: linear-gradient(120deg, var(--brand), var(--brand-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stat .lab { font-size: 14px; color: var(--muted); font-weight: 500; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); row-gap: 32px; } }
+
+  /* SECTION */
+  section { padding: 88px 0; }
+  .section-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+  .section-head h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -.02em; margin: 16px 0 14px; }
+  .section-head p { font-size: 17px; color: var(--ink-soft); }
+  .alt { background: var(--bg-soft); }
+
+  /* DUAL MODE */
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .mode-card { border-radius: 20px; padding: 36px; border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); }
+  .mode-card.peace { background: linear-gradient(180deg, #fff, #f7fbff); }
+  .mode-card.seva { background: linear-gradient(180deg, #fff, #fff7f1); border-color: #ffe0c7; }
+  .mode-tag { font-size: 13px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
+  .peace .mode-tag { color: var(--brand); }
+  .seva .mode-tag { color: var(--accent); }
+  .mode-card h3 { font-size: 24px; font-weight: 800; margin: 10px 0 12px; letter-spacing: -.01em; }
+  .mode-card p { color: var(--ink-soft); font-size: 15.5px; }
+  .mode-card ul { list-style: none; margin-top: 18px; display: grid; gap: 10px; }
+  .mode-card li { display: flex; gap: 10px; font-size: 15px; color: var(--ink-soft); }
+  .mode-card li b { color: var(--ink); font-weight: 600; }
+  .check { color: var(--brand-2); flex: none; font-weight: 800; }
+  .seva .check { color: var(--accent); }
+  @media (max-width: 820px) { .modes { grid-template-columns: 1fr; } }
+
+  /* FEATURE GRID */
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); transition: transform .18s ease, box-shadow .2s ease; }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .ico { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; margin-bottom: 16px;
+    background: linear-gradient(135deg, rgba(47,107,255,.12), rgba(0,194,168,.12)); }
+  .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .card p { color: var(--ink-soft); font-size: 15px; }
+  @media (max-width: 820px) { .grid3 { grid-template-columns: 1fr; } }
+
+  /* HOW IT WORKS */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: step; }
+  .step { position: relative; padding: 28px 22px; border-radius: var(--radius); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .step .n { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, var(--brand), var(--brand-2)); margin-bottom: 14px; }
+  .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .step p { font-size: 14.5px; color: var(--ink-soft); }
+  @media (max-width: 820px) { .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+  /* PERSONAS */
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media (max-width: 820px) { .grid4 { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .grid4 { grid-template-columns: 1fr; } }
+
+  /* ROADMAP */
+  .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .phase { border-radius: var(--radius); border: 1px solid var(--line); background: #fff; padding: 30px; box-shadow: var(--shadow); }
+  .phase .ph { font-size: 13px; font-weight: 700; color: var(--brand); letter-spacing: .03em; text-transform: uppercase; }
+  .phase h3 { font-size: 20px; font-weight: 800; margin: 8px 0 6px; }
+  .phase .when { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+  .phase ul { list-style: none; display: grid; gap: 9px; }
+  .phase li { font-size: 14.5px; color: var(--ink-soft); display: flex; gap: 9px; }
+  .phase .target { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; }
+  .phase .target b { color: var(--ink); }
+  @media (max-width: 820px) { .timeline { grid-template-columns: 1fr; } }
+
+  /* SOVEREIGNTY BANNER */
+  .sov { border-radius: 24px; padding: 52px; color: #fff; text-align: center;
+    background: radial-gradient(700px 300px at 50% -40px, rgba(255,255,255,.14), transparent), linear-gradient(135deg, #0b1020, #16224a); box-shadow: var(--shadow-lg); }
+  .sov h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -.02em; margin-bottom: 14px; }
+  .sov p { color: #c3ccea; max-width: 620px; margin: 0 auto 26px; font-size: 16.5px; }
+  .sov .chips { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .sov .chip { font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18); }
+
+  /* CTA */
+  .cta { text-align: center; }
+  .cta h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 900; letter-spacing: -.02em; margin-bottom: 16px; }
+  .cta p { font-size: 18px; color: var(--ink-soft); max-width: 560px; margin: 0 auto 30px; }
+  .signup { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; }
+  .signup input { flex: 1; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); font-size: 15px; font-family: inherit; outline: none; }
+  .signup input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(47,107,255,.12); }
+  @media (max-width: 480px) { .signup { flex-direction: column; } }
+
+  /* FOOTER */
+  footer { border-top: 1px solid var(--line); padding: 48px 0 36px; background: var(--bg-soft); }
+  .foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
+  .foot p { color: var(--muted); font-size: 14px; max-width: 320px; margin-top: 12px; }
+  .foot-links { display: flex; gap: 48px; flex-wrap: wrap; }
+  .foot-col h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin-bottom: 12px; }
+  .foot-col a { display: block; font-size: 14.5px; color: var(--ink-soft); margin-bottom: 8px; }
+  .foot-col a:hover { color: var(--brand); }
+  .foot-bottom { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="logo"><span class="mark">D</span> DUM360</a>
+    <nav class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#modes">Modes</a>
+      <a href="#providers">For providers</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#sovereignty">Sovereignty</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#providers" class="btn btn-ghost">Become a provider</a>
+      <a href="#cta" class="btn btn-primary">Get early access</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">● Distributed Unified Mesh 360 · Made in India</span>
+    <h1>India's citizen-powered <span class="grad">sovereign supercomputer</span></h1>
+    <p class="lede">DUM360 pools the idle compute of everyday phones, PCs and solar-powered GPU rigs into a secure national mesh — affordable AI for builders, passive income for citizens, and standby power for the nation.</p>
+    <div class="hero-cta">
+      <a href="#cta" class="btn btn-primary">Get early access →</a>
+      <a href="#how" class="btn btn-ghost">See how it works</a>
+    </div>
+    <p class="hero-note">100% hosted on Indian clouds &nbsp;·&nbsp; Earn payouts via UPI &nbsp;·&nbsp; Confidential, sandboxed compute</p>
+
+    <div class="stats">
+      <div class="stat"><div class="num">1M+</div><div class="lab">Target active nodes</div></div>
+      <div class="stat"><div class="num">≥3×</div><div class="lab">Redundancy per task</div></div>
+      <div class="stat"><div class="num">50%</div><div class="lab">Cheaper than hyperscalers</div></div>
+      <div class="stat"><div class="num">100%</div><div class="lab">Indian-hosted</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL MODE -->
+<section id="modes" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Dual-use mandate</span>
+      <h2>One mesh. Two missions.</h2>
+      <p>DUM360 earns its keep every day — then becomes national infrastructure the moment the country needs it.</p>
+    </div>
+    <div class="modes">
+      <div class="mode-card peace reveal">
+        <div class="mode-tag">Peace-time mode</div>
+        <h3>Affordable compute for India's builders</h3>
+        <p>Hyper-affordable, localized AI training, LLM inference and video rendering for Indian startups, researchers and academics.</p>
+        <ul>
+          <li><span class="check">✓</span><span><b>Localized AI inference & training</b> at a fraction of public-cloud cost.</span></li>
+          <li><span class="check">✓</span><span><b>Direct micro-incentives</b> paid to everyday contributors via UPI.</span></li>
+          <li><span class="check">✓</span><span><b>Solar arbitrage routing</b> for cleaner, cheaper daytime cycles.</span></li>
+        </ul>
+      </div>
+      <div class="mode-card seva reveal">
+        <div class="mode-tag">Rashtra Seva mode</div>
+        <h3>Sovereign emergency protocol</h3>
+        <p>A cryptographically authenticated government trigger mobilizes the multi-ExaFLOP national pool for public-good crises.</p>
+        <ul>
+          <li><span class="check">✓</span><span><b>Disaster & climate modeling</b> for NDMA and response teams.</span></li>
+          <li><span class="check">✓</span><span><b>Bio-defense & genetic sequencing</b> for medical agencies.</span></li>
+          <li><span class="check">✓</span><span><b>Cryptographic & cyber-defense</b> at national scale, on demand.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">How it works</span>
+      <h2>From idle device to national compute</h2>
+      <p>Enroll once, set your hours, and let DUM360 safely put your spare cycles to work.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><h3>Install & verify</h3><p>A lightweight, sandboxed node daemon (K3s/KubeEdge) or mobile WASM client. Hardware integrity checked via Secure Enclave.</p></div>
+      <div class="step reveal"><div class="n">2</div><h3>Pre-inform availability</h3><p>Book recurring windows — e.g. 11 PM–7 AM. The orchestrator maps workloads 6 hours in advance.</p></div>
+      <div class="step reveal"><div class="n">3</div><h3>Compute safely</h3><p>Encrypted, confidential containers run jobs you can't read. Tasks mirror across ≥3 machines for resilience.</p></div>
+      <div class="step reveal"><div class="n">4</div><h3>Get paid in UPI</h3><p>Usage is metered to the rupee and paid straight to your VPA. Graceful drain returns your device 30 min before exit.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Built for trust</span>
+      <h2>Sovereign by design, secure by default</h2>
+      <p>Every layer is engineered for data sovereignty, churn tolerance and confidential computing.</p>
+    </div>
+    <div class="grid3">
+      <div class="card reveal"><div class="ico">🔒</div><h3>Confidential computing</h3><p>Workloads run inside encrypted sandboxes. Hosts can never read the RAM or data packets being processed on their machine.</p></div>
+      <div class="card reveal"><div class="ico">🇮🇳</div><h3>Data stays in India</h3><p>Control planes, metadata and relay traffic run exclusively on domestic clouds. Nothing crosses the border.</p></div>
+      <div class="card reveal"><div class="ico">☀️</div><h3>Solar arbitrage mesh</h3><p>Always-on GPU rigs in Gujarat & Rajasthan get priority 10 AM–4 PM, swinging to consumer devices at night.</p></div>
+      <div class="card reveal"><div class="ico">🛡️</div><h3>≥3× redundancy</h3><p>A zero-trust uptime model mirrors each chunk across independent machines, so a closed laptop never fails a job.</p></div>
+      <div class="card reveal"><div class="ico">⚡</div><h3>Graceful eviction</h3><p>Cordon-and-drain 30 minutes before your exit — checkpoints upload, tasks finish, your device is yours again.</p></div>
+      <div class="card reveal"><div class="ico">💸</div><h3>Instant UPI payouts</h3><p>Precise metering of CPU-hours, VRAM and bytes maps to rupees, paid directly to your bank via UPI.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS / PROVIDERS -->
+<section id="providers">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Who it's for</span>
+      <h2>A network powered by everyone</h2>
+      <p>Whether you have a phone, a solar farm, or a deadline — there's a place for you in the mesh.</p>
+    </div>
+    <div class="grid4">
+      <div class="card reveal"><div class="ico">📱</div><h3>Citizen Provider</h3><p>Earn passive UPI income by enabling your idle phone, PC or gaming laptop during off-hours.</p></div>
+      <div class="card reveal"><div class="ico">🔋</div><h3>Solar Arbitrageur</h3><p>Monetize zero-cost surplus daytime solar by renting out custom GPU cycles in GJ/RJ.</p></div>
+      <div class="card reveal"><div class="ico">🧪</div><h3>Enterprise / AI Client</h3><p>Indian startups & researchers tap massively scalable GPU/CPU at a fraction of standard cloud cost.</p></div>
+      <div class="card reveal"><div class="ico">🏛️</div><h3>Sovereign Admin</h3><p>Verified officials trigger Emergency Mode to redirect national compute toward crisis response.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Roadmap</span>
+      <h2>From campus alpha to national scale</h2>
+      <p>A phased path to a standby sovereign supercomputer, ready for national service.</p>
+    </div>
+    <div class="timeline">
+      <div class="phase reveal">
+        <div class="ph">Phase 1 · Alpha</div>
+        <h3>Campus launch</h3>
+        <div class="when">Months 1–3</div>
+        <ul>
+          <li>K3s desktop wrapper across 1,000 student & developer machines</li>
+          <li>Select Indian colleges onboarded</li>
+        </ul>
+        <div class="target"><b>Target:</b> Split render / extraction job on 100 concurrent nodes, zero data loss.</div>
+      </div>
+      <div class="phase reveal">
+        <div class="ph">Phase 2 · Beta</div>
+        <h3>Strategic partnerships</h3>
+        <div class="when">Months 4–6</div>
+        <ul>
+          <li>Central orchestration on an Indian cloud partner</li>
+          <li>Agreements with private solar-grid operators</li>
+        </ul>
+        <div class="target"><b>Target:</b> 50,000 active nodes; commercial inference at 50% less than foreign hyperscalers.</div>
+      </div>
+      <div class="phase reveal">
+        <div class="ph">Phase 3 · National scale</div>
+        <h3>Mobile launch</h3>
+        <div class="when">Months 7–12</div>
+        <ul>
+          <li>Native mobile WASM app on Google Play</li>
+          <li>Advisory lines with national disaster groups</li>
+        </ul>
+        <div class="target"><b>Target:</b> 1M+ active nodes — a standby sovereign supercomputer.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOVEREIGNTY BANNER -->
+<section id="sovereignty">
+  <div class="wrap">
+    <div class="sov reveal">
+      <h2>Sovereign infrastructure, end to end</h2>
+      <p>Hosted exclusively on domestic Indian cloud providers and data centers — E2E Networks, CtrlS, Yotta, NIC — so sensitive data and national orchestration metadata never leave Indian soil.</p>
+      <div class="chips">
+        <span class="chip">DPDP Act aligned</span>
+        <span class="chip">TLS 1.3 end-to-end</span>
+        <span class="chip">Mumbai primary · Bengaluru / NCR DR</span>
+        <span class="chip">Zero cross-border routing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="wrap cta reveal">
+    <h2>Join the mesh</h2>
+    <p>Be among the first to power — and benefit from — India's sovereign supercomputer. Get early access updates.</p>
+    <form class="signup" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Thanks! ✓'; this.querySelector('button').disabled=true;">
+      <input type="email" placeholder="you@example.com" required aria-label="Email address" />
+      <button type="submit" class="btn btn-primary">Get early access</button>
+    </form>
+    <p class="hero-note" style="margin-top:14px;">No spam. Just launch news and provider onboarding.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="#" class="logo"><span class="mark">D</span> DUM360</a>
+        <p>Distributed Unified Mesh 360 — India's decentralized, citizen-powered, eco-friendly edge supercomputer network.</p>
+      </div>
+      <div class="foot-links">
+        <div class="foot-col">
+          <h4>Product</h4>
+          <a href="#how">How it works</a>
+          <a href="#modes">Modes</a>
+          <a href="#roadmap">Roadmap</a>
+        </div>
+        <div class="foot-col">
+          <h4>Network</h4>
+          <a href="#providers">Become a provider</a>
+          <a href="#providers">For enterprises</a>
+          <a href="#sovereignty">Sovereignty</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="#cta">Early access</a>
+          <a href="https://github.com/nandal/dum360">GitHub</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 DUM360 · Made in India 🇮🇳</span>
+      <span>Sovereign infrastructure · Hosted 100% in India</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
