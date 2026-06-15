@@ -188,6 +188,27 @@
   .foot-col a { display: block; font-size: 14.5px; color: var(--ink-soft); margin-bottom: 8px; }
   .foot-col a:hover { color: var(--brand); }
   .foot-bottom { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  /* MESH VIZ */
+  .mesh-controls { display:flex; gap:10px; justify-content:center; margin-bottom:22px; flex-wrap:wrap; }
+  .mode-btn { font-family:inherit; font-size:14px; font-weight:600; padding:10px 18px; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--ink-soft); cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; gap:8px; }
+  .mode-btn:hover { border-color:var(--brand); color:var(--brand); }
+  .mode-btn[aria-pressed="true"] { background:var(--brand); color:#fff; border-color:var(--brand); box-shadow:0 8px 20px rgba(47,107,255,.28); }
+  .mode-btn.em[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 8px 20px rgba(255,122,26,.3); }
+  .mode-btn.em:hover { border-color:var(--accent); color:var(--accent); }
+  .mode-btn.em[aria-pressed="true"]:hover { color:#fff; }
+  .mesh-stage { position:relative; width:100%; aspect-ratio:16/10; max-height:600px; border-radius:22px; overflow:hidden; border:1px solid var(--line); background:radial-gradient(700px 420px at 50% 42%, #ffffff, #eef3fb); box-shadow:var(--shadow); }
+  @media (max-width:680px){ .mesh-stage{ aspect-ratio:3/4; } }
+  .mesh-stage canvas { position:absolute; inset:0; width:100%; height:100%; display:block; cursor:default; }
+  .mesh-banner { position:absolute; top:14px; left:50%; transform:translateX(-50%); background:rgba(255,59,59,.12); color:#c81e1e; border:1px solid rgba(255,59,59,.3); font-size:12.5px; font-weight:700; padding:7px 16px; border-radius:999px; opacity:0; transition:opacity .3s; pointer-events:none; letter-spacing:.02em; text-align:center; white-space:nowrap; }
+  .mesh-banner.show { opacity:1; }
+  .mesh-tip { position:absolute; pointer-events:none; max-width:230px; background:#0b1020; color:#fff; font-size:12.5px; line-height:1.5; padding:10px 12px; border-radius:10px; opacity:0; transform:translateY(4px); transition:opacity .15s, transform .15s; box-shadow:0 10px 30px rgba(11,16,32,.3); z-index:5; }
+  .mesh-tip.show { opacity:1; transform:none; }
+  .mesh-tip b { color:#9ec1ff; }
+  .mesh-legend { display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:24px; }
+  .mesh-legend .li { display:inline-flex; align-items:center; gap:8px; font-size:13.5px; color:var(--ink-soft); font-weight:500; }
+  .mesh-legend .dot { width:11px; height:11px; border-radius:50%; box-shadow:0 0 8px currentColor; }
+  .mesh-hint { text-align:center; font-size:13px; color:var(--muted); margin-top:14px; }
+
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in { opacity: 1; transform: none; }
 </style>
@@ -199,6 +220,7 @@
     <a href="#" class="logo"><span class="mark">D</span> DUM360</a>
     <nav class="nav-links">
       <a href="#how">How it works</a>
+      <a href="#mesh">The mesh</a>
       <a href="#modes">Modes</a>
       <a href="#providers">For providers</a>
       <a href="#roadmap">Roadmap</a>
@@ -279,6 +301,34 @@
       <div class="step reveal"><div class="n">3</div><h3>Compute safely</h3><p>Encrypted, confidential containers run jobs you can't read. Tasks mirror across ≥3 machines for resilience.</p></div>
       <div class="step reveal"><div class="n">4</div><h3>Get paid in UPI</h3><p>Usage is metered to the rupee and paid straight to your VPA. Graceful drain returns your device 30 min before exit.</p></div>
     </div>
+  </div>
+</section>
+
+<!-- MESH VIZ -->
+<section id="mesh" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Live network</span>
+      <h2>See the mesh in motion</h2>
+      <p>Workloads, results and UPI payouts flow continuously between the sovereign core and every participant. Flip to Rashtra Seva to watch the network mobilize for a national emergency.</p>
+    </div>
+    <div class="mesh-controls reveal">
+      <button class="mode-btn" id="modePeace" aria-pressed="true">🟢 Peace-time mode</button>
+      <button class="mode-btn em" id="modeEmergency" aria-pressed="false">🔴 Rashtra Seva — Emergency</button>
+    </div>
+    <div class="mesh-stage reveal" id="meshStage">
+      <canvas id="meshCanvas"></canvas>
+      <div class="mesh-banner" id="meshBanner">⚠ EMERGENCY MODE · National compute mobilized · Commercial workloads paused</div>
+      <div class="mesh-tip" id="meshTip"></div>
+    </div>
+    <div class="mesh-legend reveal">
+      <span class="li"><span class="dot" style="color:#2f6bff;background:#2f6bff"></span> Workload dispatch</span>
+      <span class="li"><span class="dot" style="color:#00c2a8;background:#00c2a8"></span> Results &amp; checkpoints</span>
+      <span class="li"><span class="dot" style="color:#22c55e;background:#22c55e"></span> UPI payout</span>
+      <span class="li"><span class="dot" style="color:#7c5cff;background:#7c5cff"></span> Job request</span>
+      <span class="li"><span class="dot" style="color:#ff3b3b;background:#ff3b3b"></span> Emergency priority</span>
+    </div>
+    <p class="mesh-hint">Hover any node to trace its flows · drag the toggle to switch modes</p>
   </div>
 </section>
 
@@ -431,6 +481,215 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+<!-- MESH ANIMATION -->
+<script>
+(function(){
+  const stage = document.getElementById('meshStage');
+  const canvas = document.getElementById('meshCanvas');
+  if(!stage || !canvas) return;
+  const ctx = canvas.getContext('2d');
+  const tip = document.getElementById('meshTip');
+  const banner = document.getElementById('meshBanner');
+
+  if(!CanvasRenderingContext2D.prototype.roundRect){
+    CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+      r = Math.min(r, w/2, h/2);
+      this.beginPath(); this.moveTo(x+r,y);
+      this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r);
+      this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath();
+      return this;
+    };
+  }
+  function rr(x,y,w,h,r){ ctx.beginPath(); ctx.roundRect(x,y,w,h,r); }
+
+  const FLOW = { workload:'#2f6bff', result:'#00c2a8', payout:'#22c55e', request:'#7c5cff', emergency:'#ff3b3b' };
+  const core = { px:0, py:0 };
+  const nodes = [
+    { id:'phones',     label:'Consumer Phones', sub:'WASM client',     icon:'📱', color:'#2f6bff', role:'provider', ang:-90,
+      desc:'Idle phones run sandboxed <b>WASM</b> tasks at night, return results, and earn <b>UPI payouts</b>.' },
+    { id:'enterprise', label:'Enterprise & AI',  sub:'Buys compute',     icon:'🧪', color:'#7c5cff', role:'consumer', ang:-30,
+      desc:'Startups submit AI training, inference &amp; render <b>jobs</b> — results back at ~50% less cost.' },
+    { id:'gov',        label:'Govt · NDMA',      sub:'Rashtra Seva',     icon:'🏛️', color:'#ff7a1a', role:'gov',      ang:30,
+      desc:'Verified officials <b>trigger emergency mode</b>, redirecting national compute to crises.' },
+    { id:'solar',      label:'Solar GPU Grid',   sub:'GJ / RJ · daytime',icon:'☀️', color:'#f59e0b', role:'provider', ang:90,
+      desc:'Always-on solar rigs get <b>priority 10am–4pm</b> — the cheapest, greenest cycles.' },
+    { id:'gaming',     label:'Gaming PCs',       sub:'K3s · overnight',  icon:'🎮', color:'#00c2a8', role:'provider', ang:150,
+      desc:'Overnight PCs join as <b>K3s workers</b>, return checkpoints, paid via <b>UPI</b>.' },
+    { id:'research',   label:'Researchers',      sub:'Academia',         icon:'🎓', color:'#7c5cff', role:'consumer', ang:210,
+      desc:'Academics run large workloads on affordable <b>sovereign compute</b>.' },
+  ];
+
+  let W=0, H=0, DPR=1, scale=1, now=0, hovered=null, emergency=false;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SP = reduce ? 0.4 : 1;
+
+  function buildStreams(){
+    nodes.forEach(n=>{
+      const s=[];
+      if(emergency){
+        if(n.role==='provider'){
+          s.push({color:FLOW.emergency, dir:'out', speed:0.0015*SP, count:6, lane:9});
+          s.push({color:FLOW.result,    dir:'in',  speed:0.0010*SP, count:3, lane:-9});
+        } else if(n.role==='gov'){
+          s.push({color:FLOW.emergency, dir:'in',  speed:0.0017*SP, count:5, lane:0});
+        } else {
+          s.push({color:'#b4bccc', dir:'out', speed:0.00025*SP, count:1, lane:0});
+        }
+      } else {
+        if(n.role==='provider'){
+          s.push({color:FLOW.workload, dir:'out', speed:0.0009*SP, count:4, lane:10});
+          s.push({color:FLOW.result,   dir:'in',  speed:0.0008*SP, count:3, lane:-10});
+          s.push({color:FLOW.payout,   dir:'out', speed:0.0005*SP, count:2, lane:0});
+        } else if(n.role==='consumer'){
+          s.push({color:FLOW.request,  dir:'in',  speed:0.0008*SP, count:3, lane:9});
+          s.push({color:FLOW.result,   dir:'out', speed:0.0008*SP, count:3, lane:-9});
+        } else if(n.role==='gov'){
+          s.push({color:FLOW.emergency, dir:'in', speed:0.0004*SP, count:1, lane:0});
+        }
+      }
+      n.streams=s;
+    });
+  }
+
+  function resize(){
+    const r = stage.getBoundingClientRect();
+    W = r.width; H = r.height;
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    scale = Math.max(0.58, Math.min(1.15, W/1000));
+    core.px = W*0.5; core.py = H*0.5;
+    const rx = W*0.36, ry = H*0.37;
+    nodes.forEach(n=>{
+      const a = n.ang*Math.PI/180;
+      n.px = core.px + Math.cos(a)*rx;
+      n.py = core.py + Math.sin(a)*ry;
+    });
+  }
+
+  function drawCore(){
+    const w=190*scale, h=92*scale, x=core.px-w/2, y=core.py-h/2;
+    const pulse = 0.5+0.5*Math.sin(now*0.002);
+    ctx.save();
+    ctx.shadowColor = emergency? 'rgba(255,59,59,.5)':'rgba(47,107,255,.45)';
+    ctx.shadowBlur = (22+pulse*16)*scale;
+    ctx.fillStyle = '#0b1020';
+    rr(x,y,w,h,18*scale); ctx.fill();
+    ctx.shadowColor='transparent';
+    ctx.textAlign='center';
+    ctx.fillStyle='#fff'; ctx.font=`800 ${15.5*scale}px Inter, sans-serif`;
+    ctx.fillText('⎈ Sovereign Core', core.px, core.py - 12*scale);
+    ctx.fillStyle='#9ec1ff'; ctx.font=`600 ${10.5*scale}px Inter, sans-serif`;
+    ctx.fillText('Orchestrator · Metadata DB · UPI', core.px, core.py + 6*scale);
+    ctx.fillStyle='#c3ccea'; ctx.font=`600 ${10.5*scale}px Inter, sans-serif`;
+    ctx.fillText('🇮🇳 100% hosted in India', core.px, core.py + 24*scale);
+    ctx.restore();
+  }
+
+  function drawCard(n){
+    const dim = hovered && hovered!==n;
+    const w=152*scale, h=58*scale, x=n.px-w/2, y=n.py-h/2;
+    ctx.save();
+    ctx.globalAlpha = dim?0.4:1;
+    ctx.shadowColor='rgba(11,16,32,.16)'; ctx.shadowBlur=16*scale; ctx.shadowOffsetY=6*scale;
+    ctx.fillStyle='#fff'; rr(x,y,w,h,13*scale); ctx.fill();
+    ctx.shadowColor='transparent'; ctx.shadowOffsetY=0;
+    ctx.save(); rr(x,y,w,h,13*scale); ctx.clip();
+    ctx.fillStyle=n.color; ctx.fillRect(x,y,5*scale,h); ctx.restore();
+    ctx.textBaseline='middle'; ctx.textAlign='left';
+    ctx.font=`${19*scale}px serif`; ctx.fillText(n.icon, x+15*scale, n.py);
+    ctx.fillStyle='#0b1020'; ctx.font=`700 ${13*scale}px Inter, sans-serif`;
+    ctx.fillText(n.label, x+42*scale, n.py - 8*scale);
+    ctx.fillStyle='#8089a3'; ctx.font=`500 ${10.5*scale}px Inter, sans-serif`;
+    ctx.fillText(n.sub, x+42*scale, n.py + 9*scale);
+    if(n===hovered){ ctx.strokeStyle=n.color; ctx.lineWidth=2*scale; rr(x-3*scale,y-3*scale,w+6*scale,h+6*scale,16*scale); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  function frame(t){
+    now = t;
+    ctx.clearRect(0,0,W,H);
+    // background dot grid
+    const gap=34*scale; ctx.fillStyle='rgba(120,135,165,.07)';
+    for(let gx=gap; gx<W; gx+=gap) for(let gy=gap; gy<H; gy+=gap){ ctx.beginPath(); ctx.arc(gx,gy,1.1*scale,0,7); ctx.fill(); }
+    if(emergency){ ctx.fillStyle='rgba(255,59,59,.045)'; ctx.fillRect(0,0,W,H); }
+
+    // ring (mesh) connections
+    ctx.setLineDash([4*scale,7*scale]); ctx.strokeStyle='rgba(120,135,165,.12)'; ctx.lineWidth=1*scale;
+    for(let i=0;i<nodes.length;i++){ const a=nodes[i], b=nodes[(i+1)%nodes.length];
+      ctx.beginPath(); ctx.moveTo(a.px,a.py); ctx.lineTo(b.px,b.py); ctx.stroke(); }
+    ctx.setLineDash([]);
+
+    // spokes + particles
+    nodes.forEach(n=>{
+      const dim = hovered && hovered!==n;
+      ctx.strokeStyle = dim?'rgba(120,135,165,.08)':'rgba(120,135,165,.2)'; ctx.lineWidth=1*scale;
+      ctx.beginPath(); ctx.moveTo(core.px,core.py); ctx.lineTo(n.px,n.py); ctx.stroke();
+      const dx=n.px-core.px, dy=n.py-core.py, len=Math.hypot(dx,dy);
+      const ux=dx/len, uy=dy/len, perpx=-uy, perpy=ux;
+      (n.streams||[]).forEach(st=>{
+        for(let i=0;i<st.count;i++){
+          let tp = ((i/st.count) + now*st.speed) % 1;
+          const tt = st.dir==='out'? tp : 1-tp;
+          const lane = st.lane*scale*Math.sin(Math.PI*tt);
+          const bx = core.px + ux*len*tt + perpx*lane;
+          const by = core.py + uy*len*tt + perpy*lane;
+          ctx.save();
+          ctx.globalAlpha = dim?0.1 : (0.35+0.65*Math.sin(Math.PI*tt));
+          ctx.fillStyle=st.color; ctx.shadowColor=st.color; ctx.shadowBlur=8*scale;
+          ctx.beginPath(); ctx.arc(bx,by,2.6*scale,0,7); ctx.fill();
+          ctx.restore();
+        }
+      });
+    });
+
+    nodes.forEach(drawCard);
+    drawCore();
+    requestAnimationFrame(frame);
+  }
+
+  function setMode(em){
+    emergency = em;
+    buildStreams();
+    document.getElementById('modePeace').setAttribute('aria-pressed', String(!em));
+    document.getElementById('modeEmergency').setAttribute('aria-pressed', String(em));
+    banner.classList.toggle('show', em);
+  }
+  document.getElementById('modePeace').addEventListener('click', ()=>setMode(false));
+  document.getElementById('modeEmergency').addEventListener('click', ()=>setMode(true));
+
+  function hitTest(mx,my){
+    for(const n of nodes){ if(Math.abs(mx-n.px)<78*scale && Math.abs(my-n.py)<32*scale) return n; }
+    if(Math.abs(mx-core.px)<98*scale && Math.abs(my-core.py)<48*scale) return core;
+    return null;
+  }
+  stage.addEventListener('mousemove', e=>{
+    const r=canvas.getBoundingClientRect();
+    const mx=e.clientX-r.left, my=e.clientY-r.top;
+    const hit = hitTest(mx,my);
+    canvas.style.cursor = hit?'pointer':'default';
+    if(hit && hit!==core){
+      hovered = hit;
+      tip.innerHTML = '<b>'+hit.label+'</b><br>'+hit.desc;
+      tip.classList.add('show');
+      let tx=mx+16, ty=my+16;
+      if(tx>W-230) tx=mx-230; if(ty>H-90) ty=my-80;
+      tip.style.left=Math.max(8,tx)+'px'; tip.style.top=Math.max(8,ty)+'px';
+    } else if(hit===core){
+      hovered=null;
+      tip.innerHTML='<b>Sovereign Core</b><br>Orchestrator, metadata DB &amp; UPI engine — <b>100% hosted in India</b>.';
+      tip.classList.add('show');
+      let tx=mx+16, ty=my+16; if(tx>W-230) tx=mx-230; if(ty>H-90) ty=my-80;
+      tip.style.left=Math.max(8,tx)+'px'; tip.style.top=Math.max(8,ty)+'px';
+    } else { hovered=null; tip.classList.remove('show'); }
+  });
+  stage.addEventListener('mouseleave', ()=>{ hovered=null; tip.classList.remove('show'); canvas.style.cursor='default'; });
+
+  if(window.ResizeObserver){ new ResizeObserver(resize).observe(stage); } else { window.addEventListener('resize', resize); }
+  resize(); buildStreams(); requestAnimationFrame(frame);
+})();
 </script>
 </body>
 </html>
