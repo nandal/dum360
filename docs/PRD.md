@@ -20,7 +20,9 @@ By partnering exclusively with **domestic Indian Cloud Providers and Data Center
 
 ### 1.1 Core Mission
 
-DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supercomputer network. It aggregates the unutilized, idle compute capacity of consumer electronics (smartphones, desktops, gaming laptops) and specialized clean-energy setups (solar-grid attached compute rigs in regions like Rajasthan and Gujarat) into a massive, secure cloud infrastructure mesh.
+DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supercomputer network. Its founding thesis is simple: **at any given moment, the vast majority of the nation's computing power sits idle** — phones at night, gaming PCs after hours, university and PSU labs over evenings, weekends and vacations, enterprise and MSME workstations outside business hours, and surplus daytime solar-powered GPU rigs. DUM360 aggregates **all of this idle capacity — consumer, institutional, governmental and commercial — across the entire country** into a single massive, secure, sovereign cloud infrastructure mesh.
+
+It pools, among others: consumer electronics (smartphones, desktops, gaming laptops); university and research-institution labs (IITs, NITs, IIITs, central/state universities) interconnected over the National Knowledge Network (NKN); government and PSU compute labs and data centres; private enterprise, MSME and startup workstations and servers; and specialized clean-energy setups (solar-grid attached compute rigs in regions like Rajasthan and Gujarat).
 
 ### 1.2 Dual-Use Mandate
 
@@ -31,6 +33,20 @@ DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supe
 
 **100% Indian Cloud/Data Center Hosting.** The core cluster management control planes, metadata databases, and secure relay proxies will run exclusively on domestic Indian cloud providers and data centers. No data or orchestration protocols will cross geographic borders.
 
+### 1.4 The National Idle-Compute Thesis
+
+DUM360 treats **every powered-on, under-utilized processor in India as latent national infrastructure.** Rather than relying on new data centres alone, it harvests capacity that already exists and is already paid for:
+
+| Source | Typical idle window | Why it matters |
+| --- | --- | --- |
+| Consumer phones & PCs | Nights / off-hours | Largest device count; burst throughput |
+| University & research labs (IIT/NIT/IIIT) | Evenings, weekends, vacations | LAN-clustered + NKN-linked → real parallelism |
+| Government & PSU labs / data centres | Off-hours, spare capacity | High trust, sovereign by default |
+| Enterprise / MSME / startup machines | Outside business hours | Wired, powered, predictable |
+| Solar GPU rigs (GJ / RJ) | Daytime surplus generation | Cheapest, greenest cycles |
+
+The goal is a **single national fabric** in which any idle cycle, anywhere in the country, can be safely and verifiably put to productive use — and instantly reclaimed by its owner.
+
 ---
 
 ## 2. Personas & Stakeholders
@@ -39,6 +55,8 @@ DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supe
 | --- | --- | --- |
 | **The Citizen Provider** | Everyday consumer with a smartphone, PC, or gaming laptop. | Earn passive income via UPI by enabling their idle device during specified off-hours (e.g., at night). |
 | **The Solar Arbitrageur** | Operators/investors in solar-heavy states (GJ/RJ) with custom GPU hardware. | Monetize zero-cost surplus daytime solar energy by renting out computing cycles. |
+| **The Institutional Provider** | Universities & research institutions (IITs, NITs, IIITs, central/state universities) and their IT/admin departments. | Convert idle lab & HPC capacity (nights, weekends, vacations) into compute-grants, institutional credits or revenue-share; advance national research. |
+| **The Enterprise & MSME Provider** | Private firms, startups, MSMEs and PSUs with workstations, servers or labs idle outside business hours. | Offset IT spend by renting spare on-prem compute into a sovereign national pool. |
 | **The Enterprise/AI Client** | Indian startups, researchers, and developers. | Access massively scalable GPU/CPU compute at a fraction of standard public cloud costs. |
 | **The Sovereign Admin** | Verified Government officials / Disaster Management teams. | Trigger Emergency Mode to redirect national computing assets toward immediate crisis response. |
 
@@ -67,6 +85,20 @@ DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supe
 +------------------------------------------------------------------------+
 
 ```
+
+### 3.1 The Compute Supply Tiers
+
+DUM360 ingests idle capacity from every layer of the national compute stack. Each tier has a different capability, interconnect quality and trust profile, and the orchestrator schedules accordingly:
+
+| Tier | Examples | Interconnect | Best-fit workloads |
+| --- | --- | --- | --- |
+| **Institutional labs** | IITs, NITs, IIITs, central/state universities | LAN within campus + **NKN** backbone across campuses | In-cluster & cross-campus model parallelism; HPC-style jobs |
+| **Government / PSU** | Public-sector R&D labs, ministry data centres | Wired / sovereign networks | High-trust, sovereign and emergency workloads |
+| **Enterprise / MSME** | Company servers, startup & MSME workstations | Wired business broadband | Off-hours batch inference, rendering, ETL |
+| **Solar GPU rigs** | Custom multi-GPU rigs in GJ / RJ | Wired, often multi-GPU | Daytime green compute; in-rig big-model sharding |
+| **Consumer devices** | Gaming PCs, desktops, phones | Consumer broadband | Burst, request-parallel inference, light tasks |
+
+**Design principle:** use the *country-wide* mesh for **request-level parallelism (throughput)**, and confine **model-level parallelism** to LAN/NKN-connected clusters where the interconnect can sustain it.
 
 ---
 
@@ -99,6 +131,17 @@ DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supe
 
 * **FR-5.1 (Micro-Transaction Logging):** The system must compute precise usage metrics (CPU cycle hours used, VRAM consumed, bytes processed) and map it to a rupee value.
 * **FR-5.2 (UPI Direct Payouts):** The app must allow providers to input a secure VPA (Virtual Payment Address) to withdraw earnings via instant UPI transfers directly into their Indian bank account.
+* **FR-5.3 (Institutional & Enterprise Settlement):** For non-individual providers (universities, PSUs, enterprises, MSMEs), the system must support organizational billing accounts — settling earnings as **compute-grants, platform credits, or bank/Net-banking revenue-share** rather than personal UPI — with per-department/per-lab usage reporting and electricity-cost reimbursement tracking.
+
+### 4.6 Distributed Inference Architecture
+
+DUM360 serves LLM and AI inference using a **tiered strategy that matches model size to interconnect quality**, rather than naively splitting one model across the public internet.
+
+* **FR-6.1 (Request-Parallel Serving — default):** Models that fit on a single node (e.g. 7B–34B quantized) are replicated; the orchestrator routes **whole requests to whole nodes**. This is embarrassingly parallel and scales linearly to millions of concurrent inferences nationwide — the primary, highest-throughput mode.
+* **FR-6.2 (Intra-Cluster Model Parallelism):** Genuinely large models (70B–400B+) are sharded **only within a well-connected cluster** — a campus lab over LAN, a solar GPU rig, or a PSU data centre — where tensor/pipeline parallelism has the bandwidth and microsecond latency it needs.
+* **FR-6.3 (NKN-Backed Cross-Campus Parallelism):** For models exceeding a single cluster, pipeline parallelism may span institutions **over the National Knowledge Network (NKN)** academic backbone — forming a loosely-coupled national academic grid, not a consumer-broadband mesh.
+* **FR-6.4 (Speculative Decoding):** Small models on phones/PCs draft tokens that larger cluster-hosted models verify, reducing load on scarce big-model capacity.
+* **FR-6.5 (Honest Workload Fit):** The platform targets **massively-parallel, latency-tolerant, checkpointable** workloads (batch inference, rendering, sequencing, Monte-Carlo, parameter sweeps, cryptanalysis). It explicitly does **not** claim to match centralized GPU clusters for tightly-coupled, latency-critical training across consumer-grade links. *(Precedent: Folding@home reached ~exascale FP32 throughput as a distributed network in 2020.)*
 
 ---
 
