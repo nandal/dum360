@@ -22,7 +22,7 @@ By partnering exclusively with **domestic Indian Cloud Providers and Data Center
 
 DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supercomputer network. Its founding thesis is simple: **at any given moment, the vast majority of the nation's computing power sits idle** — phones at night, gaming PCs after hours, university and PSU labs over evenings, weekends and vacations, enterprise and MSME workstations outside business hours, and surplus daytime solar-powered GPU rigs. DUM360 aggregates **all of this idle capacity — consumer, institutional, governmental and commercial — across the entire country** into a single massive, secure, sovereign cloud infrastructure mesh.
 
-It pools, among others: consumer electronics (smartphones, desktops, gaming laptops); university and research-institution labs (IITs, NITs, IIITs, central/state universities) interconnected over the National Knowledge Network (NKN); government and PSU compute labs and data centres; private enterprise, MSME and startup workstations and servers; and specialized clean-energy setups (solar-grid attached compute rigs in regions like Rajasthan and Gujarat).
+It pools, among others: consumer electronics (smartphones, desktops, gaming laptops); university and research-institution labs (IITs, NITs, IIITs, central/state universities) interconnected over the National Knowledge Network (NKN); government and PSU compute labs and data centres; private enterprise, MSME and startup workstations and servers; and specialized clean-energy setups — solar-grid GPU rigs in regions like Rajasthan and Gujarat, plus emerging offshore, **seawater-cooled floating rigs** powered by **tidal, wave and offshore-solar** energy along India's long coastline.
 
 ### 1.2 Dual-Use Mandate
 
@@ -95,10 +95,12 @@ DUM360 ingests idle capacity from every layer of the national compute stack. Eac
 | **Institutional labs** | IITs, NITs, IIITs, central/state universities | LAN within campus + **NKN** backbone across campuses | In-cluster & cross-campus model parallelism; HPC-style jobs |
 | **Government / PSU** | Public-sector R&D labs, ministry data centres | Wired / sovereign networks | High-trust, sovereign and emergency workloads |
 | **Enterprise / MSME** | Company servers, startup & MSME workstations | Wired business broadband | Off-hours batch inference, rendering, ETL |
-| **Solar GPU rigs** | Custom multi-GPU rigs in GJ / RJ | Wired, often multi-GPU | Daytime green compute; in-rig big-model sharding |
+| **Renewable-powered rigs** | Solar GPU grids (GJ / RJ); emerging offshore *floating, seawater-cooled* rigs on tidal / wave / offshore-solar | Wired / subsea backhaul, multi-GPU | Daytime solar + 24×7 tidal green baseload; in-rig big-model sharding |
 | **Consumer devices** | Gaming PCs, desktops, phones | Consumer broadband | Burst, request-parallel inference, light tasks |
 
 **Design principle:** use the *country-wide* mesh for **request-level parallelism (throughput)**, and confine **model-level parallelism** to LAN/NKN-connected clusters where the interconnect can sustain it.
+
+> **Green-energy roadmap (honest status):** Floating solar + seawater-cooled coastal/barge compute is *deployable today* (cf. Microsoft Project Natick's ~8× lower failure rate at sea; Nautilus's commercial water-cooled floating datacentres). **Tidal and wave** power are still **nascent in India** (best sites: Gulf of Kutch / Khambhat; wave pilots at NIOT) and are treated as a **forward-looking R&D track** — their value is *predictable 24×7 clean baseload* to complement daytime solar, not near-term capacity.
 
 ---
 

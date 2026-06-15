@@ -238,7 +238,7 @@
   <div class="wrap">
     <span class="eyebrow">● Distributed Unified Mesh 360 · Made in India</span>
     <h1>India's citizen-powered <span class="grad">sovereign supercomputer</span></h1>
-    <p class="lede">DUM360 pools the idle compute of everyday phones, PCs and solar-powered GPU rigs into a secure national mesh — affordable AI for builders, passive income for citizens, and standby power for the nation.</p>
+    <p class="lede">DUM360 pools idle compute from across the nation — phones, gaming PCs, university &amp; PSU labs, enterprise &amp; MSME machines, and solar-powered GPU rigs — into a secure sovereign mesh: affordable AI for builders, income for contributors, and standby power for the nation.</p>
     <div class="hero-cta">
       <a href="https://forms.gle/a2JxYZAZu1otR1gm7" target="_blank" rel="noopener" class="btn btn-primary">Join now →</a>
       <a href="#how" class="btn btn-ghost">See how it works</a>
@@ -310,7 +310,7 @@
     <div class="section-head reveal">
       <span class="eyebrow">Live network</span>
       <h2>See the mesh in motion</h2>
-      <p>Workloads, results and UPI payouts flow continuously between the sovereign core and every participant. Flip to Rashtra Seva to watch the network mobilize for a national emergency.</p>
+      <p>Every tier of India's idle compute — campus labs, government &amp; PSU centres, enterprises, solar rigs, gaming PCs and phones — feeds one sovereign core. Workloads, results and UPI payouts flow continuously; flip to Rashtra Seva to watch the network mobilize for a national emergency.</p>
     </div>
     <div class="mesh-controls reveal">
       <button class="mode-btn" id="modePeace" aria-pressed="true">🟢 Peace-time mode</button>
@@ -355,15 +355,18 @@
 <section id="providers">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Who it's for</span>
-      <h2>A network powered by everyone</h2>
-      <p>Whether you have a phone, a solar farm, or a deadline — there's a place for you in the mesh.</p>
+      <span class="eyebrow">Who powers the mesh</span>
+      <h2>Every idle processor in the country</h2>
+      <p>From a phone in a pocket to a campus HPC lab — if it's powered on and idle, it can join the sovereign mesh.</p>
     </div>
-    <div class="grid4">
-      <div class="card reveal"><div class="ico">📱</div><h3>Citizen Provider</h3><p>Earn passive UPI income by enabling your idle phone, PC or gaming laptop during off-hours.</p></div>
-      <div class="card reveal"><div class="ico">🔋</div><h3>Solar Arbitrageur</h3><p>Monetize zero-cost surplus daytime solar by renting out custom GPU cycles in GJ/RJ.</p></div>
-      <div class="card reveal"><div class="ico">🧪</div><h3>Enterprise / AI Client</h3><p>Indian startups & researchers tap massively scalable GPU/CPU at a fraction of standard cloud cost.</p></div>
-      <div class="card reveal"><div class="ico">🏛️</div><h3>Sovereign Admin</h3><p>Verified officials trigger Emergency Mode to redirect national compute toward crisis response.</p></div>
+    <div class="grid3">
+      <div class="card reveal"><div class="ico">📱</div><h3>Citizen Provider</h3><p>Earn passive UPI income from your idle phone, PC or gaming laptop during off-hours.</p></div>
+      <div class="card reveal"><div class="ico">🎓</div><h3>Universities &amp; Research</h3><p>IIT/NIT/IIIT labs join over LAN + NKN, turning idle nights &amp; vacations into compute-grants and research.</p></div>
+      <div class="card reveal"><div class="ico">🏛️</div><h3>Government &amp; PSUs</h3><p>Sovereign labs &amp; data centres contribute trusted capacity — and can trigger Rashtra Seva in a crisis.</p></div>
+      <div class="card reveal"><div class="ico">🏢</div><h3>Enterprise &amp; MSME</h3><p>Companies, startups and MSMEs rent out servers and workstations idle outside business hours.</p></div>
+      <div class="card reveal"><div class="ico">☀️</div><h3>Solar Arbitrageur</h3><p>Monetize zero-cost surplus daytime solar by renting custom GPU cycles in GJ/RJ.</p></div>
+      <div class="card reveal"><div class="ico">🌊</div><h3>Tidal &amp; Offshore</h3><p>Floating, seawater-cooled GPU rigs on tidal, wave and offshore solar — round-the-clock green baseload.</p></div>
+      <div class="card reveal"><div class="ico">🧪</div><h3>Enterprise / AI Client</h3><p>Startups &amp; researchers tap scalable GPU/CPU at a fraction of standard cloud cost.</p></div>
     </div>
   </div>
 </section>
@@ -507,18 +510,24 @@
   const FLOW = { workload:'#2f6bff', result:'#00c2a8', payout:'#22c55e', request:'#7c5cff', emergency:'#ff3b3b' };
   const core = { px:0, py:0 };
   const nodes = [
-    { id:'phones',     label:'Consumer Phones', sub:'WASM client',     icon:'📱', color:'#2f6bff', role:'provider', ang:-90,
-      desc:'Idle phones run sandboxed <b>WASM</b> tasks at night, return results, and earn <b>UPI payouts</b>.' },
-    { id:'enterprise', label:'Enterprise & AI',  sub:'Buys compute',     icon:'🧪', color:'#7c5cff', role:'consumer', ang:-30,
-      desc:'Startups submit AI training, inference &amp; render <b>jobs</b> — results back at ~50% less cost.' },
-    { id:'gov',        label:'Govt · NDMA',      sub:'Rashtra Seva',     icon:'🏛️', color:'#ff7a1a', role:'gov',      ang:30,
-      desc:'Verified officials <b>trigger emergency mode</b>, redirecting national compute to crises.' },
-    { id:'solar',      label:'Solar GPU Grid',   sub:'GJ / RJ · daytime',icon:'☀️', color:'#f59e0b', role:'provider', ang:90,
+    { id:'inst',     label:'Universities',      sub:'IIT/NIT · NKN',    icon:'🎓', color:'#2f6bff', role:'provider', shape:'hex',     ang:-90,
+      desc:'Campus labs join over <b>LAN + NKN</b> — enabling real in-cluster &amp; cross-campus model parallelism.' },
+    { id:'ai',       label:'AI Startups',       sub:'Buys compute',     icon:'🧪', color:'#7c5cff', role:'consumer', shape:'pill',    ang:-50,
+      desc:'Startups submit training, inference &amp; render <b>jobs</b> — results back at ~50% less cost.' },
+    { id:'gov',      label:'Govt · PSU',        sub:'Sovereign labs',   icon:'🏛️', color:'#ff7a1a', role:'gov',      shape:'shield',  ang:-10,
+      desc:'Sovereign labs &amp; data centres contribute compute — and <b>trigger Rashtra Seva</b> in a crisis.' },
+    { id:'ent',      label:'Enterprise · MSME', sub:'Off-hours servers',icon:'🏢', color:'#0ea5a5', role:'provider', shape:'diamond', ang:30,
+      desc:'Companies, startups &amp; MSMEs rent out machines <b>idle outside business hours</b>.' },
+    { id:'solar',    label:'Solar GPU Grid',    sub:'GJ/RJ · daytime',  icon:'☀️', color:'#f59e0b', role:'provider', shape:'circle',  ang:70,
       desc:'Always-on solar rigs get <b>priority 10am–4pm</b> — the cheapest, greenest cycles.' },
-    { id:'gaming',     label:'Gaming PCs',       sub:'K3s · overnight',  icon:'🎮', color:'#00c2a8', role:'provider', ang:150,
+    { id:'tidal',    label:'Tidal & Offshore',  sub:'Wave · 24×7',      icon:'🌊', color:'#06b6d4', role:'provider', shape:'circle',  ang:110,
+      desc:'Floating, <b>seawater-cooled</b> GPU rigs on <b>tidal, wave &amp; offshore solar</b> — round-the-clock green baseload.' },
+    { id:'research', label:'Researchers',       sub:'Academia',         icon:'🔬', color:'#8b5cf6', role:'consumer', shape:'pill',    ang:150,
+      desc:'Researchers run large workloads on affordable <b>sovereign compute</b>.' },
+    { id:'gaming',   label:'Gaming PCs',        sub:'K3s · overnight',  icon:'🎮', color:'#00c2a8', role:'provider', shape:'square',  ang:190,
       desc:'Overnight PCs join as <b>K3s workers</b>, return checkpoints, paid via <b>UPI</b>.' },
-    { id:'research',   label:'Researchers',      sub:'Academia',         icon:'🎓', color:'#7c5cff', role:'consumer', ang:210,
-      desc:'Academics run large workloads on affordable <b>sovereign compute</b>.' },
+    { id:'phones',   label:'Consumer Phones',   sub:'WASM client',      icon:'📱', color:'#3b82f6', role:'provider', shape:'roundsq', ang:230,
+      desc:'Idle phones run sandboxed <b>WASM</b> tasks at night and earn <b>UPI payouts</b>.' },
   ];
 
   let W=0, H=0, DPR=1, scale=1, now=0, hovered=null, emergency=false;
@@ -546,7 +555,8 @@
           s.push({color:FLOW.request,  dir:'in',  speed:0.0008*SP, count:3, lane:9});
           s.push({color:FLOW.result,   dir:'out', speed:0.0008*SP, count:3, lane:-9});
         } else if(n.role==='gov'){
-          s.push({color:FLOW.emergency, dir:'in', speed:0.0004*SP, count:1, lane:0});
+          s.push({color:FLOW.workload, dir:'out', speed:0.0009*SP, count:3, lane:10});
+          s.push({color:FLOW.result,   dir:'in',  speed:0.0008*SP, count:2, lane:-10});
         }
       }
       n.streams=s;
@@ -561,7 +571,7 @@
     ctx.setTransform(DPR,0,0,DPR,0,0);
     scale = Math.max(0.58, Math.min(1.15, W/1000));
     core.px = W*0.5; core.py = H*0.5;
-    const rx = W*0.36, ry = H*0.37;
+    const rx = W*0.37, ry = H*0.34;
     nodes.forEach(n=>{
       const a = n.ang*Math.PI/180;
       n.px = core.px + Math.cos(a)*rx;
@@ -588,23 +598,33 @@
     ctx.restore();
   }
 
-  function drawCard(n){
-    const dim = hovered && hovered!==n;
-    const w=152*scale, h=58*scale, x=n.px-w/2, y=n.py-h/2;
+  function hexA(h,a){ const v=parseInt(h.slice(1),16); return `rgba(${(v>>16)&255},${(v>>8)&255},${v&255},${a})`; }
+  function pathFor(shape,cx,cy,r){
+    ctx.beginPath();
+    if(shape==='circle'){ ctx.arc(cx,cy,r,0,Math.PI*2); }
+    else if(shape==='square'){ ctx.roundRect(cx-r,cy-r,2*r,2*r,r*0.3); }
+    else if(shape==='roundsq'){ ctx.roundRect(cx-r*0.86,cy-r*1.04,1.72*r,2.08*r,r*0.42); }
+    else if(shape==='pill'){ ctx.roundRect(cx-r*1.3,cy-r*0.78,2.6*r,1.56*r,r*0.78); }
+    else if(shape==='diamond'){ ctx.moveTo(cx,cy-r); ctx.lineTo(cx+r,cy); ctx.lineTo(cx,cy+r); ctx.lineTo(cx-r,cy); ctx.closePath(); }
+    else if(shape==='hex'){ for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i-90), x=cx+r*Math.cos(a), y=cy+r*Math.sin(a); i?ctx.lineTo(x,y):ctx.moveTo(x,y);} ctx.closePath(); }
+    else if(shape==='shield'){ const w=r*0.96; ctx.moveTo(cx-w,cy-r*0.82); ctx.lineTo(cx+w,cy-r*0.82); ctx.lineTo(cx+w,cy+r*0.18); ctx.quadraticCurveTo(cx+w,cy+r*0.82,cx,cy+r*1.05); ctx.quadraticCurveTo(cx-w,cy+r*0.82,cx-w,cy+r*0.18); ctx.closePath(); }
+    else { ctx.roundRect(cx-r,cy-r,2*r,2*r,8*scale); }
+  }
+  function drawNode(n){
+    const dim = hovered && hovered!==n, hover=(n===hovered), r=25*scale;
     ctx.save();
     ctx.globalAlpha = dim?0.4:1;
-    ctx.shadowColor='rgba(11,16,32,.16)'; ctx.shadowBlur=16*scale; ctx.shadowOffsetY=6*scale;
-    ctx.fillStyle='#fff'; rr(x,y,w,h,13*scale); ctx.fill();
+    ctx.shadowColor='rgba(11,16,32,.16)'; ctx.shadowBlur=14*scale; ctx.shadowOffsetY=5*scale;
+    ctx.fillStyle=hexA(n.color,0.16); pathFor(n.shape,n.px,n.py,r); ctx.fill();
     ctx.shadowColor='transparent'; ctx.shadowOffsetY=0;
-    ctx.save(); rr(x,y,w,h,13*scale); ctx.clip();
-    ctx.fillStyle=n.color; ctx.fillRect(x,y,5*scale,h); ctx.restore();
-    ctx.textBaseline='middle'; ctx.textAlign='left';
-    ctx.font=`${19*scale}px serif`; ctx.fillText(n.icon, x+15*scale, n.py);
-    ctx.fillStyle='#0b1020'; ctx.font=`700 ${13*scale}px Inter, sans-serif`;
-    ctx.fillText(n.label, x+42*scale, n.py - 8*scale);
-    ctx.fillStyle='#8089a3'; ctx.font=`500 ${10.5*scale}px Inter, sans-serif`;
-    ctx.fillText(n.sub, x+42*scale, n.py + 9*scale);
-    if(n===hovered){ ctx.strokeStyle=n.color; ctx.lineWidth=2*scale; rr(x-3*scale,y-3*scale,w+6*scale,h+6*scale,16*scale); ctx.stroke(); }
+    ctx.lineWidth=(hover?2.6:1.6)*scale; ctx.strokeStyle=n.color; pathFor(n.shape,n.px,n.py,r); ctx.stroke();
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.font=`${21*scale}px serif`; ctx.fillText(n.icon, n.px, n.py+1*scale);
+    ctx.textBaseline='top';
+    ctx.fillStyle='#0b1020'; ctx.font=`700 ${12*scale}px Inter, sans-serif`;
+    ctx.fillText(n.label, n.px, n.py + r + 7*scale);
+    ctx.fillStyle='#8089a3'; ctx.font=`500 ${10*scale}px Inter, sans-serif`;
+    ctx.fillText(n.sub, n.px, n.py + r + 20*scale);
     ctx.restore();
   }
 
@@ -645,7 +665,7 @@
       });
     });
 
-    nodes.forEach(drawCard);
+    nodes.forEach(drawNode);
     drawCore();
     requestAnimationFrame(frame);
   }
@@ -661,7 +681,7 @@
   document.getElementById('modeEmergency').addEventListener('click', ()=>setMode(true));
 
   function hitTest(mx,my){
-    for(const n of nodes){ if(Math.abs(mx-n.px)<78*scale && Math.abs(my-n.py)<32*scale) return n; }
+    for(const n of nodes){ const dx=mx-n.px, dy=my-n.py; if(dx*dx+dy*dy < (40*scale)*(40*scale)) return n; }
     if(Math.abs(mx-core.px)<98*scale && Math.abs(my-core.py)<48*scale) return core;
     return null;
   }
