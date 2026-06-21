@@ -10,7 +10,7 @@
 
 ## 1. Who we are
 
-This Site is operated by **TODO _(insert full legal entity name, e.g. "DUM360 Technologies Private Limited" or the proprietorship/founder name actually responsible)_** ("DUM360", "we", "us", "our"), based in India.
+This Site is operated by **BALAJI IT SOLUTIONS** (a sole proprietorship, MSME-registered in India), which operates the DUM360 project ("DUM360", "we", "us", "our"), based in India.
 
 Registered/operating address: **TODO _(insert address)_**
 
@@ -127,7 +127,7 @@ As a **Data Principal** under the DPDP Act, you have the right to:
 - **Grievance redressal** — raise a complaint with our Grievance Officer (Section 11) and have it addressed.
 - **Nominate** — nominate another individual to exercise your rights in the event of your death or incapacity.
 
-**How to exercise any of these rights:** email us at **TODO _(insert rights/privacy contact email, e.g. privacy@dum360.com)_** with your request and the email address you signed up with (so we can locate your record). We will respond within a reasonable period and in any case within timelines required by applicable law. We may need to verify your identity before acting on a request.
+**How to exercise any of these rights:** email us at **info@balaji.it** with your request and the email address you signed up with (so we can locate your record). We will respond within a reasonable period and in any case within timelines required by applicable law. We may need to verify your identity before acting on a request.
 
 If you are not satisfied with how we handle your request or grievance, you have the right to escalate to the **Data Protection Board of India** once it is operational, as provided under the DPDP Act.
 
@@ -147,8 +147,8 @@ We keep your sign-up data only for as long as needed for the waitlist and follow
 
 In line with the DPDP Act, you can contact our Grievance Officer for any privacy question, request, or complaint:
 
-- **Name:** TODO _(insert Grievance/Data Protection Officer name)_
-- **Email:** TODO _(insert officer email)_
+- **Name:** The Proprietor, BALAJI IT SOLUTIONS
+- **Email:** info@balaji.it
 - **Postal address:** TODO _(insert address)_
 
 _(Note for internal review: if DUM360 is later classified as a Significant Data Fiduciary, appointment of a Data Protection Officer based in India and additional obligations may apply — Counsel to assess.)_
@@ -187,7 +187,7 @@ We may update this policy as the Site or the law evolves. When we make a materia
 
 Questions about this policy or your data:
 
-- **General contact:** TODO _(insert contact email)_
+- **General contact:** info@balaji.it
 - **Grievance Officer:** see Section 11.
 - **Address:** TODO _(insert address)_
 

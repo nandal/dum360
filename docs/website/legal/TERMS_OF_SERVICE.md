@@ -10,7 +10,7 @@
 
 ## 1. About these terms
 
-These Terms of Service ("Terms") govern your use of the **DUM360 marketing website and its waitlist sign-up**, operated by **TODO _(insert full legal entity name)_** ("DUM360", "we", "us", "our"), based in India.
+These Terms of Service ("Terms") govern your use of the **DUM360 marketing website and its waitlist sign-up**, operated by **BALAJI IT SOLUTIONS** (a sole proprietorship, MSME-registered in India), which operates the DUM360 project ("DUM360", "we", "us", "our"), based in India.
 
 > **Important scope note.** These Terms cover **only this website and the waitlist**. They do **not** cover the DUM360 **compute platform** (the node app, provider/client dashboards, payouts, or running compute workloads). That platform is not yet open to the public and will have **its own separate terms and agreements** before you can use it. Nothing here grants you access to, or rights in, that platform.
 
@@ -117,8 +117,8 @@ These Terms are governed by the laws of **India**. Subject to any non-waivable c
 
 Questions about these Terms:
 
-- **Email:** TODO _(insert contact email)_
-- **Operator:** TODO _(insert legal entity name)_
+- **Email:** info@balaji.it
+- **Operator:** BALAJI IT SOLUTIONS (sole proprietorship, MSME, India)
 - **Address:** TODO _(insert address)_
 
 ---

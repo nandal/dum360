@@ -73,7 +73,7 @@ We may update this notice as the Site or the law changes. We will update the "La
 
 Questions about cookies or analytics:
 
-- **Email:** TODO _(insert contact email)_
+- **Email:** info@balaji.it
 - **Grievance / Data Protection Officer:** see the [Privacy Policy](PRIVACY_POLICY.md).
 
 ---
