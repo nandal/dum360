@@ -109,7 +109,7 @@ We may change, suspend, or discontinue any part of the Site at any time. We may 
 
 ## 11. Governing law and jurisdiction
 
-These Terms are governed by the laws of **India**. Subject to any non-waivable consumer-protection rights you may have, the courts at **TODO _(insert seat/city, e.g. "New Delhi, India" or the registered office city)_** shall have exclusive jurisdiction over any dispute arising out of or relating to these Terms or the Site.
+These Terms are governed by the laws of **India**. Subject to any non-waivable consumer-protection rights you may have, the courts at **Jhajjar, Haryana, India** shall have exclusive jurisdiction over any dispute arising out of or relating to these Terms or the Site.
 
 ---
 

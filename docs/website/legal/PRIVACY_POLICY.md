@@ -108,7 +108,7 @@ We use a small set of trusted service providers ("Data Processors") who handle d
 | **Google / Firebase** (Cloud Firestore) | Stores your sign-up personal data | **Mumbai, India (`asia-south1`)** |
 | **Google** (Google Analytics 4) | Aggregate, consent-gated usage analytics | Google infrastructure (consent-gated; IP-anonymised) |
 | **Google** (Firebase Authentication / Google Sign-In) | **Only** powers an optional future contributor portal where you can manage your own record. **Never required to join the waitlist.** | Google infrastructure |
-| Bot/abuse protection provider | Detects automated/spam submissions | TODO _(confirm whether Firebase App Check / reCAPTCHA Enterprise or Cloudflare Turnstile is used; update this row)_ |
+| **Google / Firebase** (App Check, with reCAPTCHA) | Detects automated/spam submissions on the sign-up form | Google infrastructure |
 
 Each of these providers operates under its own privacy and security commitments. We choose the **Mumbai (India) region** for the data store that holds your personal data.
 
@@ -147,7 +147,7 @@ We keep your sign-up data only for as long as needed for the waitlist and follow
 
 In line with the DPDP Act, you can contact our Grievance Officer for any privacy question, request, or complaint:
 
-- **Name:** The Proprietor, BALAJI IT SOLUTIONS
+- **Name:** Sandeep Nandal (Proprietor, BALAJI IT SOLUTIONS)
 - **Email:** info@balaji.it
 - **Postal address:** #246, Ward-1, Jhajjar – 124103, Haryana, India
 

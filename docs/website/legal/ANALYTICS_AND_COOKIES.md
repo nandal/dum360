@@ -32,7 +32,7 @@ We group them into two kinds: **strictly necessary** and **analytics (optional)*
 These are required for the Site to work safely and cannot be switched off. They do **not** track you for advertising. They include:
 
 - **Remembering your consent choice** — so we don't ask you on every page.
-- **Security / anti-abuse** — to detect spam or automated bot submissions on the sign-up form (e.g. our bot-protection provider: TODO _(confirm Firebase App Check / reCAPTCHA Enterprise or Cloudflare Turnstile and name it here)_).
+- **Security / anti-abuse** — to detect spam or automated bot submissions on the sign-up form (we use **Firebase App Check**, with reCAPTCHA).
 
 ---
 
