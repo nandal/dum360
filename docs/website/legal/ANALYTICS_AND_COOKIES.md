@@ -2,8 +2,8 @@
 
 # Analytics & Cookies Notice
 
-**Effective date:** TODO _(insert date this notice goes live)_
-**Last updated:** TODO
+**Effective date:** 22 June 2026
+**Last updated:** 22 June 2026
 **Applies to:** the DUM360 website at `dum360.com` (the "Site").
 
 This short notice explains how the DUM360 website uses cookies and analytics, and how you stay in control. It supplements our [Privacy Policy](PRIVACY_POLICY.md).

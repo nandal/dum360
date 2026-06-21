@@ -2,8 +2,8 @@
 
 # Terms of Service — DUM360 Website & Waitlist
 
-**Effective date:** TODO _(insert date these terms go live)_
-**Last updated:** TODO
+**Effective date:** 22 June 2026
+**Last updated:** 22 June 2026
 **Applies to:** the DUM360 website at `dum360.com` (the "Site") and the contributor/stakeholder waitlist sign-up it offers.
 
 ---

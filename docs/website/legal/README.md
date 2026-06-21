@@ -30,7 +30,10 @@ Haryana, India**; contact/grievance email = **info@balaji.it**; grievance office
 Nandal (Proprietor)**; governing law / jurisdiction = **Jhajjar, Haryana, India**;
 bot-protection = **Firebase App Check** (with reCAPTCHA).
 
-Open items that still block go-live (also tracked in `../PRD.md` §11): **retention period**,
-**effective dates**, and a **Significant Data Fiduciary (SDF) assessment** — then a final
-review by qualified Indian counsel. Data-collection facts the policy must reflect are in
-`../PRD.md` §8.
+**Defaults applied:** retention = until the relevant DUM360 product opens + up to **24 months**
+(or on request, whichever is earlier); effective date / last updated = **22 June 2026**.
+
+Open items that still block go-live (also tracked in `../PRD.md` §11): a **Significant Data
+Fiduciary (SDF) assessment**, the **cookie "change your mind" mechanism** wording (depends on
+the frontend consent UI), and a final **review by qualified Indian counsel**. Data-collection
+facts the policy must reflect are in `../PRD.md` §8.

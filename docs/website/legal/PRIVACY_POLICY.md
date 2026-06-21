@@ -2,8 +2,8 @@
 
 # Privacy Policy
 
-**Effective date:** TODO _(insert date this policy goes live)_
-**Last updated:** TODO
+**Effective date:** 22 June 2026
+**Last updated:** 22 June 2026
 **Applies to:** the DUM360 website at `dum360.com` (the "Site") and the contributor waitlist sign-up it hosts.
 
 ---
@@ -137,7 +137,7 @@ If you are not satisfied with how we handle your request or grievance, you have 
 
 We keep your sign-up data only for as long as needed for the waitlist and follow-up purpose, and then delete or anonymise it.
 
-- **Retention period:** TODO _(CEO/Counsel to choose a defined period — e.g. "until the relevant DUM360 product opens to you and for up to 24 months thereafter, or until you ask us to delete it, whichever is earlier." A concrete, stated period is required.)_
+- **Retention period:** We keep your sign-up data until the relevant DUM360 product opens to you and for up to **24 months** thereafter, or until you ask us to delete it, whichever is earlier.
 - We delete or anonymise data sooner if you **withdraw consent** or ask for **erasure**, unless a law requires us to retain it.
 - Aggregate, **non-identifying** statistics (e.g. "how many people signed up") may be retained indefinitely as they are not personal data.
 
