@@ -12,7 +12,7 @@
 
 This Site is operated by **BALAJI IT SOLUTIONS** (a sole proprietorship, MSME-registered in India), which operates the DUM360 project ("DUM360", "we", "us", "our"), based in India.
 
-Registered/operating address: **TODO _(insert address)_**
+Registered/operating address: **#246, Ward-1, Jhajjar – 124103, Haryana, India**
 
 For the purposes of India's **Digital Personal Data Protection Act, 2023 ("DPDP Act")**, when you give us your personal data through this Site we act as a **Data Fiduciary** — we decide what data is collected and why. This policy explains, in plain language, what we collect, why, where it is stored, who can touch it, and the rights you have.
 
@@ -149,7 +149,7 @@ In line with the DPDP Act, you can contact our Grievance Officer for any privacy
 
 - **Name:** The Proprietor, BALAJI IT SOLUTIONS
 - **Email:** info@balaji.it
-- **Postal address:** TODO _(insert address)_
+- **Postal address:** #246, Ward-1, Jhajjar – 124103, Haryana, India
 
 _(Note for internal review: if DUM360 is later classified as a Significant Data Fiduciary, appointment of a Data Protection Officer based in India and additional obligations may apply — Counsel to assess.)_
 
@@ -189,7 +189,7 @@ Questions about this policy or your data:
 
 - **General contact:** info@balaji.it
 - **Grievance Officer:** see Section 11.
-- **Address:** TODO _(insert address)_
+- **Address:** #246, Ward-1, Jhajjar – 124103, Haryana, India
 
 ---
 

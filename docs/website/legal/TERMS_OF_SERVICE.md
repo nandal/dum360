@@ -119,7 +119,7 @@ Questions about these Terms:
 
 - **Email:** info@balaji.it
 - **Operator:** BALAJI IT SOLUTIONS (sole proprietorship, MSME, India)
-- **Address:** TODO _(insert address)_
+- **Address:** #246, Ward-1, Jhajjar – 124103, Haryana, India
 
 ---
 
