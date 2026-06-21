@@ -1,2 +1,5 @@
 # Claude Code local (personal) settings — keep out of version control
 .claude/settings.local.json
+
+# Firebase CLI local deploy cache
+.firebase/

@@ -6,6 +6,11 @@
 <title>DUM360 — India's Citizen-Powered Sovereign Inference Engine</title>
 <meta name="description" content="DUM360 (Distributed Unified Mesh 360) pools India's already-paid-for idle compute — phones, gaming PCs, university & PSU labs, MSME machines and solar GPU rigs — into the country's largest sovereign AI-inference engine. Built for inference and parallel workloads, not frontier training. Earn via UPI. Indian-hosted platform, DPDP-aligned." />
 <meta name="theme-color" content="#0b1020" />
+<!-- Favicons / brand -->
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <!-- Open Graph -->
 <meta property="og:title" content="DUM360 — India's Citizen-Powered Sovereign Inference Engine" />
 <meta property="og:description" content="India's already-paid-for idle hardware, pooled into its largest sovereign inference engine — without building a single new data centre. Inference & parallel workloads, not frontier training. Earn via UPI." />
@@ -109,9 +114,8 @@
   .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -.02em; color: var(--ink); }
   .logo:hover { text-decoration: none; }
   .logo .mark {
-    width: 30px; height: 30px; border-radius: 9px;
-    background: linear-gradient(135deg, var(--brand), var(--brand-2));
-    display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 900;
+    width: 32px; height: 32px; border-radius: 8px;
+    display: block; object-fit: contain;
   }
   .nav-links { display: flex; align-items: center; gap: 26px; }
   .nav-links a { font-size: 15px; font-weight: 500; color: var(--ink-soft); }
@@ -389,6 +393,13 @@
   .btn-google:hover { border-color: var(--brand); }
   .btn-google .g { font-weight: 800; color: #4285F4; }
   .trust-line { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--ink-soft); margin-top: 18px; }
+  .auth-status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink); background: #f1f6f1; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 14px 0 4px; }
+  .auth-status .ok { color: #1a7f37; font-weight: 700; }
+  .auth-status .who { font-weight: 600; word-break: break-all; }
+  .auth-status .switch { margin-left: auto; background: none; border: 0; color: var(--brand); font: inherit; cursor: pointer; padding: 0; text-decoration: underline; }
+  .auth-hint { font-size: 12.5px; color: var(--ink-soft); text-align: center; margin: 10px 0 0; }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+  input.locked { background: #f5f6f8; color: var(--ink-soft); cursor: not-allowed; }
   .form-banner { background: rgba(200,30,30,.08); border: 1px solid rgba(200,30,30,.25); color: var(--error); font-size: 13.5px; padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; display: none; }
   .form-banner.show { display: block; }
   .form-banner.warn { background: rgba(180,83,9,.08); border-color: rgba(180,83,9,.25); color: var(--warning); }
@@ -422,7 +433,7 @@
 
 <header class="nav">
   <div class="wrap nav-inner">
-    <a href="#" class="logo"><span class="mark">D</span> DUM360</a>
+    <a href="#" class="logo"><img class="mark" src="/branding/dum360-icon.png" alt="" width="32" height="32" /> DUM360</a>
     <nav class="nav-links" aria-label="Primary">
       <a href="#how">How it works</a>
       <a href="#mesh">The mesh</a>
@@ -444,7 +455,7 @@
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Site menu">
   <div class="mm-top">
-    <span class="logo"><span class="mark">D</span> DUM360</span>
+    <span class="logo"><img class="mark" src="/branding/dum360-icon.png" alt="" width="32" height="32" /> DUM360</span>
     <button class="mm-close" aria-label="Close menu" id="mmClose">×</button>
   </div>
   <a class="mm-link" href="#how">How it works</a>
@@ -886,7 +897,7 @@
   <div class="wrap">
     <div class="foot">
       <div>
-        <a href="#" class="logo"><span class="mark">D</span> DUM360</a>
+        <a href="#" class="logo"><img class="mark" src="/branding/dum360-icon.png" alt="" width="32" height="32" /> DUM360</a>
         <p>Distributed Unified Mesh 360 — India's citizen-powered, sovereign idle-compute mesh. The country's largest sovereign inference engine, built from hardware it already owns.</p>
       </div>
       <div class="foot-links">
@@ -959,12 +970,18 @@
       </label>
       <div class="field err" id="consentErr" style="display:none;"><div class="errmsg" style="display:block;">Please accept the Privacy Policy to continue.</div></div>
 
-      <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%;">Join the waitlist</button>
+      <!-- Step 1 of submit: Google sign-in is REQUIRED (anti-spam). -->
+      <button type="button" class="btn btn-google" id="googleBtn"><span class="g">G</span> Continue with Google</button>
+      <div class="auth-status" id="authStatus" style="display:none;">
+        <span class="ok">✓ Signed in</span>
+        <span class="who" id="authWho"></span>
+        <button type="button" class="switch" id="signOutBtn">Not you?</button>
+      </div>
 
-      <div class="form-divider">or</div>
-      <button type="button" class="btn btn-google" id="googleBtn"><span class="g">G</span> Continue with Google <span style="color:var(--muted);font-weight:400;font-size:12.5px;">(optional)</span></button>
+      <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%;margin-top:14px;" disabled>Join the waitlist</button>
+      <p class="auth-hint" id="authHint">Sign in with Google above to join.</p>
 
-      <div class="trust-line">🔒 <span>No spam. Your data stays in India (Firestore Mumbai). Early-access emails only — you can edit or leave anytime.</span></div>
+      <div class="trust-line">🔒 <span>Google sign-in keeps the list spam-free and lets you edit or leave anytime. Your data stays in India (Firestore Mumbai) — early-access emails only.</span></div>
     </form>
 
     <!-- SUCCESS -->
@@ -972,7 +989,7 @@
       <div class="tick">✓</div>
       <h2>You're on the list</h2>
       <p id="successMsg">We'll email you as we open access for your segment.</p>
-      <button type="button" class="btn btn-google" id="successGoogleBtn" style="max-width:320px;margin:0 auto;"><span class="g">G</span> Create an account to manage your sign-up</button>
+      <button type="button" class="btn btn-primary" id="successPortalBtn" style="max-width:320px;margin:0 auto;">Manage your sign-up →</button>
       <p style="margin-top:16px;"><button class="back-link" id="successClose">Done</button></p>
     </div>
   </div>
@@ -1010,9 +1027,10 @@
     errors: {
       network: "Couldn't submit — check your connection and try again.",
       email:   "Enter a valid email so we can reach you.",
-      auth:    "Google sign-in didn't work — you can still join with your email.",
+      auth:    "Google sign-in didn't work — please try again.",
+      authReq: "Please continue with Google to join — it keeps the list spam-free.",
       offline: "Sign-ups are opening soon. Please check back — or email hello@dum360.com.",
-      dup:     "You're already on the list 🎉 We'll be in touch. Want to update your details? Sign in with Google below."
+      dup:     "You're already on the list 🎉 We'll be in touch. Your details are tied to your Google account — sign in anytime to update them."
     }
   };
 
@@ -1060,8 +1078,13 @@
   const submitBtn = document.getElementById('submitBtn');
   const consentEl = document.getElementById('consent');
   const consentErr = document.getElementById('consentErr');
+  const authStatus = document.getElementById('authStatus');
+  const authWho = document.getElementById('authWho');
+  const authHint = document.getElementById('authHint');
+  const signOutBtn = document.getElementById('signOutBtn');
   let lastFocus = null;
   let currentAudience = null;
+  let signedInUser = null;
 
   /* ---------- Build audience picker ---------- */
   ORDER.forEach(key=>{
@@ -1119,6 +1142,8 @@
     // optional phone for citizen
     if(key==='citizen'){ html += fieldHTML({k:"phone", t:"tel", label:"Phone (optional)", help:"For WhatsApp/call follow-up."}); }
     dynamicFields.innerHTML = html;
+    // Re-apply auth gate: fields were just rebuilt, so re-lock/prefill email if signed in.
+    applyAuthState(signedInUser);
   }
 
   function fieldHTML(d){
@@ -1181,6 +1206,8 @@
     formBanner.classList.remove('show');
     // honeypot
     if(document.getElementById('hp_company').value){ showSuccess(); return; } // silently "succeed" for bots
+    // Google sign-in is mandatory — gate before validating the rest.
+    if(!signedInUser){ showBanner(I18N.errors.authReq, 'warn'); doGoogle(); return; }
     if(!validate()) return;
     const data = collect();
 
@@ -1193,14 +1220,16 @@
     } catch(err){
       setLoading(false);
       if(err && err.code === 'not-configured'){ showBanner(I18N.errors.offline, 'warn'); }
+      else if(err && err.code === 'auth-required'){ showBanner(I18N.errors.authReq, 'warn'); doGoogle(); }
       else { showBanner(I18N.errors.network, 'error'); }
       console.warn('[DUM360] signup submit error:', err);
     }
   });
 
+  function submitLabel(){ return currentAudience==='government'||currentAudience==='university' ? 'Request' : 'Join the waitlist'; }
   function setLoading(on){
     if(on){ submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spin"></span> Joining…'; }
-    else { submitBtn.disabled = false; submitBtn.textContent = currentAudience==='government'||currentAudience==='university' ? 'Request' : 'Join the waitlist'; }
+    else { submitBtn.disabled = !signedInUser; submitBtn.textContent = submitLabel(); }
   }
   function showBanner(msg, kind){
     formBanner.textContent = msg;
@@ -1214,18 +1243,34 @@
     document.getElementById('successMsg').textContent = I18N.success[currentAudience] || I18N.success._default;
   }
 
-  /* ---------- Google sign-in (optional) ---------- */
+  /* ---------- Google sign-in (MANDATORY anti-spam gate) ---------- */
+  // Reflect auth state into the form: enable the submit button only when signed
+  // in, prefill + lock the email field to the verified Google account.
+  function applyAuthState(user){
+    signedInUser = user || null;
+    const nameEl = document.getElementById('f_name');
+    const emailEl = document.getElementById('f_email');
+    if(user){
+      authStatus.style.display = '';
+      authWho.textContent = user.email || user.displayName || 'your Google account';
+      authHint.style.display = 'none';
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitLabel();
+      // Prefill from Google and lock email (it's bound server-side to this account).
+      if(nameEl && !nameEl.value && user.displayName) nameEl.value = user.displayName;
+      if(emailEl && user.email){ emailEl.value = user.email; emailEl.readOnly = true; emailEl.classList.add('locked'); }
+    } else {
+      authStatus.style.display = 'none';
+      authHint.style.display = '';
+      submitBtn.disabled = true;
+      if(emailEl){ emailEl.readOnly = false; emailEl.classList.remove('locked'); }
+    }
+  }
+
   async function doGoogle(){
     try {
-      const user = await window.DUM360.signInWithGoogle();
-      if(user){
-        // prefill
-        const nameEl = document.getElementById('f_name');
-        const emailEl = document.getElementById('f_email');
-        if(nameEl && user.displayName) nameEl.value = user.displayName;
-        if(emailEl && user.email) emailEl.value = user.email;
-        showBanner('Signed in as '+ (user.email||'your Google account') +'. Review and submit.', 'warn');
-      }
+      await window.DUM360.signInWithGoogle();
+      // UI updates via the onAuthChange observer below.
     } catch(err){
       if(err && err.code==='not-configured'){ showBanner(I18N.errors.offline,'warn'); }
       else { showBanner(I18N.errors.auth,'error'); }
@@ -1233,13 +1278,22 @@
     }
   }
   document.getElementById('googleBtn').addEventListener('click', doGoogle);
-  document.getElementById('successGoogleBtn').addEventListener('click', async function(){
-    await doGoogle();
-    // After auth from success, point to portal (placeholder)
+  signOutBtn.addEventListener('click', async function(){
+    try { await window.DUM360.signOut(); } catch(_){}
+    // observer flips the gate back to "signed out"
+  });
+  document.getElementById('successPortalBtn').addEventListener('click', function(){
     if(window.DUM360 && window.DUM360.isConfigured && window.DUM360.isConfigured()){
       location.href = '/portal.html';
     }
   });
+
+  // Subscribe once: keeps the gate in sync (incl. returning, already-signed-in users).
+  if(window.DUM360 && window.DUM360.onAuthChange){
+    window.DUM360.onAuthChange(applyAuthState);
+  } else {
+    applyAuthState(null);
+  }
 
   /* ---------- Wire triggers ---------- */
   document.querySelectorAll('[data-join]').forEach(el=>{

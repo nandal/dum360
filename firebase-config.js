@@ -22,12 +22,12 @@
 
   /* ---- 1. PASTE YOUR FIREBASE WEB CONFIG HERE (placeholders => offline mode) ---- */
   const FIREBASE_CONFIG = {
-    apiKey:            "TODO_FIREBASE_API_KEY",
-    authDomain:        "TODO_PROJECT.firebaseapp.com",
-    projectId:         "TODO_PROJECT",
-    storageBucket:     "TODO_PROJECT.appspot.com",
-    messagingSenderId: "TODO_SENDER_ID",
-    appId:             "TODO_APP_ID"
+    apiKey:            "AIzaSyD0Ba_-89nUfmxgrl21WenRUt20ikP9E4U",
+    authDomain:        "dum360-com.firebaseapp.com",
+    projectId:         "dum360-com",
+    storageBucket:     "dum360-com.firebasestorage.app",
+    messagingSenderId: "441199958635",
+    appId:             "1:441199958635:web:2af917bf97ea39c020ef2e"
     // measurementId: "TODO_MEASUREMENT_ID"  // optional (GA4)
   };
 
@@ -89,26 +89,41 @@
      * Write a signup doc to Firestore. Resolves on success, or:
      *   - resolves {duplicate:true} if a doc with this email already exists (best-effort),
      *   - rejects with err.code === 'not-configured' if Firebase isn't set up,
+     *   - rejects with err.code === 'auth-required' if the user is not signed in,
      *   - rejects with a Firestore error otherwise.
+     *
+     * Google sign-in is MANDATORY (anti-spam): the doc's uid + email are forced to
+     * the authenticated account so they always match the Firestore security rules.
      */
     async submitSignup(data) {
       await ensureInit();
-      const {
-        collection, addDoc, serverTimestamp, query, where, getDocs, limit
-      } = _fs;
 
-      // Best-effort duplicate check (rules DENY public reads of PII in production,
-      // so this query may fail — we treat a failure as "not a duplicate" and proceed).
+      const user = _auth && _auth.currentUser;
+      if (!user) {
+        const e = new Error("Sign in with Google to continue");
+        e.code = "auth-required";
+        throw e;
+      }
+
+      const { doc, getDoc, setDoc, serverTimestamp } = _fs;
+
+      // Email is bound to the verified Google account verbatim — the security rule
+      // requires it to equal request.auth.token.email exactly (no case-folding).
+      const email = user.email || "";
+
+      // One signup per Google account: the doc ID IS the uid. This makes the
+      // duplicate check reliable (an owner may read their own doc) and caps spam
+      // at one entry per real account.
+      const ref = doc(_db, SIGNUPS_COLLECTION, user.uid);
       try {
-        const q = query(collection(_db, SIGNUPS_COLLECTION), where("email", "==", data.email), limit(1));
-        const snap = await getDocs(q);
-        if (!snap.empty) return { duplicate: true };
-      } catch (_) { /* reads denied by rules in prod — ignore, proceed to create */ }
+        const existing = await getDoc(ref);
+        if (existing.exists()) return { duplicate: true };
+      } catch (_) { /* read hiccup — proceed; setDoc is still bounded to this uid */ }
 
       const payload = {
         audience: data.audience || "other",
-        name: data.name || null,
-        email: data.email,
+        name: data.name || user.displayName || null,
+        email: email,
         organisation: data.organisation || null,
         phone: data.phone || null,
         message: data.message || null,
@@ -124,11 +139,11 @@
         consent: data.consent === true,
         source: data.source || {},
         status: "new",
-        uid: (_auth && _auth.currentUser) ? _auth.currentUser.uid : null,
+        uid: user.uid,
         userAgentHash: await hashUA(),
         createdAt: serverTimestamp()
       };
-      await addDoc(collection(_db, SIGNUPS_COLLECTION), payload);
+      await setDoc(ref, payload);
       return { ok: true };
     },
 
@@ -147,7 +162,22 @@
       await signOut(_auth);
     },
 
-    currentUser() { return _auth ? _auth.currentUser : null; }
+    currentUser() { return _auth ? _auth.currentUser : null; },
+
+    /**
+     * Subscribe to auth-state changes. The callback fires once with the current
+     * user (or null) and again on every sign-in/sign-out — used by the page to
+     * gate the form behind a mandatory Google sign-in.
+     *
+     * If Firebase isn't configured, the callback is invoked once with null and a
+     * no-op unsubscribe is returned (the form then shows "sign-ups opening soon").
+     */
+    async onAuthChange(cb) {
+      if (!isConfigured()) { try { cb(null); } catch (_) {} return () => {}; }
+      await ensureInit();
+      const { onAuthStateChanged } = _authMod;
+      return onAuthStateChanged(_auth, cb);
+    }
   };
 
   /* Coarse, non-PII UA hash for abuse signals only. */

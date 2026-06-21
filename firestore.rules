@@ -3,8 +3,11 @@ rules_version = '2';
 // DUM360 Firestore security rules — PRD §8.4
 //
 // Principles:
-//  - Anyone may CREATE a signup, but only with a validated payload (consent==true,
-//    valid audience, correct field types/sizes, no arbitrary extra fields).
+//  - A signup may only be CREATED by a signed-in (Google) user, bound to their
+//    own verified account (uid + email from the auth token). This is the primary
+//    anti-spam control: one entry per real Google account, no anonymous writes.
+//  - The payload is additionally validated (consent==true, valid audience,
+//    correct field types/sizes, no arbitrary extra fields).
 //  - Public READ/LIST of `signups` is DENIED (it contains PII). Reads happen via
 //    the Firebase Console, an admin Cloud Function (Admin SDK bypasses rules),
 //    or — in the Phase-3 portal — an authenticated owner reading only their own
@@ -48,14 +51,21 @@ service cloud.firestore {
         && optString(d.phone, 40)
         && optString(d.message, 2000)
         && (d.status == 'new')
-        && (d.uid == null || d.uid is string)
+        && (d.uid is string)
         && (d.meta == null || d.meta is map)
         && (d.source == null || d.source is map);
     }
 
     match /signups/{id} {
-      // Create: open, but strictly validated.
-      allow create: if validSignup(request.resource.data);
+      // Create: signed-in users only, bound to their own verified Google account.
+      // The doc ID MUST equal the uid → exactly one signup per account (anti-spam).
+      // (UI mirrors this; the rule is the real enforcement.)
+      allow create: if request.auth != null
+        && request.auth.token.email_verified == true
+        && id == request.auth.uid
+        && validSignup(request.resource.data)
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email;
 
       // Read/update only by the authenticated owner (Phase-3 portal). No public list.
       allow get: if request.auth != null && resource.data.uid == request.auth.uid;

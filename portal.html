@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Contributor Portal — DUM360</title>
@@ -17,7 +22,7 @@
   header.nav { background:#fff; border-bottom:1px solid var(--line); }
   .nav-inner { display:flex; align-items:center; justify-content:space-between; height:68px; max-width:1000px; margin:0 auto; padding:0 24px; }
   .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; color:var(--ink); text-decoration:none; }
-  .logo .mark { width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); display:grid; place-items:center; color:#fff; font-size:13px; font-weight:900; }
+  .logo .mark { width:32px; height:32px; border-radius:8px; display:block; object-fit:contain; }
   .wrap { max-width:1000px; margin:0 auto; padding:48px 24px 80px; }
   .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; font-size:15px; padding:12px 22px; border-radius:12px; border:1px solid transparent; cursor:pointer; min-height:44px; font-family:inherit; }
   .btn-primary { background:var(--brand-strong); color:#fff; }
@@ -34,7 +39,7 @@
 <body>
 <header class="nav">
   <div class="nav-inner">
-    <a href="/" class="logo"><span class="mark">D</span> DUM360</a>
+    <a href="/" class="logo"><img class="mark" src="/branding/dum360-icon.png" alt="" width="32" height="32" /> DUM360</a>
     <button class="btn btn-ghost" id="signOut" style="display:none;">Sign out</button>
   </div>
 </header>

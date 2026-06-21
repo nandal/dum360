@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Page not found — DUM360</title>
@@ -12,7 +17,7 @@
   :root { --ink:#0b1020; --ink-soft:#475069; --brand:#2f6bff; --brand-2:#00c2a8; --brand-strong:#2a60e6; --line:#e7ebf3; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); display:grid; place-items:center; min-height:100vh; text-align:center; padding:24px; -webkit-font-smoothing:antialiased; }
-  .mark { width:48px; height:48px; border-radius:13px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); display:grid; place-items:center; color:#fff; font-size:22px; font-weight:900; margin:0 auto 24px; }
+  .mark { width:64px; height:64px; border-radius:14px; display:block; object-fit:contain; margin:0 auto 24px; }
   h1 { font-size:clamp(32px,6vw,56px); font-weight:900; letter-spacing:-.02em; margin-bottom:12px; }
   p { color:var(--ink-soft); font-size:17px; margin-bottom:28px; max-width:420px; }
   a.btn { display:inline-flex; align-items:center; gap:8px; background:var(--brand-strong); color:#fff; font-weight:600; padding:13px 24px; border-radius:12px; text-decoration:none; min-height:44px; }
@@ -21,7 +26,7 @@
 </head>
 <body>
   <div>
-    <div class="mark">D</div>
+    <img class="mark" src="/branding/dum360-icon.png" alt="DUM360" width="64" height="64" />
     <h1>404</h1>
     <p>This page doesn't exist on the DUM360 mesh — but plenty does.</p>
     <a class="btn" href="/">← Back to home</a>
