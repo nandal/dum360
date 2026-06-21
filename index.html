@@ -2,35 +2,57 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>DUM360 — India's Citizen-Powered Sovereign Supercomputer</title>
-<meta name="description" content="DUM360 (Distributed Unified Mesh 360) aggregates idle compute from consumer devices and solar-powered rigs into India's first decentralized, sovereign edge supercomputer. Earn via UPI. 100% Indian-hosted." />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>DUM360 — India's Citizen-Powered Sovereign Inference Engine</title>
+<meta name="description" content="DUM360 (Distributed Unified Mesh 360) pools India's already-paid-for idle compute — phones, gaming PCs, university & PSU labs, MSME machines and solar GPU rigs — into the country's largest sovereign AI-inference engine. Built for inference and parallel workloads, not frontier training. Earn via UPI. Indian-hosted platform, DPDP-aligned." />
 <meta name="theme-color" content="#0b1020" />
 <!-- Open Graph -->
-<meta property="og:title" content="DUM360 — India's Citizen-Powered Sovereign Supercomputer" />
-<meta property="og:description" content="Idle devices and solar compute, pooled into a sovereign national supercomputer. Earn via UPI. 100% Indian-hosted." />
+<meta property="og:title" content="DUM360 — India's Citizen-Powered Sovereign Inference Engine" />
+<meta property="og:description" content="India's already-paid-for idle hardware, pooled into its largest sovereign inference engine — without building a single new data centre. Inference & parallel workloads, not frontier training. Earn via UPI." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://dum360.com" />
+<meta property="og:image" content="https://dum360.com/og-image.png" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   :root {
+    /* Surfaces & ink (unchanged from current site) */
     --bg: #ffffff;
     --bg-soft: #f6f8fc;
     --ink: #0b1020;
     --ink-soft: #475069;
     --muted: #8089a3;
     --line: #e7ebf3;
-    --brand: #2f6bff;
-    --brand-2: #00c2a8;
-    --accent: #ff7a1a;
+    /* Brand (decoration/gradients/large display only — see a11y notes) */
+    --brand: #2f6bff;        /* primary brand blue: gradients, large text, UI borders, focus */
+    --brand-2: #00c2a8;      /* teal: DECORATION / gradients / icons ONLY — never text on light */
+    --accent: #ff7a1a;       /* orange: RESERVED for Rashtra Seva / sovereign-action only */
+    /* New a11y-correct blues (DESIGN_SPEC §2.1) */
+    --brand-ink: #1d4fd0;    /* accessible blue for links & small text on white (~5.3:1) */
+    --brand-strong: #2a60e6; /* accessible blue for button fills under white text (~4.6:1) */
+    /* New green-energy accent (DESIGN_SPEC §2.1) — green-energy section + green tier ONLY */
+    --green: #1f9d57;
+    --green-soft: #e8f6ee;
+    /* Semantic / status */
+    --success: #1f9d57;
+    --warning: #b45309;
+    --error: #c81e1e;
+    --emergency: #ff3b3b;
+    /* Radius & shadow */
+    --radius-sm: 12px;
     --radius: 16px;
+    --radius-lg: 22px;
+    --radius-pill: 999px;
     --shadow: 0 1px 2px rgba(11,16,32,.04), 0 12px 32px rgba(11,16,32,.06);
     --shadow-lg: 0 24px 60px rgba(11,16,32,.12);
+    --shadow-focus: 0 0 0 4px rgba(47,107,255,.16);
+    /* Spacing (8pt scale) */
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:88px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     color: var(--ink);
@@ -38,46 +60,81 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  a { color: inherit; text-decoration: none; }
+  a { color: var(--brand-ink); text-decoration: none; }
+  a:hover { text-decoration: underline; }
   .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  /* Focus visibility (a11y — required) */
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+  .btn:focus-visible, .mode-btn:focus-visible, .aud-card:focus-visible,
+  input:focus-visible, select:focus-visible, textarea:focus-visible,
+  .faq-q:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+
+  /* Skip link */
+  .skip { position: absolute; left: 12px; top: -60px; z-index: 200; background: var(--brand-strong); color: #fff;
+    padding: 10px 16px; border-radius: 8px; font-weight: 600; transition: top .15s; }
+  .skip:focus { top: 12px; text-decoration: none; }
+
   .eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: 13px; font-weight: 600; letter-spacing: .04em;
-    color: var(--brand); text-transform: uppercase;
-    background: rgba(47,107,255,.08); padding: 6px 12px; border-radius: 999px;
+    color: var(--brand-ink); text-transform: uppercase;
+    background: rgba(47,107,255,.08); padding: 6px 12px; border-radius: var(--radius-pill);
   }
+
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    font-weight: 600; font-size: 15px; padding: 12px 22px; border-radius: 12px;
-    border: 1px solid transparent; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, background .2s;
+    font-weight: 600; font-size: 15px; padding: 12px 22px; border-radius: var(--radius-sm);
+    border: 1px solid transparent; cursor: pointer; min-height: 44px; line-height: 1.2;
+    font-family: inherit; transition: transform .15s ease, box-shadow .2s ease, background .2s, border-color .2s, color .2s;
   }
-  .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 8px 20px rgba(47,107,255,.28); }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(47,107,255,.36); }
+  .btn-primary { background: var(--brand-strong); color: #fff; box-shadow: 0 8px 20px rgba(42,96,230,.26); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(42,96,230,.34); text-decoration: none; }
   .btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
-  .btn-ghost:hover { border-color: var(--brand); color: var(--brand); }
+  .btn-ghost:hover { border-color: var(--brand); color: var(--brand-ink); text-decoration: none; }
+  .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 8px 20px rgba(255,122,26,.26); }
+  .btn-accent:hover { transform: translateY(-2px); text-decoration: none; }
+  .btn[disabled], .btn[aria-disabled="true"] { opacity: .6; cursor: not-allowed; box-shadow: none; transform: none; }
+  .btn .spin { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   /* NAV */
   header.nav {
     position: sticky; top: 0; z-index: 50;
     backdrop-filter: saturate(180%) blur(12px);
-    background: rgba(255,255,255,.8);
+    background: rgba(255,255,255,.82);
     border-bottom: 1px solid var(--line);
   }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -.02em; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -.02em; color: var(--ink); }
+  .logo:hover { text-decoration: none; }
   .logo .mark {
     width: 30px; height: 30px; border-radius: 9px;
     background: linear-gradient(135deg, var(--brand), var(--brand-2));
     display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 900;
   }
-  .nav-links { display: flex; align-items: center; gap: 30px; }
+  .nav-links { display: flex; align-items: center; gap: 26px; }
   .nav-links a { font-size: 15px; font-weight: 500; color: var(--ink-soft); }
-  .nav-links a:hover { color: var(--ink); }
+  .nav-links a:hover, .nav-links a.active { color: var(--ink); text-decoration: none; }
+  .nav-links a.active { font-weight: 700; }
   .nav-cta { display: flex; align-items: center; gap: 12px; }
-  .menu-toggle { display: none; }
+  .menu-toggle { display: none; background: none; border: 1px solid var(--line); border-radius: 10px; width: 44px; height: 44px; cursor: pointer; align-items: center; justify-content: center; }
+  .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after { content: ""; display: block; width: 20px; height: 2px; background: var(--ink); position: relative; transition: .2s; }
+  .menu-toggle span::before { position: absolute; top: -6px; }
+  .menu-toggle span::after { position: absolute; top: 6px; }
+
+  /* Mobile menu (full-screen) */
+  .mobile-menu { position: fixed; inset: 0; z-index: 60; background: #fff; display: none; flex-direction: column; padding: 24px; overflow-y: auto; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu .mm-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .mobile-menu a.mm-link { font-size: 20px; font-weight: 600; color: var(--ink); padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .mobile-menu .mm-ctas { margin-top: 24px; display: grid; gap: 12px; }
+  .mm-close { background: none; border: 1px solid var(--line); border-radius: 10px; width: 44px; height: 44px; font-size: 22px; cursor: pointer; }
+
   @media (max-width: 880px) {
     .nav-links { display: none; }
     .nav-cta .btn-ghost { display: none; }
+    .menu-toggle { display: inline-flex; }
   }
 
   /* HERO */
@@ -89,39 +146,51 @@
     line-height: 1.05; margin: 22px auto 20px; max-width: 920px;
   }
   .hero h1 .grad { background: linear-gradient(120deg, var(--brand), var(--brand-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .hero p.lede { font-size: clamp(17px, 2.2vw, 21px); color: var(--ink-soft); max-width: 680px; margin: 0 auto 34px; }
+  .hero p.lede { font-size: clamp(17px, 2.2vw, 21px); color: var(--ink-soft); max-width: 700px; margin: 0 auto 34px; }
   .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .hero-note { margin-top: 18px; font-size: 13px; color: var(--muted); }
+  .hero-note { margin-top: 18px; font-size: 13.5px; color: var(--ink-soft); }
 
   /* STATS */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 64px; }
   .stat { text-align: center; }
   .stat .num { font-size: clamp(28px, 4vw, 40px); font-weight: 900; letter-spacing: -.02em;
     background: linear-gradient(120deg, var(--brand), var(--brand-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .stat .lab { font-size: 14px; color: var(--muted); font-weight: 500; }
+  .stat .lab { font-size: 14px; color: var(--ink-soft); font-weight: 500; }
+  .stat .tag { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+    color: var(--warning); background: rgba(180,83,9,.10); padding: 2px 8px; border-radius: var(--radius-pill); }
   @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); row-gap: 32px; } }
 
   /* SECTION */
   section { padding: 88px 0; }
-  .section-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+  @media (max-width: 720px) { section { padding: 56px 0; } }
+  .section-head { text-align: center; max-width: 700px; margin: 0 auto 56px; }
   .section-head h2 { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -.02em; margin: 16px 0 14px; }
   .section-head p { font-size: 17px; color: var(--ink-soft); }
   .alt { background: var(--bg-soft); }
 
+  /* IDLE TABLE */
+  .idle-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .idle-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+  .idle-card .ic { font-size: 26px; margin-bottom: 10px; }
+  .idle-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .idle-card p { font-size: 13.5px; color: var(--ink-soft); }
+  @media (max-width: 880px) { .idle-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .idle-grid { grid-template-columns: 1fr; } }
+
   /* DUAL MODE */
-  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-  .mode-card { border-radius: 20px; padding: 36px; border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); }
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .mode-card { border-radius: var(--radius-lg); padding: 36px; border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); }
   .mode-card.peace { background: linear-gradient(180deg, #fff, #f7fbff); }
   .mode-card.seva { background: linear-gradient(180deg, #fff, #fff7f1); border-color: #ffe0c7; }
   .mode-tag { font-size: 13px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
-  .peace .mode-tag { color: var(--brand); }
+  .peace .mode-tag { color: var(--brand-ink); }
   .seva .mode-tag { color: var(--accent); }
   .mode-card h3 { font-size: 24px; font-weight: 800; margin: 10px 0 12px; letter-spacing: -.01em; }
   .mode-card p { color: var(--ink-soft); font-size: 15.5px; }
   .mode-card ul { list-style: none; margin-top: 18px; display: grid; gap: 10px; }
   .mode-card li { display: flex; gap: 10px; font-size: 15px; color: var(--ink-soft); }
   .mode-card li b { color: var(--ink); font-weight: 600; }
-  .check { color: var(--brand-2); flex: none; font-weight: 800; }
+  .check { color: var(--brand); flex: none; font-weight: 800; }
   .seva .check { color: var(--accent); }
   @media (max-width: 820px) { .modes { grid-template-columns: 1fr; } }
 
@@ -136,70 +205,136 @@
   @media (max-width: 820px) { .grid3 { grid-template-columns: 1fr; } }
 
   /* HOW IT WORKS */
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: step; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .step { position: relative; padding: 28px 22px; border-radius: var(--radius); background: #fff; border: 1px solid var(--line); box-shadow: var(--shadow); }
   .step .n { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; font-weight: 800; color: #fff;
     background: linear-gradient(135deg, var(--brand), var(--brand-2)); margin-bottom: 14px; }
   .step h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
   .step p { font-size: 14.5px; color: var(--ink-soft); }
+  .reclaim-note { text-align: center; margin-top: 28px; font-size: 14px; color: var(--ink-soft); }
   @media (max-width: 820px) { .steps { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
 
-  /* PERSONAS */
+  /* TIERS */
+  .tiers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+  .tier { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .tier h3 { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+  .tier .badge { display: inline-block; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--brand-ink); background: rgba(47,107,255,.10); padding: 2px 8px; border-radius: var(--radius-pill); margin-bottom: 10px; align-self: flex-start; }
+  .tier .ex { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
+  .tier dl { font-size: 12.5px; margin-top: auto; }
+  .tier dt { font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; font-size: 10.5px; margin-top: 8px; }
+  .tier dd { color: var(--ink-soft); }
+  @media (max-width: 980px) { .tiers { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .tiers { grid-template-columns: 1fr; } }
+
+  /* GREEN ENERGY (uses --green palette ONLY here) */
+  .green-band { background: var(--green-soft); }
+  .green-band .eyebrow { color: var(--green); background: rgba(31,157,87,.10); }
+  .green-split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .green-card { background: #fff; border: 1px solid #cfe8da; border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); }
+  .green-card .label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; padding: 4px 10px; border-radius: var(--radius-pill); display: inline-block; margin-bottom: 12px; }
+  .green-card.today .label { color: #fff; background: var(--green); }
+  .green-card.rnd .label { color: var(--warning); background: rgba(180,83,9,.12); }
+  .green-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+  .green-card p { color: var(--ink-soft); font-size: 15px; }
+  .green-card ul { list-style: none; margin-top: 14px; display: grid; gap: 8px; }
+  .green-card li { display: flex; gap: 8px; font-size: 14.5px; color: var(--ink-soft); }
+  .green-card li .gc { color: var(--green); font-weight: 800; flex: none; }
+  @media (max-width: 820px) { .green-split { grid-template-columns: 1fr; } }
+
+  /* COMPARISON */
+  .cmp-wrap { overflow-x: auto; }
+  table.cmp { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14.5px; }
+  table.cmp th, table.cmp td { padding: 14px 16px; text-align: center; border-bottom: 1px solid var(--line); }
+  table.cmp thead th { font-weight: 800; font-size: 14px; vertical-align: bottom; }
+  table.cmp tbody th { text-align: left; font-weight: 600; color: var(--ink); }
+  table.cmp .col-dum { background: rgba(47,107,255,.06); }
+  table.cmp thead .col-dum { border-top-left-radius: 12px; border-top-right-radius: 12px; color: var(--brand-ink); }
+  table.cmp .yes { color: var(--success); font-weight: 800; }
+  table.cmp .no { color: var(--muted); font-weight: 700; }
+  table.cmp .conceded { color: var(--ink-soft); font-weight: 600; }
+  table.cmp .lim { color: var(--ink-soft); }
+  .cmp-cards { display: none; }
+  .cmp-foot { font-size: 13px; color: var(--ink-soft); max-width: 760px; margin: 18px auto 0; text-align: center; }
+  .cmp-cta { text-align: center; margin-top: 32px; }
+  @media (max-width: 760px) {
+    .cmp-wrap { display: none; }
+    .cmp-cards { display: grid; gap: 14px; }
+    .row-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; background: #fff; box-shadow: var(--shadow); }
+    .row-card h4 { font-size: 15px; margin-bottom: 10px; }
+    .row-card .rc { display: flex; justify-content: space-between; font-size: 13.5px; padding: 5px 0; border-top: 1px dashed var(--line); }
+    .row-card .rc:first-of-type { border-top: none; }
+    .row-card .rc.dum { background: rgba(47,107,255,.06); margin: 4px -8px; padding: 6px 8px; border-radius: 8px; border-top: none; font-weight: 700; }
+    .row-card .rc .k { color: var(--ink-soft); }
+  }
+
+  /* USE CASES */
   .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   @media (max-width: 820px) { .grid4 { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 520px) { .grid4 { grid-template-columns: 1fr; } }
+  .uc-note { margin-top: 28px; text-align: center; font-size: 14px; color: var(--ink-soft); max-width: 720px; margin-left: auto; margin-right: auto; }
 
-  /* ROADMAP */
-  .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-  .phase { border-radius: var(--radius); border: 1px solid var(--line); background: #fff; padding: 30px; box-shadow: var(--shadow); }
-  .phase .ph { font-size: 13px; font-weight: 700; color: var(--brand); letter-spacing: .03em; text-transform: uppercase; }
-  .phase h3 { font-size: 20px; font-weight: 800; margin: 8px 0 6px; }
-  .phase .when { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
-  .phase ul { list-style: none; display: grid; gap: 9px; }
-  .phase li { font-size: 14.5px; color: var(--ink-soft); display: flex; gap: 9px; }
-  .phase .target { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; }
-  .phase .target b { color: var(--ink); }
-  @media (max-width: 820px) { .timeline { grid-template-columns: 1fr; } }
+  /* INVITATIONS (audience cards) */
+  .aud-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .aud-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); text-align: left; cursor: pointer; font-family: inherit; transition: transform .18s, box-shadow .2s, border-color .2s; display: flex; flex-direction: column; }
+  .aud-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--brand); }
+  .aud-card .ico { margin-bottom: 14px; }
+  .aud-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+  .aud-card p { font-size: 14px; color: var(--ink-soft); margin-bottom: 16px; flex: 1; }
+  .aud-card .go { font-size: 14px; font-weight: 700; color: var(--brand-ink); }
+  .aud-card.client { background: linear-gradient(180deg, #fff, #f4fbfa); border-color: #c8ece6; }
+  .aud-card.govt { border-left: 3px solid var(--accent); }
+  @media (max-width: 900px) { .aud-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .aud-grid { grid-template-columns: 1fr; } }
 
   /* SOVEREIGNTY BANNER */
-  .sov { border-radius: 24px; padding: 52px; color: #fff; text-align: center;
+  .sov { border-radius: var(--radius-lg); padding: 52px; color: #fff; text-align: center;
     background: radial-gradient(700px 300px at 50% -40px, rgba(255,255,255,.14), transparent), linear-gradient(135deg, #0b1020, #16224a); box-shadow: var(--shadow-lg); }
   .sov h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -.02em; margin-bottom: 14px; }
-  .sov p { color: #c3ccea; max-width: 620px; margin: 0 auto 26px; font-size: 16.5px; }
+  .sov p { color: #c3ccea; max-width: 640px; margin: 0 auto 26px; font-size: 16.5px; }
   .sov .chips { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-  .sov .chip { font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18); }
+  .sov .chip { font-size: 13.5px; font-weight: 600; padding: 8px 16px; border-radius: var(--radius-pill); background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18); }
+  .sov .fine { color: #8a96bd; font-size: 12.5px; max-width: 640px; margin: 22px auto 0; }
 
-  /* CTA */
+  /* FAQ */
+  .faq { max-width: 760px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-q { width: 100%; text-align: left; background: none; border: none; font-family: inherit; font-size: 16.5px; font-weight: 700; color: var(--ink); padding: 20px 40px 20px 0; cursor: pointer; position: relative; line-height: 1.4; }
+  .faq-q::after { content: "+"; position: absolute; right: 4px; top: 18px; font-size: 24px; font-weight: 400; color: var(--brand-ink); transition: transform .2s; }
+  .faq-q[aria-expanded="true"]::after { transform: rotate(45deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+  .faq-a-inner { padding: 0 0 20px; color: var(--ink-soft); font-size: 15px; }
+  .faq-a-inner a { color: var(--brand-ink); }
+  .faq-contact { text-align: center; margin-top: 32px; font-size: 15px; color: var(--ink-soft); }
+
+  /* FINAL CTA */
   .cta { text-align: center; }
   .cta h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 900; letter-spacing: -.02em; margin-bottom: 16px; }
-  .cta p { font-size: 18px; color: var(--ink-soft); max-width: 560px; margin: 0 auto 30px; }
-  .signup { display: flex; gap: 10px; max-width: 460px; margin: 0 auto; }
-  .signup input { flex: 1; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); font-size: 15px; font-family: inherit; outline: none; }
-  .signup input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(47,107,255,.12); }
-  @media (max-width: 480px) { .signup { flex-direction: column; } }
+  .cta p { font-size: 18px; color: var(--ink-soft); max-width: 580px; margin: 0 auto 30px; }
 
   /* FOOTER */
   footer { border-top: 1px solid var(--line); padding: 48px 0 36px; background: var(--bg-soft); }
   .foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; }
-  .foot p { color: var(--muted); font-size: 14px; max-width: 320px; margin-top: 12px; }
+  .foot p { color: var(--ink-soft); font-size: 14px; max-width: 340px; margin-top: 12px; }
   .foot-links { display: flex; gap: 48px; flex-wrap: wrap; }
   .foot-col h4 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin-bottom: 12px; }
-  .foot-col a { display: block; font-size: 14.5px; color: var(--ink-soft); margin-bottom: 8px; }
-  .foot-col a:hover { color: var(--brand); }
-  .foot-bottom { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .foot-col a, .foot-col button.linkish { display: block; font-size: 14.5px; color: var(--ink-soft); margin-bottom: 8px; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; text-align: left; }
+  .foot-col a:hover, .foot-col button.linkish:hover { color: var(--brand-ink); text-decoration: underline; }
+  .foot-bottom { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 13.5px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .foot-hosting { font-size: 12.5px; color: var(--muted); margin-top: 16px; max-width: 760px; }
+
   /* MESH VIZ */
   .mesh-controls { display:flex; gap:10px; justify-content:center; margin-bottom:22px; flex-wrap:wrap; }
-  .mode-btn { font-family:inherit; font-size:14px; font-weight:600; padding:10px 18px; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--ink-soft); cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; gap:8px; }
-  .mode-btn:hover { border-color:var(--brand); color:var(--brand); }
-  .mode-btn[aria-pressed="true"] { background:var(--brand); color:#fff; border-color:var(--brand); box-shadow:0 8px 20px rgba(47,107,255,.28); }
+  .mode-btn { font-family:inherit; font-size:14px; font-weight:600; padding:10px 18px; border-radius:var(--radius-pill); border:1px solid var(--line); background:#fff; color:var(--ink-soft); cursor:pointer; transition:all .2s; display:inline-flex; align-items:center; gap:8px; min-height:44px; }
+  .mode-btn:hover { border-color:var(--brand); color:var(--brand-ink); }
+  .mode-btn[aria-pressed="true"] { background:var(--brand-strong); color:#fff; border-color:var(--brand-strong); box-shadow:0 8px 20px rgba(42,96,230,.26); }
   .mode-btn.em[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 8px 20px rgba(255,122,26,.3); }
   .mode-btn.em:hover { border-color:var(--accent); color:var(--accent); }
   .mode-btn.em[aria-pressed="true"]:hover { color:#fff; }
-  .mesh-stage { position:relative; width:100%; aspect-ratio:16/10; max-height:600px; border-radius:22px; overflow:hidden; border:1px solid var(--line); background:radial-gradient(700px 420px at 50% 42%, #ffffff, #eef3fb); box-shadow:var(--shadow); }
+  .mesh-stage { position:relative; width:100%; aspect-ratio:16/10; max-height:600px; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--line); background:radial-gradient(700px 420px at 50% 42%, #ffffff, #eef3fb); box-shadow:var(--shadow); }
   @media (max-width:680px){ .mesh-stage{ aspect-ratio:3/4; } }
   .mesh-stage canvas { position:absolute; inset:0; width:100%; height:100%; display:block; cursor:default; }
-  .mesh-banner { position:absolute; top:14px; left:50%; transform:translateX(-50%); background:rgba(255,59,59,.12); color:#c81e1e; border:1px solid rgba(255,59,59,.3); font-size:12.5px; font-weight:700; padding:7px 16px; border-radius:999px; opacity:0; transition:opacity .3s; pointer-events:none; letter-spacing:.02em; text-align:center; white-space:nowrap; }
+  .mesh-banner { position:absolute; top:14px; left:50%; transform:translateX(-50%); background:rgba(255,59,59,.12); color:#c81e1e; border:1px solid rgba(255,59,59,.3); font-size:12.5px; font-weight:700; padding:7px 16px; border-radius:var(--radius-pill); opacity:0; transition:opacity .3s; pointer-events:none; letter-spacing:.02em; text-align:center; white-space:nowrap; }
   .mesh-banner.show { opacity:1; }
   .mesh-tip { position:absolute; pointer-events:none; max-width:230px; background:#0b1020; color:#fff; font-size:12.5px; line-height:1.5; padding:10px 12px; border-radius:10px; opacity:0; transform:translateY(4px); transition:opacity .15s, transform .15s; box-shadow:0 10px 30px rgba(11,16,32,.3); z-index:5; }
   .mesh-tip.show { opacity:1; transform:none; }
@@ -207,81 +342,184 @@
   .mesh-legend { display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin-top:24px; }
   .mesh-legend .li { display:inline-flex; align-items:center; gap:8px; font-size:13.5px; color:var(--ink-soft); font-weight:500; }
   .mesh-legend .dot { width:11px; height:11px; border-radius:50%; box-shadow:0 0 8px currentColor; }
-  .mesh-hint { text-align:center; font-size:13px; color:var(--muted); margin-top:14px; }
+  .mesh-caption { text-align:center; font-size:13px; color:var(--muted); margin-top:16px; max-width:640px; margin-left:auto; margin-right:auto; }
+  .mesh-hint { text-align:center; font-size:13px; color:var(--ink-soft); margin-top:10px; }
 
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(11,16,32,.55); display: none; align-items: flex-start; justify-content: center; padding: 24px; overflow-y: auto; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 100%; max-width: 560px; margin: auto; padding: 28px; position: relative; }
+  .modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+  .modal h2 { font-size: 22px; font-weight: 800; letter-spacing: -.01em; }
+  .modal .sub { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 20px; }
+  .modal-close { background: none; border: 1px solid var(--line); border-radius: 10px; width: 40px; height: 40px; font-size: 20px; cursor: pointer; flex: none; line-height: 1; }
+  .modal-close:hover { border-color: var(--brand); }
+  .back-link { background: none; border: none; color: var(--brand-ink); font-weight: 600; font-size: 14px; cursor: pointer; padding: 0; font-family: inherit; margin-bottom: 4px; }
+
+  /* Audience picker in modal */
+  .picker { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .pick { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px 8px; text-align: center; cursor: pointer; background: #fff; font-family: inherit; min-height: 80px; transition: border-color .15s, box-shadow .15s; }
+  .pick:hover, .pick.sel { border-color: var(--brand); box-shadow: var(--shadow-focus); }
+  .pick .pi { font-size: 24px; display: block; }
+  .pick .pl { font-size: 12px; font-weight: 700; color: var(--ink); margin-top: 6px; display: block; }
+  .pick .pd { font-size: 10.5px; color: var(--ink-soft); }
+  .picker-generic { margin-top: 16px; text-align: center; }
+  @media (max-width: 480px) { .picker { grid-template-columns: 1fr 1fr; } }
+
+  /* Form */
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .field .req { color: var(--error); }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 1px solid var(--line);
+    font-size: 15px; font-family: inherit; color: var(--ink); background: #fff; min-height: 44px; }
+  .field textarea { min-height: 84px; resize: vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--brand); }
+  .field.err input, .field.err select { border-color: var(--error); }
+  .field .help { font-size: 12.5px; color: var(--ink-soft); margin-top: 5px; }
+  .field .errmsg { font-size: 12.5px; color: var(--error); margin-top: 5px; display: none; }
+  .field.err .errmsg { display: block; }
+  .field-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: var(--ink-soft); margin: 4px 0 18px; }
+  .consent input { width: 18px; height: 18px; min-height: 0; margin-top: 2px; flex: none; }
+  .form-divider { text-align: center; font-size: 13px; color: var(--muted); margin: 18px 0; position: relative; }
+  .form-divider::before, .form-divider::after { content: ""; position: absolute; top: 50%; width: 38%; height: 1px; background: var(--line); }
+  .form-divider::before { left: 0; } .form-divider::after { right: 0; }
+  .btn-google { width: 100%; background: #fff; border: 1px solid var(--line); color: var(--ink); }
+  .btn-google:hover { border-color: var(--brand); }
+  .btn-google .g { font-weight: 800; color: #4285F4; }
+  .trust-line { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--ink-soft); margin-top: 18px; }
+  .form-banner { background: rgba(200,30,30,.08); border: 1px solid rgba(200,30,30,.25); color: var(--error); font-size: 13.5px; padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; display: none; }
+  .form-banner.show { display: block; }
+  .form-banner.warn { background: rgba(180,83,9,.08); border-color: rgba(180,83,9,.25); color: var(--warning); }
+
+  /* Success state */
+  .success-state { text-align: center; padding: 12px 0; }
+  .success-state .tick { width: 64px; height: 64px; border-radius: 50%; background: var(--green-soft); color: var(--success); display: grid; place-items: center; font-size: 32px; margin: 0 auto 18px; }
+  .success-state h2 { font-size: 22px; margin-bottom: 10px; }
+  .success-state p { color: var(--ink-soft); font-size: 15px; margin-bottom: 18px; }
+
+  /* reveal */
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in { opacity: 1; transform: none; }
+
+  /* visually hidden (for SR text) */
+  .vh { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .card:hover, .aud-card:hover, .btn-primary:hover, .btn-accent:hover { transform: none; }
+    .faq-a { transition: none; }
+    * { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+  }
 </style>
 </head>
 <body>
 
+<a href="#main" class="skip">Skip to content</a>
+
 <header class="nav">
   <div class="wrap nav-inner">
     <a href="#" class="logo"><span class="mark">D</span> DUM360</a>
-    <nav class="nav-links">
+    <nav class="nav-links" aria-label="Primary">
       <a href="#how">How it works</a>
       <a href="#mesh">The mesh</a>
       <a href="#inference">AI inference</a>
-      <a href="#modes">Modes</a>
-      <a href="#providers">For providers</a>
-      <a href="#roadmap">Roadmap</a>
-      <a href="#sovereignty">Sovereignty</a>
+      <a href="#tiers">Tiers</a>
+      <a href="#green">Green</a>
+      <a href="#compare">Compare</a>
+      <a href="#join">For contributors</a>
+      <a href="#faq">FAQ</a>
     </nav>
     <div class="nav-cta">
-      <a href="#providers" class="btn btn-ghost">Become a provider</a>
-      <a href="https://forms.gle/a2JxYZAZu1otR1gm7" target="_blank" rel="noopener" class="btn btn-primary">Join now</a>
+      <a href="#join" class="btn btn-ghost">Become a provider</a>
+      <button class="btn btn-primary" data-join>Join now</button>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" id="menuToggle"><span></span></button>
     </div>
   </div>
 </header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Site menu">
+  <div class="mm-top">
+    <span class="logo"><span class="mark">D</span> DUM360</span>
+    <button class="mm-close" aria-label="Close menu" id="mmClose">×</button>
+  </div>
+  <a class="mm-link" href="#how">How it works</a>
+  <a class="mm-link" href="#mesh">The mesh</a>
+  <a class="mm-link" href="#inference">AI inference</a>
+  <a class="mm-link" href="#tiers">Supply tiers</a>
+  <a class="mm-link" href="#green">Green energy</a>
+  <a class="mm-link" href="#compare">Compare</a>
+  <a class="mm-link" href="#usecases">Use-cases</a>
+  <a class="mm-link" href="#join">For contributors</a>
+  <a class="mm-link" href="#sovereignty">Sovereignty</a>
+  <a class="mm-link" href="#faq">FAQ</a>
+  <div class="mm-ctas">
+    <button class="btn btn-primary" data-join>Join the mesh</button>
+  </div>
+</div>
+
+<main id="main">
 
 <!-- HERO -->
 <section class="hero">
   <div class="wrap">
     <span class="eyebrow">● Distributed Unified Mesh 360 · Made in India</span>
     <h1>India's citizen-powered <span class="grad">sovereign supercomputer</span></h1>
-    <p class="lede">DUM360 pools idle compute from across the nation — phones, gaming PCs, university &amp; PSU labs, enterprise &amp; MSME machines, and solar-powered GPU rigs — into a secure sovereign mesh: affordable AI for builders, income for contributors, and standby power for the nation.</p>
+    <p class="lede">DUM360 pools the nation's already-paid-for idle compute — phones, gaming PCs, university &amp; PSU labs, enterprise &amp; MSME machines, and solar GPU rigs — into India's largest sovereign <strong>inference</strong> engine. Built for AI inference and parallel workloads, not frontier training — and reclaimable by its owner in minutes.</p>
     <div class="hero-cta">
-      <a href="https://forms.gle/a2JxYZAZu1otR1gm7" target="_blank" rel="noopener" class="btn btn-primary">Join now →</a>
+      <button class="btn btn-primary" data-join>Join the mesh →</button>
       <a href="#how" class="btn btn-ghost">See how it works</a>
     </div>
-    <p class="hero-note">100% hosted on Indian clouds &nbsp;·&nbsp; Earn payouts via UPI &nbsp;·&nbsp; Confidential, sandboxed compute</p>
+    <p class="hero-note">Indian-hosted platform &nbsp;·&nbsp; Earn payouts via UPI &nbsp;·&nbsp; Confidential, sandboxed compute</p>
 
     <div class="stats">
-      <div class="stat"><div class="num">1M+</div><div class="lab">Target active nodes</div></div>
+      <div class="stat"><div class="num">1M+</div><div class="lab">Active nodes</div><span class="tag">Target</span></div>
       <div class="stat"><div class="num">≥3×</div><div class="lab">Redundancy per task</div></div>
-      <div class="stat"><div class="num">50%</div><div class="lab">Cheaper than hyperscalers</div></div>
-      <div class="stat"><div class="num">100%</div><div class="lab">Indian-hosted</div></div>
+      <div class="stat"><div class="num">~½</div><div class="lab">The cost of cloud</div><span class="tag">Phase-2 target</span></div>
+      <div class="stat"><div class="num">100%</div><div class="lab">Indian-hosted platform</div></div>
     </div>
   </div>
 </section>
 
-<!-- DUAL MODE -->
-<section id="modes" class="alt">
+<!-- PROBLEM / THESIS -->
+<section id="thesis">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Dual-use mandate</span>
-      <h2>One mesh. Two missions.</h2>
-      <p>DUM360 earns its keep every day — then becomes national infrastructure the moment the country needs it.</p>
+      <span class="eyebrow">The idle-compute thesis</span>
+      <h2>Most of India's computing power is sitting idle right now</h2>
+      <p>At any moment, hardware the country has already paid for is doing nothing. DUM360 puts it to work — safely — and gives it back instantly.</p>
     </div>
+    <div class="idle-grid reveal">
+      <div class="idle-card"><div class="ic">📱</div><h4>Phones at night</h4><p>Hundreds of millions of devices, charging and idle.</p></div>
+      <div class="idle-card"><div class="ic">🎮</div><h4>Gaming PCs after hours</h4><p>Powerful GPUs unused while owners sleep.</p></div>
+      <div class="idle-card"><div class="ic">🎓</div><h4>Labs on weekends</h4><p>University &amp; PSU labs over evenings &amp; vacations.</p></div>
+      <div class="idle-card"><div class="ic">🏢</div><h4>MSME workstations</h4><p>Business machines idle outside working hours.</p></div>
+      <div class="idle-card"><div class="ic">☀️</div><h4>Surplus daytime solar</h4><p>Clean GPU cycles from GJ/RJ solar rigs.</p></div>
+    </div>
+
     <div class="modes">
       <div class="mode-card peace reveal">
         <div class="mode-tag">Peace-time mode</div>
         <h3>Affordable compute for India's builders</h3>
-        <p>Hyper-affordable, localized AI training, LLM inference and video rendering for Indian startups, researchers and academics.</p>
+        <p>Localized, affordable AI inference and rendering for Indian startups, researchers and academics — using cycles the country already owns.</p>
         <ul>
-          <li><span class="check">✓</span><span><b>Localized AI inference & training</b> at a fraction of public-cloud cost.</span></li>
+          <li><span class="check">✓</span><span><b>Localized AI inference</b> at a fraction of public-cloud cost <em>(Phase-2 target: ~½)</em>.</span></li>
           <li><span class="check">✓</span><span><b>Direct micro-incentives</b> paid to everyday contributors via UPI.</span></li>
           <li><span class="check">✓</span><span><b>Solar arbitrage routing</b> for cleaner, cheaper daytime cycles.</span></li>
         </ul>
       </div>
       <div class="mode-card seva reveal">
         <div class="mode-tag">Rashtra Seva mode</div>
-        <h3>Sovereign emergency protocol</h3>
-        <p>A cryptographically authenticated government trigger mobilizes the multi-ExaFLOP national pool for public-good crises.</p>
+        <h3>A designed sovereign emergency protocol</h3>
+        <p>A <em>designed</em> protocol — not operational today — in which a cryptographically-authenticated government credential could mobilize the national pool for public-good crises. Governance is being developed with relevant authorities.</p>
         <ul>
-          <li><span class="check">✓</span><span><b>Disaster & climate modeling</b> for NDMA and response teams.</span></li>
-          <li><span class="check">✓</span><span><b>Bio-defense & genetic sequencing</b> for medical agencies.</span></li>
-          <li><span class="check">✓</span><span><b>Cryptographic & cyber-defense</b> at national scale, on demand.</span></li>
+          <li><span class="check">✓</span><span><b>Disaster &amp; climate modeling</b> for NDMA and response teams.</span></li>
+          <li><span class="check">✓</span><span><b>Bio-defense &amp; genetic sequencing</b> for medical agencies.</span></li>
+          <li><span class="check">✓</span><span><b>Cyber-defense</b> at national scale, on demand.</span></li>
         </ul>
       </div>
     </div>
@@ -289,47 +527,91 @@
 </section>
 
 <!-- HOW IT WORKS -->
-<section id="how">
+<section id="how" class="alt">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">How it works</span>
       <h2>From idle device to national compute</h2>
-      <p>Enroll once, set your hours, and let DUM360 safely put your spare cycles to work.</p>
+      <p>Enroll once, set your hours, and let DUM360 safely put your spare cycles to work — on your terms.</p>
     </div>
     <div class="steps">
-      <div class="step reveal"><div class="n">1</div><h3>Install & verify</h3><p>Citizens, campuses, enterprises and PSUs install a lightweight sandboxed node daemon (K3s/KubeEdge) or mobile WASM client. Hardware integrity verified via Secure Enclave.</p></div>
-      <div class="step reveal"><div class="n">2</div><h3>Pre-inform availability</h3><p>Book recurring windows — e.g. 11 PM–7 AM. The orchestrator maps workloads 6 hours in advance.</p></div>
-      <div class="step reveal"><div class="n">3</div><h3>Compute safely</h3><p>Encrypted, confidential containers run jobs you can't read. Tasks mirror across ≥3 machines for resilience.</p></div>
-      <div class="step reveal"><div class="n">4</div><h3>Get paid</h3><p>Usage is metered to the rupee — paid straight to your UPI VPA, or as credits/grants for institutions. Graceful drain returns your device 30 min before exit.</p></div>
+      <div class="step reveal"><div class="n">1</div><h3>Install &amp; verify</h3><p>Citizens, campuses, enterprises and PSUs install a lightweight sandboxed node (K3s/KubeEdge) or mobile WASM client. Hardware integrity is verified via Secure Enclave.</p></div>
+      <div class="step reveal"><div class="n">2</div><h3>Pre-inform availability</h3><p>Book recurring windows — e.g. 11 PM–7 AM. The orchestrator maps workloads hours in advance.</p></div>
+      <div class="step reveal"><div class="n">3</div><h3>Compute safely</h3><p>Jobs run inside encrypted, confidential sandboxes you <b>can't read</b> — and we never read your files. Tasks mirror across ≥3 machines for resilience.</p></div>
+      <div class="step reveal"><div class="n">4</div><h3>Get paid</h3><p>Usage is metered to the rupee — paid straight to your UPI VPA, or as credits/grants for institutions. Graceful drain returns your device 30 min before your exit.</p></div>
     </div>
+    <p class="reclaim-note reveal">You stay in control — <strong>pause, edit your hours, or uninstall anytime.</strong> Your device is always yours.</p>
   </div>
 </section>
 
 <!-- MESH VIZ -->
-<section id="mesh" class="alt">
+<section id="mesh">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Live network</span>
-      <h2>See the mesh in motion</h2>
-      <p>Every tier of India's idle compute — campus labs, government &amp; PSU centres, enterprises, solar rigs, gaming PCs and phones — feeds one sovereign core. Workloads, results and UPI payouts flow continuously; flip to Rashtra Seva to watch the network mobilize for a national emergency.</p>
+      <span class="eyebrow">The mesh</span>
+      <h2>How work flows across the network</h2>
+      <p>Every tier of India's idle compute — campus labs, government &amp; PSU centres, enterprises, solar rigs, gaming PCs and phones — feeds one sovereign core. Workloads, results and UPI payouts flow continuously; switch to Rashtra Seva to see how the network <em>would</em> mobilize for a national emergency.</p>
     </div>
     <div class="mesh-controls reveal">
       <button class="mode-btn" id="modePeace" aria-pressed="true">🟢 Peace-time mode</button>
       <button class="mode-btn em" id="modeEmergency" aria-pressed="false">🔴 Rashtra Seva — Emergency</button>
     </div>
     <div class="mesh-stage reveal" id="meshStage">
-      <canvas id="meshCanvas"></canvas>
-      <div class="mesh-banner" id="meshBanner">⚠ EMERGENCY MODE · National compute mobilized · Commercial workloads paused</div>
+      <canvas id="meshCanvas" role="img" aria-label="Illustrative diagram of the DUM360 mesh: nine tiers of idle compute — universities, AI startups, government/PSU labs, enterprises, solar GPU rigs, tidal/offshore rigs, researchers, gaming PCs and consumer phones — arranged around a central Indian-hosted Sovereign Core that orchestrates workloads, results and UPI payouts. A toggle switches between peace-time routing and a designed emergency-mobilization mode."></canvas>
+      <div class="mesh-banner" id="meshBanner">⚠ EMERGENCY MODE (illustrative) · National compute mobilized · Commercial workloads paused</div>
       <div class="mesh-tip" id="meshTip"></div>
     </div>
-    <div class="mesh-legend reveal">
+    <div class="mesh-legend reveal" aria-hidden="true">
       <span class="li"><span class="dot" style="color:#2f6bff;background:#2f6bff"></span> Workload dispatch</span>
       <span class="li"><span class="dot" style="color:#00c2a8;background:#00c2a8"></span> Results &amp; checkpoints</span>
-      <span class="li"><span class="dot" style="color:#22c55e;background:#22c55e"></span> UPI payout</span>
+      <span class="li"><span class="dot" style="color:#1f9d57;background:#1f9d57"></span> UPI payout</span>
       <span class="li"><span class="dot" style="color:#7c5cff;background:#7c5cff"></span> Job request</span>
       <span class="li"><span class="dot" style="color:#ff3b3b;background:#ff3b3b"></span> Emergency priority</span>
     </div>
-    <p class="mesh-hint">Hover any node to trace its flows · drag the toggle to switch modes</p>
+    <p class="mesh-caption reveal"><strong>Illustrative</strong> — a diagram of how work, results and payouts route across the mesh, not a live network feed. Toggle to see emergency mobilization.</p>
+    <p class="mesh-hint reveal" id="meshHint">Hover any node to trace its flows · switch modes above</p>
+  </div>
+</section>
+
+<!-- SUPPLY TIERS -->
+<section id="tiers" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Supply tiers</span>
+      <h2>Who powers the mesh — and what each tier is good at</h2>
+      <p>Country-wide mesh for throughput; tightly-connected clusters for big models. Each tier is scheduled for the work it's actually good at.</p>
+    </div>
+    <div class="tiers reveal">
+      <div class="tier">
+        <span class="badge">Credible core</span>
+        <h3>Institutional</h3>
+        <p class="ex">IIT/NIT/IIIT &amp; university labs</p>
+        <dl><dt>Interconnect</dt><dd>LAN + NKN</dd><dt>Best-fit work</dt><dd>In-cluster sharding, cross-campus pipelines</dd></dl>
+      </div>
+      <div class="tier">
+        <h3>Government · PSU</h3>
+        <p class="ex">Sovereign labs &amp; data centres</p>
+        <dl><dt>Interconnect</dt><dd>DC-grade LAN</dd><dt>Best-fit work</dt><dd>High-trust inference, sovereign capacity</dd></dl>
+      </div>
+      <div class="tier">
+        <h3>Enterprise · MSME</h3>
+        <p class="ex">Off-hours servers &amp; workstations</p>
+        <dl><dt>Interconnect</dt><dd>LAN / broadband</dd><dt>Best-fit work</dt><dd>Batch inference, ETL, rendering</dd></dl>
+      </div>
+      <div class="tier">
+        <h3>Renewable</h3>
+        <p class="ex">Solar GPU rigs (GJ/RJ)</p>
+        <dl><dt>Interconnect</dt><dd>Site LAN</dd><dt>Best-fit work</dt><dd>Daytime batch &amp; inference (clean cycles)</dd></dl>
+      </div>
+      <div class="tier">
+        <h3>Consumer</h3>
+        <p class="ex">Phones &amp; gaming PCs</p>
+        <dl><dt>Interconnect</dt><dd>Consumer broadband</dd><dt>Best-fit work</dt><dd>Request-parallel inference (the burst edge)</dd></dl>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:32px;" class="reveal">
+      <a href="#join" class="btn btn-ghost">Find your tier →</a>
+    </div>
   </div>
 </section>
 
@@ -337,132 +619,267 @@
 <section id="inference">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">AI at national scale</span>
+      <span class="eyebrow">AI inference, made simple</span>
       <h2>How big models actually run on the mesh</h2>
       <p>DUM360 matches model size to interconnect quality — so inference scales without pretending home broadband is a supercomputer fabric.</p>
     </div>
     <div class="grid3">
-      <div class="card reveal"><div class="ico">⚡</div><h3>Request-parallel (default)</h3><p>Models that fit on one node (7B–34B quantized) are replicated; whole requests route to whole nodes — scaling linearly to millions of concurrent inferences nationwide.</p></div>
-      <div class="card reveal"><div class="ico">🧩</div><h3>In-cluster sharding</h3><p>Genuinely large models (70B–400B+) are split only inside well-connected clusters — a campus lab, a GPU rig, a PSU data centre — where bandwidth and latency can sustain it.</p></div>
-      <div class="card reveal"><div class="ico">🌐</div><h3>NKN cross-campus</h3><p>For the biggest models, pipeline parallelism spans institutions over the National Knowledge Network — a loosely-coupled national academic grid, not consumer broadband.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">⚡</div><h3>Small models → whole requests to whole nodes</h3><p>Models that fit one node (7B–34B quantized) are replicated; whole requests route to whole nodes — scaling to millions of concurrent inferences nationwide.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">🧩</div><h3>Big models → split inside one cluster</h3><p>Genuinely large models (70B–400B+) are split <em>only inside</em> well-connected clusters — a campus lab, a GPU rig, a PSU data centre — where bandwidth and latency can sustain it.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">🌐</div><h3>Biggest models → pipeline across campuses</h3><p>For the biggest models, pipeline parallelism spans institutions over the National Knowledge Network — a loosely-coupled academic grid, not consumer broadband.</p></div>
     </div>
-    <p class="mesh-hint">Plus speculative decoding — small models draft tokens, big cluster-hosted models verify — to stretch scarce big-model capacity. Built for massively-parallel, latency-tolerant workloads.</p>
+    <p class="uc-note reveal" style="font-weight:600; color:var(--ink); font-size:15.5px;">Built for massively-parallel, latency-tolerant work — inference, rendering, simulation. <span style="font-weight:400; color:var(--ink-soft);">Not for training frontier models across home internet — the physics doesn't allow it, and we won't pretend it does.</span> Plus speculative decoding: small models draft tokens, big cluster-hosted models verify, to stretch scarce big-model capacity. <a href="#compare">Read the honest comparison →</a></p>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="alt">
+<!-- GREEN ENERGY -->
+<section id="green" class="green-band">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Built for trust</span>
-      <h2>Sovereign by design, secure by default</h2>
-      <p>Every layer is engineered for data sovereignty, churn tolerance and confidential computing.</p>
+      <span class="eyebrow">Green energy</span>
+      <h2>The cleanest, cheapest cycles — honestly scoped</h2>
+      <p>Solar arbitrage runs today. Coastal green compute is an early R&amp;D track for round-the-clock clean baseload — promising, not yet at scale.</p>
     </div>
-    <div class="grid3">
-      <div class="card reveal"><div class="ico">🔒</div><h3>Confidential computing</h3><p>Workloads run inside encrypted sandboxes. Hosts can never read the RAM or data packets being processed on their machine.</p></div>
-      <div class="card reveal"><div class="ico">🇮🇳</div><h3>Data stays in India</h3><p>Control planes, metadata and relay traffic run exclusively on domestic clouds. Nothing crosses the border.</p></div>
-      <div class="card reveal"><div class="ico">🎓</div><h3>National academic grid</h3><p>IIT/NIT/IIIT and PSU labs link over the National Knowledge Network (NKN), enabling true cross-campus model parallelism.</p></div>
-      <div class="card reveal"><div class="ico">🧠</div><h3>Tiered AI inference</h3><p>Small models run whole-node nationwide; large models shard inside LAN/NKN clusters — model size matched to interconnect.</p></div>
-      <div class="card reveal"><div class="ico">🌊</div><h3>Green-energy compute</h3><p>Daytime solar in GJ/RJ, plus emerging seawater-cooled tidal &amp; offshore rigs for round-the-clock clean baseload.</p></div>
-      <div class="card reveal"><div class="ico">🛡️</div><h3>≥3× redundancy</h3><p>A zero-trust uptime model mirrors each chunk across independent machines, so a closed laptop never fails a job.</p></div>
-      <div class="card reveal"><div class="ico">⚡</div><h3>Graceful eviction</h3><p>Cordon-and-drain 30 minutes before your exit — checkpoints upload, tasks finish, your device is yours again.</p></div>
-      <div class="card reveal"><div class="ico">💸</div><h3>Instant UPI payouts</h3><p>Precise metering of CPU-hours, VRAM and bytes maps to rupees, paid directly to your bank via UPI — or credits for institutions.</p></div>
-      <div class="card reveal"><div class="ico">🚨</div><h3>Rashtra Seva mode</h3><p>A cryptographically-authenticated government trigger remobilizes the entire mesh for national emergencies in seconds.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- PERSONAS / PROVIDERS -->
-<section id="providers">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">Who powers the mesh</span>
-      <h2>Every idle processor in the country</h2>
-      <p>From a phone in a pocket to a campus HPC lab — if it's powered on and idle, it can join the sovereign mesh.</p>
-    </div>
-    <div class="grid3">
-      <div class="card reveal"><div class="ico">📱</div><h3>Citizen Provider</h3><p>Earn passive UPI income from your idle phone, PC or gaming laptop during off-hours.</p></div>
-      <div class="card reveal"><div class="ico">🎓</div><h3>Universities &amp; Research</h3><p>IIT/NIT/IIIT labs join over LAN + NKN, turning idle nights &amp; vacations into compute-grants and research.</p></div>
-      <div class="card reveal"><div class="ico">🏛️</div><h3>Government &amp; PSUs</h3><p>Sovereign labs &amp; data centres contribute trusted capacity — and can trigger Rashtra Seva in a crisis.</p></div>
-      <div class="card reveal"><div class="ico">🏢</div><h3>Enterprise &amp; MSME</h3><p>Companies, startups and MSMEs rent out servers and workstations idle outside business hours.</p></div>
-      <div class="card reveal"><div class="ico">☀️</div><h3>Solar Arbitrageur</h3><p>Monetize zero-cost surplus daytime solar by renting custom GPU cycles in GJ/RJ.</p></div>
-      <div class="card reveal"><div class="ico">🌊</div><h3>Tidal &amp; Offshore</h3><p>Floating, seawater-cooled GPU rigs on tidal, wave and offshore solar — round-the-clock green baseload.</p></div>
-      <div class="card reveal"><div class="ico">🧪</div><h3>Enterprise / AI Client</h3><p>Startups &amp; researchers tap scalable GPU/CPU at a fraction of standard cloud cost.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ROADMAP -->
-<section id="roadmap" class="alt">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <span class="eyebrow">Roadmap</span>
-      <h2>From campus alpha to national scale</h2>
-      <p>A phased path to a standby sovereign supercomputer, ready for national service.</p>
-    </div>
-    <div class="timeline">
-      <div class="phase reveal">
-        <div class="ph">Phase 1 · Alpha</div>
-        <h3>Campus launch</h3>
-        <div class="when">Months 1–3</div>
+    <div class="green-split">
+      <div class="green-card today reveal">
+        <span class="label">Deployable today</span>
+        <h3>Daytime solar &amp; floating coastal rigs</h3>
+        <p>The cheapest, greenest cycles come from daytime solar GPU rigs in Gujarat &amp; Rajasthan, given priority routing 10am–4pm.</p>
         <ul>
-          <li>K3s desktop wrapper across 1,000 student & developer machines</li>
-          <li>Select Indian colleges onboarded</li>
+          <li><span class="gc">✓</span><span>Solar arbitrage — priority scheduling 10am–4pm.</span></li>
+          <li><span class="gc">✓</span><span>Seawater-cooled, floating-solar coastal rigs (deployable today).</span></li>
+          <li><span class="gc">✓</span><span>Idle hardware reused — no new build, less embodied carbon.</span></li>
         </ul>
-        <div class="target"><b>Target:</b> Split render / extraction job on 100 concurrent nodes, zero data loss.</div>
       </div>
-      <div class="phase reveal">
-        <div class="ph">Phase 2 · Beta</div>
-        <h3>Strategic partnerships</h3>
-        <div class="when">Months 4–6</div>
+      <div class="green-card rnd reveal">
+        <span class="label">Forward-looking R&amp;D track</span>
+        <h3>Tidal &amp; wave power</h3>
+        <p>Tidal and wave power are a <strong>nascent R&amp;D track</strong> in India toward predictable 24×7 clean baseload. We are exploring it — we are <strong>not</strong> presenting it as near-term capacity.</p>
         <ul>
-          <li>Central orchestration on an Indian cloud partner</li>
-          <li>Agreements with private solar-grid operators</li>
+          <li><span class="gc">○</span><span>Goal: round-the-clock clean baseload for coastal compute.</span></li>
+          <li><span class="gc">○</span><span>Early-stage research — not available at scale at launch.</span></li>
         </ul>
-        <div class="target"><b>Target:</b> 50,000 active nodes; commercial inference at 50% less than foreign hyperscalers.</div>
-      </div>
-      <div class="phase reveal">
-        <div class="ph">Phase 3 · National scale</div>
-        <h3>Mobile launch</h3>
-        <div class="when">Months 7–12</div>
-        <ul>
-          <li>Native mobile WASM app on Google Play</li>
-          <li>Advisory lines with national disaster groups</li>
-        </ul>
-        <div class="target"><b>Target:</b> 1M+ active nodes — a standby sovereign supercomputer.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SOVEREIGNTY BANNER -->
+<!-- COMPARISON -->
+<section id="compare">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Honest comparison</span>
+      <h2>Where DUM360 actually fits</h2>
+      <p>We're not claiming to out-build the world's hyperscalers — the physics of consumer networks won't allow it, and we won't pretend otherwise. We turn India's already-paid-for idle hardware into its largest sovereign inference engine, without building a single new data centre. Here's the honest picture.</p>
+    </div>
+
+    <div class="cmp-wrap reveal">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col" class="col-dum">★ DUM360<br><span style="font-weight:600;font-size:12px;color:var(--ink-soft)">(sovereign)</span></th>
+            <th scope="col">Foreign hyperscaler<br><span style="font-weight:600;font-size:12px;color:var(--ink-soft)">(AWS/Azure/GCP)</span></th>
+            <th scope="col">India public HPC today<br><span style="font-weight:600;font-size:12px;color:var(--ink-soft)">(NSM/AIRAWAT)</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Data stays in India</th><td class="col-dum yes">✓</td><td class="no">✗</td><td class="yes">✓</td></tr>
+          <tr><th scope="row">Uses existing hardware (no new build)</th><td class="col-dum yes">✓</td><td class="no">✗</td><td class="no">✗</td></tr>
+          <tr><th scope="row">AI inference at scale</th><td class="col-dum yes">✓</td><td class="yes">✓</td><td class="lim">limited</td></tr>
+          <tr><th scope="row">Cost</th><td class="col-dum">~½ of cloud*</td><td class="lim">baseline</td><td class="lim">n/a</td></tr>
+          <tr><th scope="row">Greener (idle + solar)</th><td class="col-dum yes">✓</td><td class="lim">varies</td><td class="lim">varies</td></tr>
+          <tr><th scope="row">Usable AI-inference scale</th><td class="col-dum">a few EF/s usable †</td><td class="lim">effectively unlimited (paid)</td><td class="lim">~NSM baseline (~0.04 EF/s FP64)</td></tr>
+          <tr><th scope="row">Emergency mobilization (designed)</th><td class="col-dum yes">✓</td><td class="no">✗</td><td class="lim">partial</td></tr>
+          <tr><th scope="row">Frontier model <em>training</em></th><td class="col-dum conceded">✗ not us</td><td class="yes">✓</td><td class="lim">limited</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mobile stacked cards -->
+    <div class="cmp-cards reveal" aria-hidden="true">
+      <div class="row-card"><h4>Data stays in India</h4><div class="rc dum"><span class="k">DUM360</span><span>✓</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>✗</span></div><div class="rc"><span class="k">India public HPC</span><span>✓</span></div></div>
+      <div class="row-card"><h4>Uses existing hardware</h4><div class="rc dum"><span class="k">DUM360</span><span>✓</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>✗</span></div><div class="rc"><span class="k">India public HPC</span><span>✗</span></div></div>
+      <div class="row-card"><h4>AI inference at scale</h4><div class="rc dum"><span class="k">DUM360</span><span>✓</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>✓</span></div><div class="rc"><span class="k">India public HPC</span><span>limited</span></div></div>
+      <div class="row-card"><h4>Cost</h4><div class="rc dum"><span class="k">DUM360</span><span>~½ of cloud*</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>baseline</span></div><div class="rc"><span class="k">India public HPC</span><span>n/a</span></div></div>
+      <div class="row-card"><h4>Greener (idle + solar)</h4><div class="rc dum"><span class="k">DUM360</span><span>✓</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>varies</span></div><div class="rc"><span class="k">India public HPC</span><span>varies</span></div></div>
+      <div class="row-card"><h4>Usable AI-inference scale</h4><div class="rc dum"><span class="k">DUM360</span><span>a few EF/s †</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>unlimited (paid)</span></div><div class="rc"><span class="k">India public HPC</span><span>~0.04 EF/s FP64</span></div></div>
+      <div class="row-card"><h4>Emergency mobilization (designed)</h4><div class="rc dum"><span class="k">DUM360</span><span>✓</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>✗</span></div><div class="rc"><span class="k">India public HPC</span><span>partial</span></div></div>
+      <div class="row-card"><h4>Frontier model training</h4><div class="rc dum"><span class="k">DUM360</span><span>✗ not us</span></div><div class="rc"><span class="k">Foreign hyperscaler</span><span>✓</span></div><div class="rc"><span class="k">India public HPC</span><span>limited</span></div></div>
+    </div>
+
+    <p class="cmp-foot reveal">We're honest about what we're not. <strong>*</strong> Phase-2 cost target, not measured. <strong>†</strong> Figures are our own bottom-up, clearly-labelled order-of-magnitude estimates, discounted for the verified 2–10× distributed penalty — not measured results or a forecast. On AI-precision <em>peak</em> paper FLOPS the mesh could approach a single flagship AI cluster; <em>usable</em> throughput is a few exaFLOP/s — <strong>1–2 orders of magnitude beyond India's entire current public HPC</strong>. We do <strong>not</strong> claim to rival hyperscaler total fleets or to train frontier models. See the <a href="https://github.com/" data-benchmark>honest benchmark</a>.</p>
+
+    <div class="cmp-cta reveal">
+      <button class="btn btn-primary" data-join>Join the mesh →</button>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">What it's for</span>
+      <h2>What India does with a sovereign inference engine</h2>
+      <p>Two things: power affordable AI for the people building here, and stand ready when the nation needs compute fast.</p>
+    </div>
+    <div class="grid4">
+      <div class="card reveal"><div class="ico" aria-hidden="true">🤖</div><h3>Affordable LLM inference</h3><p>Run a million inference requests overnight — request-parallel serving at national scale for startups, researchers and academics.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">🎬</div><h3>Batch &amp; video rendering</h3><p>Render a film sequence across campus labs — for studios, ed-tech and media.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">📊</div><h3>Scientific &amp; ETL batch</h3><p>Parameter sweeps, Monte-Carlo, and data-extraction pipelines — embarrassingly parallel, checkpointable.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">🧬</div><h3>Genomic pipelines</h3><p>Sequencing &amp; bioinformatics — parallel, latency-tolerant, recoverable.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">🎓</div><h3>Student &amp; research compute</h3><p>Labs accessing capacity they couldn't otherwise afford.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">🌪️</div><h3>Disaster modeling (Rashtra Seva)</h3><p>A standby strategic reserve for climate/disaster modeling, bio-defense and cyber-defense — a designed emergency protocol.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">🇮🇳</div><h3>Largest sovereign inference in India</h3><p>1–2 orders of magnitude beyond current public HPC — with data kept in India.</p></div>
+      <div class="card reveal"><div class="ico" aria-hidden="true">💸</div><h3>Economic inclusion</h3><p>UPI micro-income to citizens, compute-grants to institutions, IT-spend offset for MSMEs.</p></div>
+    </div>
+    <p class="uc-note reveal"><strong>Not built for:</strong> tightly-coupled frontier model training over consumer links — the network physics forbids it, and we say so plainly.</p>
+    <div style="text-align:center; margin-top:28px;" class="reveal">
+      <button class="btn btn-primary" data-join data-audience="ai_client">Request compute →</button>
+      <button class="btn btn-ghost" data-join data-audience="citizen">Become a provider</button>
+    </div>
+  </div>
+</section>
+
+<!-- SOVEREIGNTY -->
 <section id="sovereignty">
   <div class="wrap">
     <div class="sov reveal">
-      <h2>Sovereign infrastructure, end to end</h2>
-      <p>Hosted exclusively on domestic Indian cloud providers and data centers — E2E Networks, CtrlS, Yotta, NIC — so sensitive data and national orchestration metadata never leave Indian soil.</p>
+      <h2>Sovereign infrastructure for the platform &amp; your data</h2>
+      <p>The DUM360 compute platform's control plane, metadata and relay traffic run exclusively on Indian clouds — so sensitive data and national orchestration metadata never leave Indian soil. Aligned with the Digital Personal Data Protection (DPDP) Act.</p>
       <div class="chips">
         <span class="chip">DPDP Act aligned</span>
         <span class="chip">TLS 1.3 end-to-end</span>
         <span class="chip">Mumbai primary · Bengaluru / NCR DR</span>
         <span class="chip">Zero cross-border routing</span>
+        <span class="chip">Confidential computing</span>
       </div>
+      <p class="fine">Indian cloud/data-centre providers (such as E2E Networks, CtrlS, Yotta, NIC) are named as illustrative examples, not claimed partnerships. Note: this marketing website is served from a global CDN; signup data is stored in Firestore Mumbai (asia-south1). See our <a href="/privacy.html" style="color:#9ec1ff;">Privacy Policy</a> for exactly where your data lives.</p>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section id="cta">
-  <div class="wrap cta reveal">
-    <h2>Join the mesh</h2>
-    <p>Share a device and earn via UPI, rent out solar GPU cycles, buy affordable compute, or help build the platform — join now and we'll reach out as we open up access.</p>
-    <div class="hero-cta">
-      <a href="https://forms.gle/a2JxYZAZu1otR1gm7" target="_blank" rel="noopener" class="btn btn-primary">Join now →</a>
-      <a href="#how" class="btn btn-ghost">See how it works</a>
+<!-- CONTRIBUTOR INVITATIONS -->
+<section id="join" class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">For contributors</span>
+      <h2>This is for you — here's the ask, and what you get</h2>
+      <p>Pick who you are. We'll keep the next step short — only your email is required.</p>
     </div>
-    <p class="hero-note" style="margin-top:14px;">Takes under 2 minutes · 100% Indian-hosted · No spam.</p>
+    <div class="aud-grid reveal">
+      <button class="aud-card" data-join data-audience="citizen">
+        <div class="ico" aria-hidden="true">📱</div>
+        <h3>Citizen</h3>
+        <p>Turn your idle phone or PC into nightly income — paid in rupees via UPI.</p>
+        <span class="go">Start earning →</span>
+      </button>
+      <button class="aud-card" data-join data-audience="student">
+        <div class="ico" aria-hidden="true">🎓</div>
+        <h3>Student</h3>
+        <p>Earn from your laptop and help build India's sovereign compute mesh — a real national systems project.</p>
+        <span class="go">Join as a student →</span>
+      </button>
+      <button class="aud-card" data-join data-audience="university">
+        <div class="ico" aria-hidden="true">🏫</div>
+        <h3>University</h3>
+        <p>Convert idle lab nights into compute-grants, credits and research — no daytime disruption, under a simple MoU.</p>
+        <span class="go">Partner your campus →</span>
+      </button>
+      <button class="aud-card govt" data-join data-audience="government">
+        <div class="ico" aria-hidden="true">🏛️</div>
+        <h3>Govt / PSU</h3>
+        <p>Contribute sovereign capacity and help govern the designed Rashtra Seva emergency protocol.</p>
+        <span class="go">Talk to us →</span>
+      </button>
+      <button class="aud-card" data-join data-audience="solar">
+        <div class="ico" aria-hidden="true">☀️</div>
+        <h3>Solar / green operator</h3>
+        <p>Monetize surplus daytime solar by renting clean GPU cycles — priority 10am–4pm routing.</p>
+        <span class="go">Monetize cycles →</span>
+      </button>
+      <button class="aud-card" data-join data-audience="enterprise">
+        <div class="ico" aria-hidden="true">🏢</div>
+        <h3>Enterprise / MSME</h3>
+        <p>Offset IT spend — rent machines idle outside business hours into a sovereign pool, with confidential isolation.</p>
+        <span class="go">Rent spare compute →</span>
+      </button>
+      <button class="aud-card client" data-join data-audience="ai_client">
+        <div class="ico" aria-hidden="true">🧪</div>
+        <h3>AI client</h3>
+        <p>Affordable, India-hosted inference and rendering at scale — with honest workload-fit guidance.</p>
+        <span class="go">Request compute →</span>
+      </button>
+      <button class="aud-card" data-join data-audience="developer">
+        <div class="ico" aria-hidden="true">💻</div>
+        <h3>Developer</h3>
+        <p>Build distributed scheduling, WASM/K3s agents and secure enclaves — on real national infrastructure.</p>
+        <span class="go">Contribute code →</span>
+      </button>
+    </div>
   </div>
 </section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Questions</span>
+      <h2>Honest answers to the obvious questions</h2>
+    </div>
+    <div class="faq reveal" id="faqList">
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Will this slow down or damage my device?</button>
+        <div class="faq-a"><div class="faq-a-inner">No. You set the hours, jobs run in a sandbox, and cordon-and-drain returns your device 30 minutes before your scheduled exit. You can pause or uninstall anytime.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can DUM360 read my files or data?</button>
+        <div class="faq-a"><div class="faq-a-inner">No. Jobs run inside encrypted, confidential sandboxes — the host cannot read the RAM or data being processed, and we never read your files.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">How do I get paid?</button>
+        <div class="faq-a"><div class="faq-a-inner">Metered usage maps to rupees, paid directly to your UPI VPA. Institutions settle as compute-grants, credits, or revenue-share.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Is my data really kept in India?</button>
+        <div class="faq-a"><div class="faq-a-inner">The DUM360 compute platform's control plane, metadata and relay traffic run on Indian clouds. (Note: this marketing website is served from a global CDN, and waitlist signup data is stored in Firestore Mumbai, asia-south1 — see our <a href="/privacy.html">Privacy Policy</a>.)</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Can DUM360 train GPT-class frontier models?</button>
+        <div class="faq-a"><div class="faq-a-inner">No, and we don't claim to. Consumer networks can't support tightly-coupled frontier <em>training</em> — the physics forbids it. We're built for <strong>inference and parallel workloads</strong>. See the <a href="https://github.com/" data-benchmark>honest benchmark</a>.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Who can trigger Rashtra Seva mode, and is it active now?</button>
+        <div class="faq-a"><div class="faq-a-inner">It's a <strong>designed</strong> emergency protocol requiring a cryptographically-authenticated government credential. It is <strong>not operational today</strong>, and governance is being developed with relevant authorities — no single party controls it unilaterally.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Is this crypto?</button>
+        <div class="faq-a"><div class="faq-a-inner"><strong>No — this isn't crypto.</strong> There's no token, no coin, no wallet. It's national compute infrastructure, and contributors are paid in rupees via UPI.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">Is it open source? When can I actually join?</button>
+        <div class="faq-a"><div class="faq-a-inner">Developer contributions are welcome — pick "Developer" in the <button class="back-link" data-join data-audience="developer" style="font-size:15px;">join flow</button> to get pointed to the repo and contributor list. Rollout is phased (campus alpha → beta → mobile). Sign up and we'll notify you for your segment.</div></div>
+      </div>
+    </div>
+    <p class="faq-contact reveal">Still have a question? <a href="mailto:hello@dum360.com">Email us</a>.</p>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta" class="alt">
+  <div class="wrap cta reveal">
+    <h2>Join the mesh</h2>
+    <p>Share a device and earn via UPI, register green or off-hours capacity, request affordable compute, or help build the platform — join now and we'll reach out as we open access for your segment.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary" data-join>Join the mesh →</button>
+      <a href="#how" class="btn btn-ghost">See how it works</a>
+    </div>
+    <p class="hero-note" style="margin-top:14px;">Under 2 minutes · No spam · Your data stays in India.</p>
+  </div>
+</section>
+
+</main>
 
 <!-- FOOTER -->
 <footer>
@@ -470,7 +887,7 @@
     <div class="foot">
       <div>
         <a href="#" class="logo"><span class="mark">D</span> DUM360</a>
-        <p>Distributed Unified Mesh 360 — India's decentralized, citizen-powered, eco-friendly edge supercomputer network.</p>
+        <p>Distributed Unified Mesh 360 — India's citizen-powered, sovereign idle-compute mesh. The country's largest sovereign inference engine, built from hardware it already owns.</p>
       </div>
       <div class="foot-links">
         <div class="foot-col">
@@ -478,37 +895,445 @@
           <a href="#how">How it works</a>
           <a href="#mesh">The mesh</a>
           <a href="#inference">AI inference</a>
-          <a href="#roadmap">Roadmap</a>
+          <a href="#compare">Compare</a>
         </div>
         <div class="foot-col">
           <h4>Network</h4>
-          <a href="#providers">Become a provider</a>
-          <a href="#providers">For enterprises</a>
+          <a href="#tiers">Supply tiers</a>
+          <a href="#green">Green energy</a>
           <a href="#sovereignty">Sovereignty</a>
+          <a href="#usecases">Use-cases</a>
         </div>
         <div class="foot-col">
           <h4>Company</h4>
-          <a href="https://forms.gle/a2JxYZAZu1otR1gm7" target="_blank" rel="noopener">Join now</a>
-          <a href="#cta">Early access</a>
+          <button class="linkish" data-join>Join the mesh</button>
+          <a href="#faq">FAQ</a>
+          <a href="/privacy.html">Privacy Policy</a>
+          <a href="/terms.html">Terms</a>
         </div>
       </div>
     </div>
+    <p class="foot-hosting">Sovereignty note: the “100% Indian-hosted” claim refers to the DUM360 <strong>compute platform and its operational data</strong>. This marketing website is served from a global CDN (Firebase Hosting); waitlist signup data is stored in Cloud Firestore in Mumbai (asia-south1, India). See the <a href="/privacy.html">Privacy Policy</a> for details.</p>
     <div class="foot-bottom">
       <span>© 2026 DUM360 · Made in India 🇮🇳</span>
-      <span>Sovereign infrastructure · Hosted 100% in India</span>
+      <span>Sovereign platform · Indian-hosted data · DPDP-aligned</span>
     </div>
   </div>
 </footer>
 
+<!-- SIGN-UP MODAL -->
+<div class="modal-overlay" id="joinModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal" id="modalBox">
+    <div class="modal-head">
+      <div>
+        <button class="back-link" id="modalBack" style="display:none;">← Back</button>
+        <h2 id="modalTitle">Join the mesh</h2>
+      </div>
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+    </div>
+    <p class="sub" id="modalSub">Tell us who you are — we'll tailor the next step.</p>
+
+    <!-- STEP 1: audience picker -->
+    <div id="step1">
+      <div class="picker" id="picker"><!-- populated by JS --></div>
+      <div class="picker-generic">
+        <button class="back-link" data-pick="other" style="font-size:14px;">Not sure? I just want updates →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: form -->
+    <form id="signupForm" style="display:none;" novalidate>
+      <div class="form-banner" id="formBanner" role="alert" aria-live="assertive"></div>
+      <div id="dynamicFields"></div>
+
+      <!-- honeypot -->
+      <div class="field-honeypot" aria-hidden="true">
+        <label for="hp_company">Company (leave blank)</label>
+        <input type="text" id="hp_company" name="hp_company" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" id="consent" required />
+        <span>I agree to be contacted about DUM360 and accept the <a href="/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+      </label>
+      <div class="field err" id="consentErr" style="display:none;"><div class="errmsg" style="display:block;">Please accept the Privacy Policy to continue.</div></div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%;">Join the waitlist</button>
+
+      <div class="form-divider">or</div>
+      <button type="button" class="btn btn-google" id="googleBtn"><span class="g">G</span> Continue with Google <span style="color:var(--muted);font-weight:400;font-size:12.5px;">(optional)</span></button>
+
+      <div class="trust-line">🔒 <span>No spam. Your data stays in India (Firestore Mumbai). Early-access emails only — you can edit or leave anytime.</span></div>
+    </form>
+
+    <!-- SUCCESS -->
+    <div class="success-state" id="successState" style="display:none;">
+      <div class="tick">✓</div>
+      <h2>You're on the list</h2>
+      <p id="successMsg">We'll email you as we open access for your segment.</p>
+      <button type="button" class="btn btn-google" id="successGoogleBtn" style="max-width:320px;margin:0 auto;"><span class="g">G</span> Create an account to manage your sign-up</button>
+      <p style="margin-top:16px;"><button class="back-link" id="successClose">Done</button></p>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase config (placeholder — fill in via firebase-config.js) -->
+<script src="/firebase-config.js"></script>
+
+<!-- App logic -->
 <script>
-  // Scroll reveal
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+(function(){
+  "use strict";
+
+  /* ---------- Externalized strings (i18n-ready) ---------- */
+  const I18N = {
+    audiences: {
+      citizen:    { icon:"📱", label:"Citizen",     hint:"Earn from idle device",  title:"Join as a Citizen Provider", sub:"Earn passive UPI income from your idle phone or PC." },
+      student:    { icon:"🎓", label:"Student",     hint:"Build + contribute",     title:"Join as a Student",          sub:"Earn from your laptop and help build India's sovereign mesh." },
+      university: { icon:"🏫", label:"University",   hint:"Idle lab compute",       title:"Become a Founding University Partner", sub:"Idle lab nights → compute-grants, credits & research. Tell us what you'd pilot." },
+      government: { icon:"🏛️", label:"Govt / PSU",  hint:"Sovereign capacity",     title:"Request a Sovereignty Briefing", sub:"Sovereign capacity + Rashtra Seva governance. We'll set up a briefing." },
+      solar:      { icon:"☀️", label:"Solar / green",hint:"Monetize clean cycles", title:"Register Green Capacity",    sub:"Monetize surplus daytime solar with priority routing." },
+      enterprise: { icon:"🏢", label:"Enterprise",  hint:"Off-hours machines",     title:"Register Off-Hours Capacity",sub:"Offset IT spend — machines idle outside business hours." },
+      ai_client:  { icon:"🧪", label:"AI client",   hint:"Buy compute",            title:"Get Early Access to Compute",sub:"Affordable, India-hosted inference. Tell us your workload — we'll be honest about fit." },
+      developer:  { icon:"💻", label:"Developer",   hint:"Contribute code",        title:"Contribute Code",            sub:"Hard distributed-systems problems, open code, credit." },
+      other:      { icon:"✉️", label:"Just updates",hint:"General waitlist",       title:"Join the Waitlist",          sub:"We'll keep you posted as we open access." }
+    },
+    success: {
+      university: "Thanks — we'll reach out to set up a founding-partner pilot conversation.",
+      government: "Thanks — we'll be in touch to arrange a sovereignty briefing.",
+      ai_client:  "Thanks — we'll reach out about compute early-access and your workload fit.",
+      solar:      "Thanks — we'll be in touch about registering your green capacity.",
+      enterprise: "Thanks — we'll reach out about enrolling your off-hours capacity.",
+      _default:   "We'll email you as we open access for your segment."
+    },
+    errors: {
+      network: "Couldn't submit — check your connection and try again.",
+      email:   "Enter a valid email so we can reach you.",
+      auth:    "Google sign-in didn't work — you can still join with your email.",
+      offline: "Sign-ups are opening soon. Please check back — or email hello@dum360.com.",
+      dup:     "You're already on the list 🎉 We'll be in touch. Want to update your details? Sign in with Google below."
+    }
+  };
+
+  /* Audience-adaptive field definitions (beyond name+email). */
+  const FIELDS = {
+    citizen:    [ {k:"device", t:"select", label:"Device(s) you'd share", opts:["Phone","PC / laptop","Both"]},
+                  {k:"state",  t:"select", label:"State", help:"Helps us plan rollout.", opts:STATES()} ],
+    student:    [ {k:"organisation", t:"text", label:"College / University", required:true},
+                  {k:"interest", t:"select", label:"Interest", opts:["Use my device","Build the platform","Both"]} ],
+    university: [ {k:"organisation", t:"text", label:"Institution name", required:true},
+                  {k:"role", t:"text", label:"Your role"},
+                  {k:"message", t:"textarea", label:"What would you pilot?", help:"e.g. 1–2 labs, overnight windows."} ],
+    government: [ {k:"organisation", t:"text", label:"Organization / Department", required:true},
+                  {k:"role", t:"text", label:"Your role"},
+                  {k:"message", t:"textarea", label:"What would you like to discuss?", help:"Sovereignty, DPDP, emergency governance…"} ],
+    solar:      [ {k:"organisation", t:"text", label:"Org / site name", required:true},
+                  {k:"state", t:"select", label:"State", opts:STATES()},
+                  {k:"message", t:"text", label:"Approx GPU capacity / energy source"} ],
+    enterprise: [ {k:"organisation", t:"text", label:"Company", required:true},
+                  {k:"message", t:"text", label:"Approx machines idle off-hours"} ],
+    ai_client:  [ {k:"organisation", t:"text", label:"Organization"},
+                  {k:"workload", t:"select", label:"Workload type", opts:["Inference","Rendering","Batch / ETL","Other"]},
+                  {k:"message", t:"textarea", label:"Describe your workload", help:"Scale, model size, latency needs — we'll tell you if it won't fit."} ],
+    developer:  [ {k:"github", t:"text", label:"GitHub / portfolio (optional)"},
+                  {k:"message", t:"text", label:"Skills / interest area"} ],
+    other:      []
+  };
+
+  function STATES(){ return ["Andhra Pradesh","Assam","Bihar","Chhattisgarh","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Odisha","Punjab","Rajasthan","Tamil Nadu","Telangana","Uttar Pradesh","Uttarakhand","West Bengal","Other"]; }
+
+  const ORDER = ["citizen","student","university","government","solar","enterprise","ai_client","developer"];
+
+  /* ---------- DOM refs ---------- */
+  const modal = document.getElementById('joinModal');
+  const modalBox = document.getElementById('modalBox');
+  const step1 = document.getElementById('step1');
+  const form = document.getElementById('signupForm');
+  const successState = document.getElementById('successState');
+  const picker = document.getElementById('picker');
+  const dynamicFields = document.getElementById('dynamicFields');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalSub = document.getElementById('modalSub');
+  const modalBack = document.getElementById('modalBack');
+  const formBanner = document.getElementById('formBanner');
+  const submitBtn = document.getElementById('submitBtn');
+  const consentEl = document.getElementById('consent');
+  const consentErr = document.getElementById('consentErr');
+  let lastFocus = null;
+  let currentAudience = null;
+
+  /* ---------- Build audience picker ---------- */
+  ORDER.forEach(key=>{
+    const a = I18N.audiences[key];
+    const b = document.createElement('button');
+    b.type = "button"; b.className = "pick"; b.dataset.audience = key;
+    b.innerHTML = `<span class="pi" aria-hidden="true">${a.icon}</span><span class="pl">${a.label}</span><span class="pd">${a.hint}</span>`;
+    b.addEventListener('click', ()=>selectAudience(key));
+    picker.appendChild(b);
+  });
+  document.querySelector('[data-pick="other"]').addEventListener('click', ()=>selectAudience('other'));
+
+  /* ---------- Modal open/close + focus trap ---------- */
+  function openModal(audience){
+    lastFocus = document.activeElement;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    if(audience && I18N.audiences[audience]) { selectAudience(audience); }
+    else { showStep1(); }
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function showStep1(){
+    step1.style.display = ''; form.style.display = 'none'; successState.style.display = 'none';
+    modalBack.style.display = 'none';
+    modalTitle.textContent = 'Join the mesh';
+    modalSub.textContent = 'Tell us who you are — we’ll tailor the next step.';
+    const first = picker.querySelector('.pick'); if(first) first.focus();
+  }
+  function selectAudience(key){
+    currentAudience = key;
+    const a = I18N.audiences[key];
+    step1.style.display = 'none'; successState.style.display = 'none'; form.style.display = '';
+    modalBack.style.display = '';
+    modalTitle.textContent = a.title;
+    modalSub.textContent = a.sub;
+    buildForm(key);
+    formBanner.classList.remove('show');
+    const firstInput = form.querySelector('input, select, textarea');
+    if(firstInput) firstInput.focus();
+  }
+
+  function buildForm(key){
+    const defs = FIELDS[key] || [];
+    let html = '';
+    // Name (optional for low-friction audiences, required label-wise none are *required* except email)
+    html += fieldHTML({k:"name", t:"text", label:"Name", help:(key==='citizen'||key==='other')?"Optional.":""});
+    html += fieldHTML({k:"email", t:"email", label:"Email", required:true, help:"Only your email is required."});
+    defs.forEach(d=>{ html += fieldHTML(d); });
+    // optional phone for citizen
+    if(key==='citizen'){ html += fieldHTML({k:"phone", t:"tel", label:"Phone (optional)", help:"For WhatsApp/call follow-up."}); }
+    dynamicFields.innerHTML = html;
+  }
+
+  function fieldHTML(d){
+    const id = "f_"+d.k;
+    const reqStar = d.required ? ' <span class="req">*</span>' : '';
+    const help = d.help ? `<div class="help">${d.help}</div>` : '';
+    let control;
+    if(d.t==='select'){
+      const opts = ['<option value="">Select…</option>'].concat((d.opts||[]).map(o=>`<option>${o}</option>`)).join('');
+      control = `<select id="${id}" name="${d.k}" ${d.required?'required':''}>${opts}</select>`;
+    } else if(d.t==='textarea'){
+      control = `<textarea id="${id}" name="${d.k}" maxlength="2000" ${d.required?'required':''}></textarea>`;
+    } else {
+      const im = d.t==='email' ? 'inputmode="email"' : (d.t==='tel'?'inputmode="tel"':'');
+      control = `<input type="${d.t}" id="${id}" name="${d.k}" ${im} maxlength="200" ${d.required?'required':''} ${d.t==='email'?'placeholder="you@example.com"':''} />`;
+    }
+    return `<div class="field" data-field="${d.k}"><label for="${id}">${d.label}${reqStar}</label>${control}<div class="errmsg">This field is required.</div>${help}</div>`;
+  }
+
+  /* ---------- Validation ---------- */
+  function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function validate(){
+    let ok = true;
+    form.querySelectorAll('.field[data-field]').forEach(fl=>{
+      const ctrl = fl.querySelector('input,select,textarea');
+      fl.classList.remove('err');
+      if(ctrl.hasAttribute('required') && !ctrl.value.trim()){ fl.classList.add('err'); ok=false; }
+      if(ctrl.type==='email' && ctrl.value.trim() && !validEmail(ctrl.value.trim())){
+        fl.classList.add('err'); fl.querySelector('.errmsg').textContent = I18N.errors.email; ok=false;
+      }
+    });
+    consentErr.style.display = consentEl.checked ? 'none' : '';
+    if(!consentEl.checked) ok = false;
+    return ok;
+  }
+
+  /* ---------- Collect payload ---------- */
+  function collect(){
+    const data = { audience: currentAudience };
+    form.querySelectorAll('input[name],select[name],textarea[name]').forEach(c=>{
+      if(c.name==='hp_company') return;
+      if(c.value && c.value.trim()) data[c.name] = c.value.trim();
+    });
+    data.consent = consentEl.checked;
+    data.source = {
+      utm_source: getParam('utm_source')||null,
+      utm_medium: getParam('utm_medium')||null,
+      utm_campaign: getParam('utm_campaign')||null,
+      referrer: document.referrer||null,
+      landing_path: location.pathname + location.search
+    };
+    if(data.email) data.email = data.email.toLowerCase();
+    return data;
+  }
+  function getParam(k){ return new URLSearchParams(location.search).get(k); }
+
+  /* ---------- Submit ---------- */
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    formBanner.classList.remove('show');
+    // honeypot
+    if(document.getElementById('hp_company').value){ showSuccess(); return; } // silently "succeed" for bots
+    if(!validate()) return;
+    const data = collect();
+
+    setLoading(true);
+    try {
+      const result = await window.DUM360.submitSignup(data);
+      setLoading(false);
+      if(result && result.duplicate){ showBanner(I18N.errors.dup, 'warn'); return; }
+      showSuccess();
+    } catch(err){
+      setLoading(false);
+      if(err && err.code === 'not-configured'){ showBanner(I18N.errors.offline, 'warn'); }
+      else { showBanner(I18N.errors.network, 'error'); }
+      console.warn('[DUM360] signup submit error:', err);
+    }
+  });
+
+  function setLoading(on){
+    if(on){ submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spin"></span> Joining…'; }
+    else { submitBtn.disabled = false; submitBtn.textContent = currentAudience==='government'||currentAudience==='university' ? 'Request' : 'Join the waitlist'; }
+  }
+  function showBanner(msg, kind){
+    formBanner.textContent = msg;
+    formBanner.className = 'form-banner show' + (kind==='warn'?' warn':'');
+  }
+  function showSuccess(){
+    form.style.display = 'none'; step1.style.display = 'none'; successState.style.display = '';
+    modalBack.style.display = 'none';
+    modalTitle.textContent = 'You’re on the list';
+    modalSub.textContent = '';
+    document.getElementById('successMsg').textContent = I18N.success[currentAudience] || I18N.success._default;
+  }
+
+  /* ---------- Google sign-in (optional) ---------- */
+  async function doGoogle(){
+    try {
+      const user = await window.DUM360.signInWithGoogle();
+      if(user){
+        // prefill
+        const nameEl = document.getElementById('f_name');
+        const emailEl = document.getElementById('f_email');
+        if(nameEl && user.displayName) nameEl.value = user.displayName;
+        if(emailEl && user.email) emailEl.value = user.email;
+        showBanner('Signed in as '+ (user.email||'your Google account') +'. Review and submit.', 'warn');
+      }
+    } catch(err){
+      if(err && err.code==='not-configured'){ showBanner(I18N.errors.offline,'warn'); }
+      else { showBanner(I18N.errors.auth,'error'); }
+      console.warn('[DUM360] google sign-in error:', err);
+    }
+  }
+  document.getElementById('googleBtn').addEventListener('click', doGoogle);
+  document.getElementById('successGoogleBtn').addEventListener('click', async function(){
+    await doGoogle();
+    // After auth from success, point to portal (placeholder)
+    if(window.DUM360 && window.DUM360.isConfigured && window.DUM360.isConfigured()){
+      location.href = '/portal.html';
+    }
+  });
+
+  /* ---------- Wire triggers ---------- */
+  document.querySelectorAll('[data-join]').forEach(el=>{
+    el.addEventListener('click', function(e){
+      e.preventDefault();
+      openModal(this.dataset.audience || null);
+    });
+  });
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('successClose').addEventListener('click', closeModal);
+  modalBack.addEventListener('click', showStep1);
+  modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && modal.classList.contains('open')) closeModal();
+    if(e.key==='Tab' && modal.classList.contains('open')) trapFocus(e);
+  });
+  function trapFocus(e){
+    const f = modalBox.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const vis = Array.from(f).filter(el=>el.offsetParent!==null && !el.disabled);
+    if(!vis.length) return;
+    const first = vis[0], last = vis[vis.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+
+  /* ---------- Deep link (?join=university / ?audience=university / ?type=university) ---------- */
+  (function deepLink(){
+    const p = new URLSearchParams(location.search);
+    const aud = p.get('join') || p.get('audience') || p.get('type');
+    if(aud){
+      const map = { govt:'government', client:'ai_client', 'ai-client':'ai_client' };
+      const key = map[aud] || aud;
+      if(I18N.audiences[key]) { setTimeout(()=>openModal(key), 200); }
+    }
+  })();
+
+  /* ---------- Benchmark link (placeholder until /honesty page or public benchmark URL) ---------- */
+  document.querySelectorAll('[data-benchmark]').forEach(a=>{
+    a.setAttribute('href', 'https://github.com/'); // TODO: replace with public benchmark/honesty URL
+    a.setAttribute('target','_blank'); a.setAttribute('rel','noopener');
+  });
+})();
 </script>
 
-<!-- MESH ANIMATION -->
+<!-- UI behaviour: nav, mobile menu, scroll-spy, FAQ, reveal, mesh -->
+<script>
+(function(){
+  "use strict";
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Reveal */
+  if(reduce){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')); }
+  else {
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  }
+
+  /* Mobile menu */
+  const mt = document.getElementById('menuToggle');
+  const mm = document.getElementById('mobileMenu');
+  function openMM(){ mm.classList.add('open'); mt.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+  function closeMM(){ mm.classList.remove('open'); mt.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+  mt.addEventListener('click', openMM);
+  document.getElementById('mmClose').addEventListener('click', closeMM);
+  mm.querySelectorAll('a.mm-link').forEach(a=>a.addEventListener('click', closeMM));
+
+  /* Scroll-spy */
+  const navMap = {};
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(a=>{ navMap[a.getAttribute('href').slice(1)] = a; });
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        Object.values(navMap).forEach(a=>a.classList.remove('active'));
+        const link = navMap[e.target.id]; if(link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  Object.keys(navMap).forEach(id=>{ const s = document.getElementById(id); if(s) spy.observe(s); });
+
+  /* FAQ accordion */
+  document.querySelectorAll('.faq-q').forEach(q=>{
+    q.addEventListener('click', function(e){
+      if(e.target.closest('[data-join]')) return; // don't toggle when clicking inner join button
+      const open = this.getAttribute('aria-expanded')==='true';
+      this.setAttribute('aria-expanded', String(!open));
+      const a = this.nextElementSibling;
+      a.style.maxHeight = open ? '0' : a.scrollHeight + 'px';
+    });
+  });
+})();
+</script>
+
+<!-- MESH ANIMATION (illustrative diagram) -->
 <script>
 (function(){
   const stage = document.getElementById('meshStage');
@@ -517,6 +1342,7 @@
   const ctx = canvas.getContext('2d');
   const tip = document.getElementById('meshTip');
   const banner = document.getElementById('meshBanner');
+  const hint = document.getElementById('meshHint');
 
   if(!CanvasRenderingContext2D.prototype.roundRect){
     CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
@@ -529,57 +1355,44 @@
   }
   function rr(x,y,w,h,r){ ctx.beginPath(); ctx.roundRect(x,y,w,h,r); }
 
-  const FLOW = { workload:'#2f6bff', result:'#00c2a8', payout:'#22c55e', request:'#7c5cff', emergency:'#ff3b3b' };
+  const FLOW = { workload:'#2f6bff', result:'#00c2a8', payout:'#1f9d57', request:'#7c5cff', emergency:'#ff3b3b' };
   const core = { px:0, py:0 };
   const nodes = [
     { id:'inst',     label:'Universities',      sub:'IIT/NIT · NKN',    icon:'🎓', color:'#2f6bff', role:'provider', shape:'hex',     ang:-90,
       desc:'Campus labs join over <b>LAN + NKN</b> — enabling real in-cluster &amp; cross-campus model parallelism.' },
     { id:'ai',       label:'AI Startups',       sub:'Buys compute',     icon:'🧪', color:'#7c5cff', role:'consumer', shape:'pill',    ang:-50,
-      desc:'Startups submit training, inference &amp; render <b>jobs</b> — results back at ~50% less cost.' },
+      desc:'Startups submit inference &amp; render <b>jobs</b> — affordable, India-hosted compute.' },
     { id:'gov',      label:'Govt · PSU',        sub:'Sovereign labs',   icon:'🏛️', color:'#ff7a1a', role:'gov',      shape:'shield',  ang:-10,
-      desc:'Sovereign labs &amp; data centres contribute compute — and <b>trigger Rashtra Seva</b> in a crisis.' },
+      desc:'Sovereign labs &amp; data centres contribute compute — and could <b>trigger Rashtra Seva</b> (designed) in a crisis.' },
     { id:'ent',      label:'Enterprise · MSME', sub:'Off-hours servers',icon:'🏢', color:'#0ea5a5', role:'provider', shape:'diamond', ang:30,
       desc:'Companies, startups &amp; MSMEs rent out machines <b>idle outside business hours</b>.' },
-    { id:'solar',    label:'Solar GPU Grid',    sub:'GJ/RJ · daytime',  icon:'☀️', color:'#f59e0b', role:'provider', shape:'circle',  ang:70,
-      desc:'Always-on solar rigs get <b>priority 10am–4pm</b> — the cheapest, greenest cycles.' },
-    { id:'tidal',    label:'Tidal & Offshore',  sub:'Wave · 24×7',      icon:'🌊', color:'#06b6d4', role:'provider', shape:'circle',  ang:110,
-      desc:'Floating, <b>seawater-cooled</b> GPU rigs on <b>tidal, wave &amp; offshore solar</b> — round-the-clock green baseload.' },
+    { id:'solar',    label:'Solar GPU Grid',    sub:'GJ/RJ · daytime',  icon:'☀️', color:'#1f9d57', role:'provider', shape:'circle',  ang:70,
+      desc:'Solar rigs get <b>priority 10am–4pm</b> — the cheapest, greenest cycles.' },
+    { id:'tidal',    label:'Coastal (R&D)',     sub:'Solar-cooled',     icon:'🌊', color:'#06b6d4', role:'provider', shape:'circle',  ang:110,
+      desc:'Floating, <b>seawater-cooled</b> coastal rigs. Tidal/wave is an <b>early R&amp;D track</b> — not capacity at launch.' },
     { id:'research', label:'Researchers',       sub:'Academia',         icon:'🔬', color:'#8b5cf6', role:'consumer', shape:'pill',    ang:150,
-      desc:'Researchers run large workloads on affordable <b>sovereign compute</b>.' },
+      desc:'Researchers run large parallel workloads on affordable <b>sovereign compute</b>.' },
     { id:'gaming',   label:'Gaming PCs',        sub:'K3s · overnight',  icon:'🎮', color:'#00c2a8', role:'provider', shape:'square',  ang:190,
       desc:'Overnight PCs join as <b>K3s workers</b>, return checkpoints, paid via <b>UPI</b>.' },
     { id:'phones',   label:'Consumer Phones',   sub:'WASM client',      icon:'📱', color:'#3b82f6', role:'provider', shape:'roundsq', ang:230,
-      desc:'Idle phones run sandboxed <b>WASM</b> tasks at night and earn <b>UPI payouts</b>.' },
+      desc:'Idle phones run sandboxed <b>WASM</b> inference at night and earn <b>UPI payouts</b>.' },
   ];
 
-  let W=0, H=0, DPR=1, scale=1, now=0, hovered=null, emergency=false;
+  let W=0, H=0, DPR=1, scale=1, now=0, hovered=null, emergency=false, raf=null, onScreen=true;
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const SP = reduce ? 0.4 : 1;
+  const SP = 1;
 
   function buildStreams(){
     nodes.forEach(n=>{
       const s=[];
       if(emergency){
-        if(n.role==='provider'){
-          s.push({color:FLOW.emergency, dir:'out', speed:0.0015*SP, count:6, lane:9});
-          s.push({color:FLOW.result,    dir:'in',  speed:0.0010*SP, count:3, lane:-9});
-        } else if(n.role==='gov'){
-          s.push({color:FLOW.emergency, dir:'in',  speed:0.0017*SP, count:5, lane:0});
-        } else {
-          s.push({color:'#b4bccc', dir:'out', speed:0.00025*SP, count:1, lane:0});
-        }
+        if(n.role==='provider'){ s.push({color:FLOW.emergency, dir:'out', speed:0.0015*SP, count:6, lane:9}); s.push({color:FLOW.result, dir:'in', speed:0.0010*SP, count:3, lane:-9}); }
+        else if(n.role==='gov'){ s.push({color:FLOW.emergency, dir:'in', speed:0.0017*SP, count:5, lane:0}); }
+        else { s.push({color:'#b4bccc', dir:'out', speed:0.00025*SP, count:1, lane:0}); }
       } else {
-        if(n.role==='provider'){
-          s.push({color:FLOW.workload, dir:'out', speed:0.0009*SP, count:4, lane:10});
-          s.push({color:FLOW.result,   dir:'in',  speed:0.0008*SP, count:3, lane:-10});
-          s.push({color:FLOW.payout,   dir:'out', speed:0.0005*SP, count:2, lane:0});
-        } else if(n.role==='consumer'){
-          s.push({color:FLOW.request,  dir:'in',  speed:0.0008*SP, count:3, lane:9});
-          s.push({color:FLOW.result,   dir:'out', speed:0.0008*SP, count:3, lane:-9});
-        } else if(n.role==='gov'){
-          s.push({color:FLOW.workload, dir:'out', speed:0.0009*SP, count:3, lane:10});
-          s.push({color:FLOW.result,   dir:'in',  speed:0.0008*SP, count:2, lane:-10});
-        }
+        if(n.role==='provider'){ s.push({color:FLOW.workload, dir:'out', speed:0.0009*SP, count:4, lane:10}); s.push({color:FLOW.result, dir:'in', speed:0.0008*SP, count:3, lane:-10}); s.push({color:FLOW.payout, dir:'out', speed:0.0005*SP, count:2, lane:0}); }
+        else if(n.role==='consumer'){ s.push({color:FLOW.request, dir:'in', speed:0.0008*SP, count:3, lane:9}); s.push({color:FLOW.result, dir:'out', speed:0.0008*SP, count:3, lane:-9}); }
+        else if(n.role==='gov'){ s.push({color:FLOW.workload, dir:'out', speed:0.0009*SP, count:3, lane:10}); s.push({color:FLOW.result, dir:'in', speed:0.0008*SP, count:2, lane:-10}); }
       }
       n.streams=s;
     });
@@ -594,16 +1407,13 @@
     scale = Math.max(0.58, Math.min(1.15, W/1000));
     core.px = W*0.5; core.py = H*0.5;
     const rx = W*0.37, ry = H*0.34;
-    nodes.forEach(n=>{
-      const a = n.ang*Math.PI/180;
-      n.px = core.px + Math.cos(a)*rx;
-      n.py = core.py + Math.sin(a)*ry;
-    });
+    nodes.forEach(n=>{ const a = n.ang*Math.PI/180; n.px = core.px + Math.cos(a)*rx; n.py = core.py + Math.sin(a)*ry; });
+    if(reduce) drawStatic();
   }
 
   function drawCore(){
     const w=190*scale, h=92*scale, x=core.px-w/2, y=core.py-h/2;
-    const pulse = 0.5+0.5*Math.sin(now*0.002);
+    const pulse = reduce ? 0.5 : 0.5+0.5*Math.sin(now*0.002);
     ctx.save();
     ctx.shadowColor = emergency? 'rgba(255,59,59,.5)':'rgba(47,107,255,.45)';
     ctx.shadowBlur = (22+pulse*16)*scale;
@@ -616,7 +1426,7 @@
     ctx.fillStyle='#9ec1ff'; ctx.font=`600 ${10.5*scale}px Inter, sans-serif`;
     ctx.fillText('Orchestrator · Metadata DB · UPI', core.px, core.py + 6*scale);
     ctx.fillStyle='#c3ccea'; ctx.font=`600 ${10.5*scale}px Inter, sans-serif`;
-    ctx.fillText('🇮🇳 100% hosted in India', core.px, core.py + 24*scale);
+    ctx.fillText('🇮🇳 Indian-hosted platform', core.px, core.py + 24*scale);
     ctx.restore();
   }
 
@@ -645,30 +1455,24 @@
     ctx.textBaseline='top';
     ctx.fillStyle='#0b1020'; ctx.font=`700 ${12*scale}px Inter, sans-serif`;
     ctx.fillText(n.label, n.px, n.py + r + 7*scale);
-    ctx.fillStyle='#8089a3'; ctx.font=`500 ${10*scale}px Inter, sans-serif`;
+    ctx.fillStyle='#475069'; ctx.font=`500 ${10*scale}px Inter, sans-serif`;
     ctx.fillText(n.sub, n.px, n.py + r + 20*scale);
     ctx.restore();
   }
 
-  function frame(t){
-    now = t;
+  function drawScene(withParticles){
     ctx.clearRect(0,0,W,H);
-    // background dot grid
     const gap=34*scale; ctx.fillStyle='rgba(120,135,165,.07)';
     for(let gx=gap; gx<W; gx+=gap) for(let gy=gap; gy<H; gy+=gap){ ctx.beginPath(); ctx.arc(gx,gy,1.1*scale,0,7); ctx.fill(); }
     if(emergency){ ctx.fillStyle='rgba(255,59,59,.045)'; ctx.fillRect(0,0,W,H); }
-
-    // ring (mesh) connections
     ctx.setLineDash([4*scale,7*scale]); ctx.strokeStyle='rgba(120,135,165,.12)'; ctx.lineWidth=1*scale;
-    for(let i=0;i<nodes.length;i++){ const a=nodes[i], b=nodes[(i+1)%nodes.length];
-      ctx.beginPath(); ctx.moveTo(a.px,a.py); ctx.lineTo(b.px,b.py); ctx.stroke(); }
+    for(let i=0;i<nodes.length;i++){ const a=nodes[i], b=nodes[(i+1)%nodes.length]; ctx.beginPath(); ctx.moveTo(a.px,a.py); ctx.lineTo(b.px,b.py); ctx.stroke(); }
     ctx.setLineDash([]);
-
-    // spokes + particles
     nodes.forEach(n=>{
       const dim = hovered && hovered!==n;
       ctx.strokeStyle = dim?'rgba(120,135,165,.08)':'rgba(120,135,165,.2)'; ctx.lineWidth=1*scale;
       ctx.beginPath(); ctx.moveTo(core.px,core.py); ctx.lineTo(n.px,n.py); ctx.stroke();
+      if(!withParticles) return;
       const dx=n.px-core.px, dy=n.py-core.py, len=Math.hypot(dx,dy);
       const ux=dx/len, uy=dy/len, perpx=-uy, perpy=ux;
       (n.streams||[]).forEach(st=>{
@@ -686,11 +1490,15 @@
         }
       });
     });
-
     nodes.forEach(drawNode);
     drawCore();
-    requestAnimationFrame(frame);
   }
+
+  function drawStatic(){ drawScene(false); }
+
+  function frame(t){ now = t; drawScene(true); raf = requestAnimationFrame(frame); }
+  function start(){ if(reduce){ drawStatic(); return; } if(!raf) raf = requestAnimationFrame(frame); }
+  function stop(){ if(raf){ cancelAnimationFrame(raf); raf = null; } }
 
   function setMode(em){
     emergency = em;
@@ -698,6 +1506,7 @@
     document.getElementById('modePeace').setAttribute('aria-pressed', String(!em));
     document.getElementById('modeEmergency').setAttribute('aria-pressed', String(em));
     banner.classList.toggle('show', em);
+    if(reduce) drawStatic();
   }
   document.getElementById('modePeace').addEventListener('click', ()=>setMode(false));
   document.getElementById('modeEmergency').addEventListener('click', ()=>setMode(true));
@@ -707,30 +1516,36 @@
     if(Math.abs(mx-core.px)<98*scale && Math.abs(my-core.py)<48*scale) return core;
     return null;
   }
+  function showTip(n,mx,my){
+    tip.innerHTML = '<b>'+n.label+'</b><br>'+n.desc; tip.classList.add('show');
+    let tx=mx+16, ty=my+16; if(tx>W-230) tx=mx-230; if(ty>H-90) ty=my-80;
+    tip.style.left=Math.max(8,tx)+'px'; tip.style.top=Math.max(8,ty)+'px';
+  }
   stage.addEventListener('mousemove', e=>{
-    const r=canvas.getBoundingClientRect();
-    const mx=e.clientX-r.left, my=e.clientY-r.top;
-    const hit = hitTest(mx,my);
-    canvas.style.cursor = hit?'pointer':'default';
-    if(hit && hit!==core){
-      hovered = hit;
-      tip.innerHTML = '<b>'+hit.label+'</b><br>'+hit.desc;
-      tip.classList.add('show');
-      let tx=mx+16, ty=my+16;
-      if(tx>W-230) tx=mx-230; if(ty>H-90) ty=my-80;
-      tip.style.left=Math.max(8,tx)+'px'; tip.style.top=Math.max(8,ty)+'px';
-    } else if(hit===core){
-      hovered=null;
-      tip.innerHTML='<b>Sovereign Core</b><br>Orchestrator, metadata DB &amp; UPI engine — <b>100% hosted in India</b>.';
-      tip.classList.add('show');
-      let tx=mx+16, ty=my+16; if(tx>W-230) tx=mx-230; if(ty>H-90) ty=my-80;
-      tip.style.left=Math.max(8,tx)+'px'; tip.style.top=Math.max(8,ty)+'px';
-    } else { hovered=null; tip.classList.remove('show'); }
+    const r=canvas.getBoundingClientRect(); const mx=e.clientX-r.left, my=e.clientY-r.top;
+    const hit = hitTest(mx,my); canvas.style.cursor = hit?'pointer':'default';
+    if(hit && hit!==core){ hovered = hit; showTip(hit,mx,my); }
+    else if(hit===core){ hovered=null; tip.innerHTML='<b>Sovereign Core</b><br>Orchestrator, metadata DB &amp; UPI engine — <b>Indian-hosted platform</b>.'; tip.classList.add('show'); let tx=mx+16, ty=my+16; if(tx>W-230) tx=mx-230; if(ty>H-90) ty=my-80; tip.style.left=Math.max(8,tx)+'px'; tip.style.top=Math.max(8,ty)+'px'; }
+    else { hovered=null; tip.classList.remove('show'); }
+    if(reduce) drawStatic();
   });
-  stage.addEventListener('mouseleave', ()=>{ hovered=null; tip.classList.remove('show'); canvas.style.cursor='default'; });
+  stage.addEventListener('mouseleave', ()=>{ hovered=null; tip.classList.remove('show'); canvas.style.cursor='default'; if(reduce) drawStatic(); });
+  // Touch: tap a node to show dismissible tip
+  stage.addEventListener('click', e=>{
+    if(!('ontouchstart' in window)) return;
+    const r=canvas.getBoundingClientRect(); const mx=e.clientX-r.left, my=e.clientY-r.top;
+    const hit = hitTest(mx,my);
+    if(hit && hit!==core){ hovered=hit; showTip(hit,mx,my); if(reduce) drawStatic(); }
+    else { hovered=null; tip.classList.remove('show'); if(reduce) drawStatic(); }
+  });
+  if('ontouchstart' in window && hint){ hint.textContent = 'Tap any node to see its role · switch modes above'; }
 
+  // Pause off-screen to save battery/CPU
+  if(window.IntersectionObserver){
+    new IntersectionObserver((es)=>{ es.forEach(e=>{ onScreen=e.isIntersecting; if(onScreen) start(); else stop(); }); }, {threshold:0.05}).observe(stage);
+  }
   if(window.ResizeObserver){ new ResizeObserver(resize).observe(stage); } else { window.addEventListener('resize', resize); }
-  resize(); buildStreams(); requestAnimationFrame(frame);
+  resize(); buildStreams(); start();
 })();
 </script>
 </body>

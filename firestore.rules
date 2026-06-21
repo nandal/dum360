@@ -1,0 +1,86 @@
+rules_version = '2';
+
+// DUM360 Firestore security rules — PRD §8.4
+//
+// Principles:
+//  - Anyone may CREATE a signup, but only with a validated payload (consent==true,
+//    valid audience, correct field types/sizes, no arbitrary extra fields).
+//  - Public READ/LIST of `signups` is DENIED (it contains PII). Reads happen via
+//    the Firebase Console, an admin Cloud Function (Admin SDK bypasses rules),
+//    or — in the Phase-3 portal — an authenticated owner reading only their own
+//    docs (uid == auth.uid).
+//  - `signups_meta` (counts only, no PII) is publicly readable; writes are
+//    server-side only.
+//
+// App Check should additionally gate these writes (enforced in the Firebase
+// Console: Firestore → App Check → Enforce).
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isString(v, maxLen) {
+      return v is string && v.size() > 0 && v.size() <= maxLen;
+    }
+    function optString(v, maxLen) {
+      return v == null || (v is string && v.size() <= maxLen);
+    }
+
+    function validAudience(a) {
+      return a in ['citizen','student','university','government','solar','enterprise','ai_client','developer','other'];
+    }
+
+    // Only these top-level keys are allowed on a signup doc.
+    function allowedKeys(d) {
+      return d.keys().hasOnly([
+        'audience','name','email','organisation','phone','message',
+        'meta','consent','source','status','uid','userAgentHash','createdAt'
+      ]);
+    }
+
+    function validSignup(d) {
+      return allowedKeys(d)
+        && validAudience(d.audience)
+        && d.consent == true
+        && isString(d.email, 254)
+        && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && optString(d.name, 200)
+        && optString(d.organisation, 200)
+        && optString(d.phone, 40)
+        && optString(d.message, 2000)
+        && (d.status == 'new')
+        && (d.uid == null || d.uid is string)
+        && (d.meta == null || d.meta is map)
+        && (d.source == null || d.source is map);
+    }
+
+    match /signups/{id} {
+      // Create: open, but strictly validated.
+      allow create: if validSignup(request.resource.data);
+
+      // Read/update only by the authenticated owner (Phase-3 portal). No public list.
+      allow get: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow list: if false;
+
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        // Owner may not change status/audit fields, only their own details.
+        && request.resource.data.status == resource.data.status
+        && request.resource.data.email == resource.data.email;
+
+      // Owner may withdraw (delete) their own entry — trust mirror of "uninstall anytime".
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+
+    // Public counters (no PII). Writes are server-side (Admin SDK) only.
+    match /signups_meta/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Default deny everything else.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

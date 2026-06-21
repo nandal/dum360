@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contributor Portal — DUM360</title>
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#0b1020" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg:#fff; --bg-soft:#f6f8fc; --ink:#0b1020; --ink-soft:#475069; --muted:#8089a3; --line:#e7ebf3; --brand:#2f6bff; --brand-2:#00c2a8; --brand-ink:#1d4fd0; --brand-strong:#2a60e6; --error:#c81e1e; --radius:16px; --shadow:0 1px 2px rgba(11,16,32,.04),0 12px 32px rgba(11,16,32,.06); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg-soft); line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100vh; }
+  a { color:var(--brand-ink); } :focus-visible { outline:3px solid var(--brand); outline-offset:2px; border-radius:6px; }
+  header.nav { background:#fff; border-bottom:1px solid var(--line); }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:68px; max-width:1000px; margin:0 auto; padding:0 24px; }
+  .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; color:var(--ink); text-decoration:none; }
+  .logo .mark { width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,var(--brand),var(--brand-2)); display:grid; place-items:center; color:#fff; font-size:13px; font-weight:900; }
+  .wrap { max-width:1000px; margin:0 auto; padding:48px 24px 80px; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:600; font-size:15px; padding:12px 22px; border-radius:12px; border:1px solid transparent; cursor:pointer; min-height:44px; font-family:inherit; }
+  .btn-primary { background:var(--brand-strong); color:#fff; }
+  .btn-ghost { background:#fff; color:var(--ink); border-color:var(--line); }
+  .btn-google { background:#fff; border:1px solid var(--line); color:var(--ink); }
+  .btn-google .g { font-weight:800; color:#4285F4; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow); }
+  h1 { font-size:28px; font-weight:800; margin-bottom:8px; }
+  .center { text-align:center; max-width:440px; margin:40px auto; }
+  .note { background:#fff7f1; border:1px solid #ffe0c7; border-radius:12px; padding:16px; font-size:14px; color:var(--ink-soft); margin-bottom:24px; }
+  .muted { color:var(--ink-soft); font-size:15px; }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo"><span class="mark">D</span> DUM360</a>
+    <button class="btn btn-ghost" id="signOut" style="display:none;">Sign out</button>
+  </div>
+</header>
+<div class="wrap">
+  <div class="note" role="note">
+    <strong>Phase-3 scaffold.</strong> The full contributor portal (view / edit / withdraw your waitlist entry) is wired to Firebase Auth + Firestore but is intentionally minimal for v1. It activates once <code>firebase-config.js</code> has real values and Google Auth is enabled.
+  </div>
+
+  <!-- Signed-out -->
+  <div class="center card" id="signedOut">
+    <h1>Manage your sign-up</h1>
+    <p class="muted" style="margin-bottom:24px;">Sign in with the email you joined with to view, edit, or withdraw your waitlist entry.</p>
+    <button class="btn btn-google" id="googleSignIn" style="width:100%;"><span class="g">G</span> Continue with Google</button>
+    <p class="muted" style="margin-top:16px;font-size:13px;">Optional — you never need an account to join the waitlist. <a href="/">Back to home</a></p>
+  </div>
+
+  <!-- Signed-in -->
+  <div id="signedIn" style="display:none;">
+    <h1 style="margin-bottom:24px;">Hi <span id="userName">there</span> — you're on the list</h1>
+    <div class="card">
+      <p class="muted" id="entrySummary">Loading your entry…</p>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-ghost" id="leaveBtn">Leave the waitlist</button>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px;">
+      <h2 style="font-size:18px;margin-bottom:10px;">What happens next</h2>
+      <ol class="muted" style="padding-left:20px;">
+        <li>We're onboarding campuses first (Phase 1).</li>
+        <li>You'll get an email when access opens for your segment.</li>
+        <li>Then: install, set your hours, and earn via UPI (citizen/provider).</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script src="/firebase-config.js"></script>
+<script>
+(function(){
+  "use strict";
+  const signedOut = document.getElementById('signedOut');
+  const signedIn = document.getElementById('signedIn');
+  const signOutBtn = document.getElementById('signOut');
+
+  if(!window.DUM360 || !window.DUM360.isConfigured || !window.DUM360.isConfigured()){
+    document.getElementById('googleSignIn').addEventListener('click', ()=>{
+      alert('Sign-ups are opening soon. The portal activates once Firebase is configured. See docs/website/DEPLOY.md.');
+    });
+    return;
+  }
+
+  document.getElementById('googleSignIn').addEventListener('click', async ()=>{
+    try {
+      const user = await window.DUM360.signInWithGoogle();
+      onSignedIn(user);
+    } catch(e){ console.warn('[DUM360] portal sign-in error', e); alert('Google sign-in did not work. Please try again.'); }
+  });
+
+  signOutBtn.addEventListener('click', async ()=>{ await window.DUM360.signOut(); location.reload(); });
+
+  document.getElementById('leaveBtn').addEventListener('click', ()=>{
+    if(confirm('Leave the waitlist? You can rejoin anytime.')){
+      // TODO (Phase 3): delete the user's own Firestore signup doc (rules allow owner delete).
+      alert('Withdrawal flow is part of Phase-3 portal completion. Your delete permission is already enforced in firestore.rules.');
+    }
+  });
+
+  function onSignedIn(user){
+    signedOut.style.display='none'; signedIn.style.display=''; signOutBtn.style.display='';
+    document.getElementById('userName').textContent = (user && user.displayName) ? user.displayName.split(' ')[0] : 'there';
+    // TODO (Phase 3): query signups where uid == auth.uid (rules allow owner get) and render real details.
+    document.getElementById('entrySummary').textContent = 'Signed in as ' + (user.email||'') + '. Your waitlist details will appear here once the Phase-3 claim/query is wired (see firestore.rules + DEPLOY.md).';
+  }
+})();
+</script>
+</body>
+</html>
