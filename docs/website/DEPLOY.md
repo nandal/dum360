@@ -8,6 +8,24 @@ The site is a no-build static page (`index.html` + a few standalone HTML files +
 
 ---
 
+## Fast path (scripted)
+
+Most of this is automated by `scripts/setup-firebase.sh`. Do the two interactive logins, then run it:
+
+```bash
+npm install -g firebase-tools     # if not already installed
+firebase login                    # browser sign-in (the project's Google account)
+gcloud auth login                 # only needed for the scripted Firestore-DB creation
+
+# create the project + wire everything + deploy, in one go:
+./scripts/setup-firebase.sh dum360-web --create
+# (omit --create if you already made the project in the Console)
+```
+
+The script: writes `.firebaserc`, ensures a Web app + writes its SDK keys into `firebase-config.js`, creates **Firestore in asia-south1 (Mumbai)**, and deploys rules + indexes + hosting. It then prints the Console-only steps that remain (Google Auth, App Check key, custom domain/DNS). The manual walkthrough below documents every step the script performs, plus those Console-only bits.
+
+---
+
 ## 0. Prerequisites
 
 ```bash
