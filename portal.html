@@ -34,6 +34,30 @@
   .center { text-align:center; max-width:440px; margin:40px auto; }
   .note { background:#fff7f1; border:1px solid #ffe0c7; border-radius:12px; padding:16px; font-size:14px; color:var(--ink-soft); margin-bottom:24px; }
   .muted { color:var(--ink-soft); font-size:15px; }
+  h2 { font-size:18px; font-weight:800; }
+  /* Profile / dashboard */
+  .profile { display:flex; align-items:center; gap:16px; }
+  .avatar { width:64px; height:64px; border-radius:50%; object-fit:cover; background:var(--bg-soft); flex:none; }
+  .avatar.sm { width:36px; height:36px; }
+  .profile h1 { font-size:22px; margin:0; }
+  .profile .email { color:var(--ink-soft); font-size:14px; }
+  .dash-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px; }
+  @media (max-width:680px){ .dash-grid { grid-template-columns:1fr; } }
+  .card h2 { margin-bottom:14px; }
+  .fields { display:grid; gap:12px; }
+  .field { display:flex; justify-content:space-between; gap:16px; font-size:14px; border-bottom:1px dashed var(--line); padding-bottom:10px; }
+  .field:last-child { border-bottom:0; padding-bottom:0; }
+  .field .k { color:var(--muted); }
+  .field .v { font-weight:600; text-align:right; word-break:break-word; }
+  .badge { display:inline-block; font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px; background:#eef3ff; color:var(--brand-ink); text-transform:capitalize; }
+  .empty { text-align:center; padding:8px 0; }
+  .row-actions { margin-top:20px; display:flex; gap:12px; flex-wrap:wrap; }
+  .btn-danger { background:#fff; color:var(--error); border:1px solid #f3c7c7; }
+  .btn-danger:hover { background:#fff5f5; }
+  .toast { display:none; margin-bottom:20px; border-radius:12px; padding:14px 16px; font-size:14px; }
+  .toast.show { display:block; }
+  .toast.ok { background:#eefaf3; border:1px solid #bfe8cf; color:#136c3a; }
+  .toast.err { background:#fff5f5; border:1px solid #f3c7c7; color:var(--error); }
 </style>
 </head>
 <body>
@@ -44,34 +68,63 @@
   </div>
 </header>
 <div class="wrap">
-  <div class="note" role="note">
-    <strong>Phase-3 scaffold.</strong> The full contributor portal (view / edit / withdraw your waitlist entry) is wired to Firebase Auth + Firestore but is intentionally minimal for v1. It activates once <code>firebase-config.js</code> has real values and Google Auth is enabled.
+  <!-- Loading -->
+  <div class="center" id="loading">
+    <p class="muted">Loading…</p>
   </div>
 
   <!-- Signed-out -->
-  <div class="center card" id="signedOut">
-    <h1>Manage your sign-up</h1>
-    <p class="muted" style="margin-bottom:24px;">Sign in with the email you joined with to view, edit, or withdraw your waitlist entry.</p>
+  <div class="center card" id="signedOut" style="display:none;">
+    <h1>Your DUM360 account</h1>
+    <p class="muted" style="margin-bottom:24px;">Sign in with Google to view your profile, manage your waitlist entry, and see what's next.</p>
     <button class="btn btn-google" id="googleSignIn" style="width:100%;"><span class="g">G</span> Continue with Google</button>
-    <p class="muted" style="margin-top:16px;font-size:13px;">Optional — you never need an account to join the waitlist. <a href="/">Back to home</a></p>
+    <p class="muted" style="margin-top:16px;font-size:13px;">You never need an account to join the waitlist. <a href="/">Back to home</a></p>
   </div>
 
   <!-- Signed-in -->
   <div id="signedIn" style="display:none;">
-    <h1 style="margin-bottom:24px;">Hi <span id="userName">there</span> — you're on the list</h1>
+    <div id="toast" class="toast" role="status"></div>
+
+    <!-- Profile -->
     <div class="card">
-      <p class="muted" id="entrySummary">Loading your entry…</p>
-      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
-        <button class="btn btn-ghost" id="leaveBtn">Leave the waitlist</button>
+      <div class="profile">
+        <img class="avatar" id="avatar" alt="" referrerpolicy="no-referrer" />
+        <div>
+          <h1>Hi <span id="userName">there</span></h1>
+          <div class="email" id="userEmail"></div>
+        </div>
       </div>
     </div>
-    <div class="card" style="margin-top:20px;">
-      <h2 style="font-size:18px;margin-bottom:10px;">What happens next</h2>
-      <ol class="muted" style="padding-left:20px;">
-        <li>We're onboarding campuses first (Phase 1).</li>
-        <li>You'll get an email when access opens for your segment.</li>
-        <li>Then: install, set your hours, and earn via UPI (citizen/provider).</li>
-      </ol>
+
+    <div class="dash-grid">
+      <!-- Waitlist entry -->
+      <div class="card">
+        <h2>Your waitlist entry</h2>
+        <div id="entryLoading" class="muted">Loading your entry…</div>
+
+        <div id="entryDetails" style="display:none;">
+          <div class="fields" id="entryFields"></div>
+          <div class="row-actions">
+            <button class="btn btn-danger" id="leaveBtn">Leave the waitlist</button>
+          </div>
+        </div>
+
+        <div id="entryEmpty" class="empty" style="display:none;">
+          <p class="muted" style="margin-bottom:16px;">You're signed in, but you haven't joined the waitlist yet.</p>
+          <a class="btn btn-primary" href="/#join">Join the mesh</a>
+        </div>
+      </div>
+
+      <!-- What's next -->
+      <div class="card">
+        <h2>What happens next</h2>
+        <ol class="muted" style="padding-left:20px;display:grid;gap:8px;">
+          <li>We're onboarding campuses first (Phase 1).</li>
+          <li>You'll get an email when access opens for your segment.</li>
+          <li>Then: install, set your hours, and earn via UPI (citizen/provider).</li>
+        </ol>
+        <p class="muted" style="margin-top:16px;font-size:13px;">Questions? <a href="mailto:hello@dum360.com">hello@dum360.com</a></p>
+      </div>
     </div>
   </div>
 </div>
@@ -80,39 +133,133 @@
 <script>
 (function(){
   "use strict";
-  const signedOut = document.getElementById('signedOut');
-  const signedIn = document.getElementById('signedIn');
-  const signOutBtn = document.getElementById('signOut');
+  const $ = function(id){ return document.getElementById(id); };
+  const loading  = $('loading');
+  const signedOut= $('signedOut');
+  const signedIn = $('signedIn');
+  const signOutBtn = $('signOut');
+  const googleSignIn = $('googleSignIn');
 
+  const AUDIENCE = {
+    citizen:'Citizen provider', student:'Student', university:'University / institution',
+    government:'Government / PSU', solar:'Solar / green-energy rig', enterprise:'Enterprise / MSME',
+    ai_client:'AI / inference client', developer:'Developer / contributor', other:'Other'
+  };
+
+  function toast(msg, kind){
+    const t = $('toast');
+    t.textContent = msg; t.className = 'toast show ' + (kind||'ok');
+    if(kind !== 'err') setTimeout(function(){ t.classList.remove('show'); }, 4000);
+  }
+
+  function avatarFor(user){
+    if(user && user.photoURL) return user.photoURL;
+    const label = (user && (user.displayName || user.email)) || '?';
+    const ch = (label.trim().charAt(0) || '?').toUpperCase();
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128'>"
+      + "<rect width='128' height='128' rx='64' fill='#2a60e6'/>"
+      + "<text x='50%' y='50%' dy='.35em' font-family='Inter,system-ui,sans-serif' font-size='60' font-weight='700' fill='#fff' text-anchor='middle'>" + ch + "</text></svg>";
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
+
+  function fmtDate(ts){
+    try {
+      const d = ts && typeof ts.toDate === 'function' ? ts.toDate() : (ts ? new Date(ts) : null);
+      if(!d || isNaN(d)) return null;
+      return d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    } catch(_){ return null; }
+  }
+
+  function row(k, v){
+    if(v == null || v === '') return '';
+    return '<div class="field"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+  }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+
+  // ---- Not configured: degrade gracefully ----
   if(!window.DUM360 || !window.DUM360.isConfigured || !window.DUM360.isConfigured()){
-    document.getElementById('googleSignIn').addEventListener('click', ()=>{
-      alert('Sign-ups are opening soon. The portal activates once Firebase is configured. See docs/website/DEPLOY.md.');
+    loading.style.display = 'none';
+    signedOut.style.display = '';
+    googleSignIn.addEventListener('click', function(){
+      alert('Sign-in is opening soon. The portal activates once Firebase is configured. See docs/website/DEPLOY.md.');
     });
     return;
   }
 
-  document.getElementById('googleSignIn').addEventListener('click', async ()=>{
-    try {
-      const user = await window.DUM360.signInWithGoogle();
-      onSignedIn(user);
-    } catch(e){ console.warn('[DUM360] portal sign-in error', e); alert('Google sign-in did not work. Please try again.'); }
+  // ---- Sign in / out ----
+  googleSignIn.addEventListener('click', async function(){
+    try { await window.DUM360.signInWithGoogle(); /* onAuthChange renders */ }
+    catch(e){ console.warn('[DUM360] portal sign-in error', e); alert('Google sign-in did not work. Please try again.'); }
+  });
+  signOutBtn.addEventListener('click', async function(){
+    try { await window.DUM360.signOut(); } catch(_){}
+    /* onAuthChange flips back to signed-out */
   });
 
-  signOutBtn.addEventListener('click', async ()=>{ await window.DUM360.signOut(); location.reload(); });
-
-  document.getElementById('leaveBtn').addEventListener('click', ()=>{
-    if(confirm('Leave the waitlist? You can rejoin anytime.')){
-      // TODO (Phase 3): delete the user's own Firestore signup doc (rules allow owner delete).
-      alert('Withdrawal flow is part of Phase-3 portal completion. Your delete permission is already enforced in firestore.rules.');
+  // ---- Leave the waitlist (owner delete) ----
+  $('leaveBtn').addEventListener('click', async function(){
+    if(!confirm('Leave the waitlist? Your entry will be deleted. You can rejoin anytime.')) return;
+    this.disabled = true;
+    try {
+      await window.DUM360.deleteMySignup();
+      $('entryDetails').style.display = 'none';
+      $('entryEmpty').style.display = '';
+      toast('You have left the waitlist. You can rejoin anytime.', 'ok');
+    } catch(e){
+      console.warn('[DUM360] leave error', e);
+      toast('Could not remove your entry. Please try again.', 'err');
+      this.disabled = false;
     }
   });
 
-  function onSignedIn(user){
-    signedOut.style.display='none'; signedIn.style.display=''; signOutBtn.style.display='';
-    document.getElementById('userName').textContent = (user && user.displayName) ? user.displayName.split(' ')[0] : 'there';
-    // TODO (Phase 3): query signups where uid == auth.uid (rules allow owner get) and render real details.
-    document.getElementById('entrySummary').textContent = 'Signed in as ' + (user.email||'') + '. Your waitlist details will appear here once the Phase-3 claim/query is wired (see firestore.rules + DEPLOY.md).';
+  // ---- Render entry ----
+  async function loadEntry(){
+    $('entryLoading').style.display = '';
+    $('entryDetails').style.display = 'none';
+    $('entryEmpty').style.display = 'none';
+    try {
+      const d = await window.DUM360.getMySignup();
+      $('entryLoading').style.display = 'none';
+      if(!d){ $('entryEmpty').style.display = ''; return; }
+      const meta = d.meta || {};
+      let html = '';
+      html += row('Status', '<span class="badge">' + esc(d.status || 'new') + '</span>');
+      html += row('Joining as', esc(AUDIENCE[d.audience] || d.audience || 'Other'));
+      html += row('Name', d.name ? esc(d.name) : '');
+      html += row('Organisation', d.organisation ? esc(d.organisation) : '');
+      html += row('Phone', d.phone ? esc(d.phone) : '');
+      html += row('State', meta.state ? esc(meta.state) : '');
+      html += row('Device', meta.device ? esc(meta.device) : '');
+      html += row('Interest', meta.interest ? esc(meta.interest) : '');
+      html += row('Joined on', fmtDate(d.createdAt) || '');
+      $('entryFields').innerHTML = html;
+      $('entryDetails').style.display = '';
+    } catch(e){
+      console.warn('[DUM360] load entry error', e);
+      $('entryLoading').textContent = 'Could not load your entry. Refresh to try again.';
+    }
   }
+
+  // ---- Auth state drives the whole page ----
+  function render(user){
+    loading.style.display = 'none';
+    if(user){
+      signedOut.style.display = 'none';
+      signedIn.style.display = '';
+      signOutBtn.style.display = '';
+      $('avatar').src = avatarFor(user);
+      $('userName').textContent = user.displayName ? user.displayName.split(' ')[0] : 'there';
+      $('userEmail').textContent = user.email || '';
+      loadEntry();
+    } else {
+      signedIn.style.display = 'none';
+      signOutBtn.style.display = 'none';
+      signedOut.style.display = '';
+    }
+  }
+
+  if(window.DUM360.onAuthChange){ window.DUM360.onAuthChange(render); }
+  else { render(window.DUM360.currentUser && window.DUM360.currentUser()); }
 })();
 </script>
 </body>

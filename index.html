@@ -110,18 +110,52 @@
     background: rgba(255,255,255,.82);
     border-bottom: 1px solid var(--line);
   }
-  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -.02em; color: var(--ink); }
+  /* 3-zone bar: logo (left) · links (centered) · actions (right). The side zones
+     flex equally so the link cluster stays optically centered regardless of widths. */
+  .nav-inner { display: flex; align-items: center; gap: 20px; height: 70px; }
+  .logo { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; letter-spacing: -.02em; color: var(--ink); }
+  .logo { justify-content: flex-start; }
   .logo:hover { text-decoration: none; }
   .logo .mark {
     width: 32px; height: 32px; border-radius: 8px;
     display: block; object-fit: contain;
   }
-  .nav-links { display: flex; align-items: center; gap: 26px; }
-  .nav-links a { font-size: 15px; font-weight: 500; color: var(--ink-soft); }
-  .nav-links a:hover, .nav-links a.active { color: var(--ink); text-decoration: none; }
-  .nav-links a.active { font-weight: 700; }
-  .nav-cta { display: flex; align-items: center; gap: 12px; }
+  .nav-links { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; }
+  .nav-links a, .nav-more-btn {
+    position: relative; font-size: 14.5px; font-weight: 500; color: var(--ink-soft);
+    padding: 8px 12px; border-radius: 9px; line-height: 1;
+    font-family: inherit; background: none; border: 0; cursor: pointer;
+    transition: color .15s, background .15s;
+  }
+  .nav-links a::after, .nav-more-btn::after {
+    content: ""; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px;
+    background: var(--brand); border-radius: 2px; transform: scaleX(0); transform-origin: center;
+    transition: transform .2s ease;
+  }
+  .nav-links a:hover, .nav-more-btn:hover,
+  .nav-links a.active, .nav-more-btn.active { color: var(--ink); text-decoration: none; }
+  .nav-links a:hover::after, .nav-more-btn:hover::after,
+  .nav-links a.active::after, .nav-more-btn.active::after { transform: scaleX(1); }
+
+  /* "More" dropdown */
+  .nav-more { position: relative; display: flex; align-items: center; }
+  .nav-more-btn { display: inline-flex; align-items: center; gap: 5px; }
+  .nav-more-btn .chev { color: var(--muted); transition: transform .2s; }
+  .nav-more.open .nav-more-btn .chev { transform: rotate(180deg); }
+  .nav-more.open .nav-more-btn { color: var(--ink); }
+  .nav-more-menu {
+    position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 10px);
+    min-width: 210px; background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 8px; display: none; z-index: 70;
+  }
+  .nav-more.open .nav-more-menu { display: block; }
+  .nav-more-menu a {
+    display: block; padding: 9px 12px; border-radius: 9px;
+    font-size: 14px; font-weight: 500; color: var(--ink-soft);
+  }
+  .nav-more-menu a:hover, .nav-more-menu a.active { background: var(--bg-soft); color: var(--ink); text-decoration: none; }
+
+  .nav-cta { flex: 1 1 0; display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
   .menu-toggle { display: none; background: none; border: 1px solid var(--line); border-radius: 10px; width: 44px; height: 44px; cursor: pointer; align-items: center; justify-content: center; }
   .menu-toggle span, .menu-toggle span::before, .menu-toggle span::after { content: ""; display: block; width: 20px; height: 2px; background: var(--ink); position: relative; transition: .2s; }
   .menu-toggle span::before { position: absolute; top: -6px; }
@@ -139,6 +173,32 @@
     .nav-links { display: none; }
     .nav-cta .btn-ghost { display: none; }
     .menu-toggle { display: inline-flex; }
+  }
+
+  /* Account widget (header) */
+  .btn-signin .g { font-weight: 800; color: #4285F4; }
+  .account { position: relative; }
+  .account-btn { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px 5px 5px; min-height: 40px; cursor: pointer; font-family: inherit; font-weight: 600; font-size: 14px; color: var(--ink); }
+  .account-btn:hover { border-color: var(--brand); }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: var(--bg-soft); display: block; flex: none; }
+  .avatar.lg { width: 42px; height: 42px; }
+  .account-name { max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .account-btn .chev { color: var(--muted); transition: transform .2s; flex: none; }
+  .account.open .account-btn .chev { transform: rotate(180deg); }
+  .account-menu { position: absolute; right: 0; top: calc(100% + 8px); width: 252px; background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 8px; display: none; z-index: 70; }
+  .account.open .account-menu { display: block; }
+  .account-head { display: flex; align-items: center; gap: 12px; padding: 10px 10px 12px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+  .account-id { min-width: 0; }
+  .account-name.strong { font-weight: 700; font-size: 15px; max-width: 100%; }
+  .account-email { font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .account-item { display: block; width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--ink); background: none; border: none; cursor: pointer; font-family: inherit; }
+  .account-item:hover { background: var(--bg-soft); text-decoration: none; }
+  .account-item.danger { color: var(--error); }
+  .mm-ctas .mm-signout { color: var(--error); }
+  /* On mobile the header account collapses to just the avatar; the dropdown still opens. */
+  @media (max-width: 880px) {
+    .account-btn { padding: 4px; }
+    .account-btn .account-name, .account-btn .chev { display: none; }
   }
 
   /* HERO */
@@ -438,15 +498,48 @@
       <a href="#how">How it works</a>
       <a href="#mesh">The mesh</a>
       <a href="#inference">AI inference</a>
-      <a href="#tiers">Tiers</a>
-      <a href="#green">Green</a>
       <a href="#compare">Compare</a>
-      <a href="#join">For contributors</a>
-      <a href="#faq">FAQ</a>
+      <div class="nav-more">
+        <button type="button" class="nav-more-btn" id="navMoreBtn" aria-haspopup="menu" aria-expanded="false">More
+          <svg class="chev" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-more-menu" id="navMoreMenu" role="menu" aria-label="More">
+          <a href="#tiers" role="menuitem">Supply tiers</a>
+          <a href="#green" role="menuitem">Green energy</a>
+          <a href="#sovereignty" role="menuitem">Sovereignty</a>
+          <a href="#usecases" role="menuitem">Use-cases</a>
+          <a href="#join" role="menuitem">For contributors</a>
+          <a href="#faq" role="menuitem">FAQ</a>
+        </div>
+      </div>
     </nav>
     <div class="nav-cta">
-      <a href="#join" class="btn btn-ghost">Become a provider</a>
       <button class="btn btn-primary" data-join>Join now</button>
+
+      <!-- Account: signed OUT -->
+      <button type="button" class="btn btn-ghost btn-signin" id="navSignIn" style="display:none;"><span class="g">G</span> Sign in</button>
+
+      <!-- Account: signed IN -->
+      <div class="account" id="navAccount" style="display:none;">
+        <button type="button" class="account-btn" id="accountBtn" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">
+          <img class="avatar" id="navAvatar" alt="" referrerpolicy="no-referrer" />
+          <span class="account-name" id="navName"></span>
+          <svg class="chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="account-menu" id="accountMenu" role="menu" aria-label="Account">
+          <div class="account-head">
+            <img class="avatar lg" id="menuAvatar" alt="" referrerpolicy="no-referrer" />
+            <div class="account-id">
+              <div class="account-name strong" id="menuName"></div>
+              <div class="account-email" id="menuEmail"></div>
+            </div>
+          </div>
+          <a href="/portal.html" class="account-item" role="menuitem">Dashboard</a>
+          <a href="/portal.html" class="account-item" role="menuitem">Profile &amp; settings</a>
+          <button type="button" class="account-item danger" id="navSignOut" role="menuitem">Sign out</button>
+        </div>
+      </div>
+
       <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" id="menuToggle"><span></span></button>
     </div>
   </div>
@@ -470,6 +563,9 @@
   <a class="mm-link" href="#faq">FAQ</a>
   <div class="mm-ctas">
     <button class="btn btn-primary" data-join>Join the mesh</button>
+    <button type="button" class="btn btn-ghost btn-signin" id="mmSignIn" style="display:none;"><span class="g">G</span> Sign in with Google</button>
+    <a class="btn btn-ghost" id="mmDashboard" href="/portal.html" style="display:none;">My dashboard</a>
+    <button type="button" class="btn btn-ghost mm-signout" id="mmSignOut" style="display:none;">Sign out</button>
   </div>
 </div>
 
@@ -1082,6 +1178,21 @@
   const authWho = document.getElementById('authWho');
   const authHint = document.getElementById('authHint');
   const signOutBtn = document.getElementById('signOutBtn');
+  // Header + mobile account widgets
+  const navSignIn = document.getElementById('navSignIn');
+  const navAccount = document.getElementById('navAccount');
+  const accountWrap = navAccount; // .account container (toggles .open)
+  const accountBtn = document.getElementById('accountBtn');
+  const accountMenu = document.getElementById('accountMenu');
+  const navAvatar = document.getElementById('navAvatar');
+  const navName = document.getElementById('navName');
+  const menuAvatar = document.getElementById('menuAvatar');
+  const menuName = document.getElementById('menuName');
+  const menuEmail = document.getElementById('menuEmail');
+  const navSignOut = document.getElementById('navSignOut');
+  const mmSignIn = document.getElementById('mmSignIn');
+  const mmDashboard = document.getElementById('mmDashboard');
+  const mmSignOut = document.getElementById('mmSignOut');
   let lastFocus = null;
   let currentAudience = null;
   let signedInUser = null;
@@ -1265,7 +1376,72 @@
       submitBtn.disabled = true;
       if(emailEl){ emailEl.readOnly = false; emailEl.classList.remove('locked'); }
     }
+    updateAccountUI(user);
   }
+
+  /* ---------- Header / mobile account widget ---------- */
+  // Build an avatar: the Google photo if present, else an initial on a brand chip.
+  function avatarFor(user){
+    if(user && user.photoURL) return user.photoURL;
+    const label = (user && (user.displayName || user.email)) || '?';
+    const ch = (label.trim().charAt(0) || '?').toUpperCase();
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'>"
+      + "<rect width='80' height='80' rx='40' fill='#2a60e6'/>"
+      + "<text x='50%' y='50%' dy='.35em' font-family='Inter,system-ui,sans-serif' font-size='38' font-weight='700' fill='#fff' text-anchor='middle'>" + ch + "</text></svg>";
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
+
+  function updateAccountUI(user){
+    const configured = !!(window.DUM360 && window.DUM360.isConfigured && window.DUM360.isConfigured());
+    if(user){
+      const first = user.displayName ? user.displayName.split(' ')[0] : (user.email || 'Account');
+      const av = avatarFor(user);
+      navAvatar.src = av; menuAvatar.src = av;
+      navName.textContent = first;
+      menuName.textContent = user.displayName || first;
+      menuEmail.textContent = user.email || '';
+      navSignIn.style.display = 'none';
+      navAccount.style.display = '';
+      // mobile menu
+      mmSignIn.style.display = 'none';
+      mmDashboard.style.display = '';
+      mmSignOut.style.display = '';
+    } else {
+      closeAccountMenu();
+      navAccount.style.display = 'none';
+      navSignIn.style.display = configured ? '' : 'none';
+      mmSignIn.style.display = '';   // always offer sign-in in the mobile menu (shows offline notice if unconfigured)
+      mmDashboard.style.display = 'none';
+      mmSignOut.style.display = 'none';
+    }
+  }
+
+  function closeAccountMenu(){ if(accountWrap){ accountWrap.classList.remove('open'); accountBtn.setAttribute('aria-expanded','false'); } }
+  function toggleAccountMenu(){
+    const open = accountWrap.classList.toggle('open');
+    accountBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  accountBtn.addEventListener('click', function(e){ e.stopPropagation(); toggleAccountMenu(); });
+  document.addEventListener('click', function(e){ if(accountWrap.classList.contains('open') && !accountWrap.contains(e.target)) closeAccountMenu(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAccountMenu(); });
+
+  async function doSignOut(){
+    closeAccountMenu();
+    try { await window.DUM360.signOut(); } catch(_){}
+    // the onAuthChange observer flips every widget back to signed-out
+  }
+  // Close the (separately-scoped) mobile menu without reaching into its IIFE.
+  function closeMobileMenu(){
+    const mmEl = document.getElementById('mobileMenu');
+    if(mmEl){ mmEl.classList.remove('open'); document.body.style.overflow = ''; }
+    const mtEl = document.getElementById('menuToggle');
+    if(mtEl) mtEl.setAttribute('aria-expanded','false');
+  }
+  navSignIn.addEventListener('click', doGoogle);
+  navSignOut.addEventListener('click', doSignOut);
+  mmSignIn.addEventListener('click', function(){ closeMobileMenu(); doGoogle(); });
+  mmSignOut.addEventListener('click', function(){ closeMobileMenu(); doSignOut(); });
+  mmDashboard.addEventListener('click', closeMobileMenu);
 
   async function doGoogle(){
     try {
@@ -1362,7 +1538,23 @@
   document.getElementById('mmClose').addEventListener('click', closeMM);
   mm.querySelectorAll('a.mm-link').forEach(a=>a.addEventListener('click', closeMM));
 
-  /* Scroll-spy */
+  /* "More" dropdown (desktop nav) */
+  const navMore = document.getElementById('navMoreBtn') ? document.getElementById('navMoreBtn').closest('.nav-more') : null;
+  const navMoreBtn = document.getElementById('navMoreBtn');
+  if(navMore && navMoreBtn){
+    const closeMore = function(){ navMore.classList.remove('open'); navMoreBtn.setAttribute('aria-expanded','false'); };
+    navMoreBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const open = navMore.classList.toggle('open');
+      navMoreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('click', function(e){ if(navMore.classList.contains('open') && !navMore.contains(e.target)) closeMore(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMore(); });
+    navMore.querySelectorAll('.nav-more-menu a').forEach(a=>a.addEventListener('click', closeMore));
+  }
+
+  /* Scroll-spy — highlights the active section; reflects onto the "More" button
+     when the active section lives inside the dropdown. */
   const navMap = {};
   document.querySelectorAll('.nav-links a[href^="#"]').forEach(a=>{ navMap[a.getAttribute('href').slice(1)] = a; });
   const spy = new IntersectionObserver((entries)=>{
@@ -1370,6 +1562,7 @@
       if(e.isIntersecting){
         Object.values(navMap).forEach(a=>a.classList.remove('active'));
         const link = navMap[e.target.id]; if(link) link.classList.add('active');
+        if(navMoreBtn) navMoreBtn.classList.toggle('active', !!(link && link.closest('.nav-more-menu')));
       }
     });
   }, { rootMargin: '-45% 0px -50% 0px' });

@@ -91,6 +91,24 @@ Console: **Build → Authentication → Get started → Sign-in method → Googl
 
 Add your domains under **Authentication → Settings → Authorized domains**: `dum360.com`, `www.dum360.com`, and `<project>.web.app`. (Not required to join the waitlist — only for the contributor portal.)
 
+> ⚠️ **Don't skip the authorized-domains step — it's the #1 cause of "Google sign-in doesn't work" in production.** The provider can be fully enabled and the config correct, but if the *live* domain (`dum360.com`) isn't on this list, the browser throws **`auth/unauthorized-domain`** and the page only shows a generic "sign-in didn't work" banner. New Firebase projects ship with only `localhost`, `<project>.firebaseapp.com`, and `<project>.web.app` authorized — the custom domain is **not** added automatically by the custom-domain/DNS step.
+>
+> **Verify / fix from the CLI** (no Console clicking). Requires `gcloud auth login`:
+> ```bash
+> PROJECT=dum360-com
+> TOKEN=$(gcloud auth print-access-token)
+> # Check current list:
+> curl -s -H "Authorization: Bearer $TOKEN" -H "x-goog-user-project: $PROJECT" \
+>   "https://identitytoolkit.googleapis.com/admin/v2/projects/$PROJECT/config" \
+>   | python3 -c "import sys,json;print(json.load(sys.stdin).get('authorizedDomains'))"
+> # Set the full list (this REPLACES it — include every domain you want kept):
+> curl -s -X PATCH -H "Authorization: Bearer $TOKEN" -H "x-goog-user-project: $PROJECT" \
+>   -H "Content-Type: application/json" \
+>   "https://identitytoolkit.googleapis.com/admin/v2/projects/$PROJECT/config?updateMask=authorizedDomains" \
+>   -d '{"authorizedDomains":["localhost","'"$PROJECT"'.firebaseapp.com","'"$PROJECT"'.web.app","dum360.com","www.dum360.com"]}'
+> ```
+> Note: `authorizedDomains` is replaced wholesale, not merged — always send the complete list. Changes take effect within a minute or two; no redeploy needed.
+
 ---
 
 ## 5. Deploy the Firestore security rules & indexes
@@ -146,7 +164,7 @@ This deploys to `https://<project>.web.app` and `https://<project>.firebaseapp.c
 
 ## 9. Custom domain & DNS migration (GitHub Pages → Firebase Hosting)
 
-The domain `dum360.com` currently points at **GitHub Pages** (that's what the `CNAME` file is for). To move it to Firebase:
+`dum360.com` is now served by **Firebase Hosting**. (It was originally on GitHub Pages — that's what the repo-root `CNAME` file is a leftover of.) These are the steps that were followed to migrate, kept for reference / DR:
 
 1. **Console → Hosting → Add custom domain → `dum360.com`** (add `www.dum360.com` too, redirect www→apex or vice-versa as you prefer).
 2. Firebase gives you DNS records to set at your **domain registrar / DNS provider** (the place that controls dum360.com DNS — *not* GitHub):

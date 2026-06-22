@@ -147,6 +147,35 @@
       return { ok: true };
     },
 
+    /**
+     * Fetch the signed-in user's own signup doc (the dashboard "my entry" view).
+     * Resolves the doc data, or null if they haven't joined the waitlist yet.
+     * Rejects with err.code 'not-configured' / 'auth-required'. Per firestore.rules,
+     * an owner may `get` only their own doc (id == uid).
+     */
+    async getMySignup() {
+      await ensureInit();
+      const user = _auth && _auth.currentUser;
+      if (!user) { const e = new Error("Sign in to continue"); e.code = "auth-required"; throw e; }
+      const { doc, getDoc } = _fs;
+      const snap = await getDoc(doc(_db, SIGNUPS_COLLECTION, user.uid));
+      return snap.exists() ? snap.data() : null;
+    },
+
+    /**
+     * Withdraw: delete the signed-in user's own signup doc. Rules allow an owner to
+     * delete only their own entry (uid == auth.uid) — the trust mirror of
+     * "uninstall / leave anytime".
+     */
+    async deleteMySignup() {
+      await ensureInit();
+      const user = _auth && _auth.currentUser;
+      if (!user) { const e = new Error("Sign in to continue"); e.code = "auth-required"; throw e; }
+      const { doc, deleteDoc } = _fs;
+      await deleteDoc(doc(_db, SIGNUPS_COLLECTION, user.uid));
+      return { ok: true };
+    },
+
     /** Optional Google sign-in. Returns the user, or rejects (err.code 'not-configured' if unset). */
     async signInWithGoogle() {
       await ensureInit();
