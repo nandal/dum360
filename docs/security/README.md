@@ -36,7 +36,7 @@
 | Malicious workload exploits sandbox escape | Cross-tenant attack | Sandbox isolation. Workloads cannot access host or other workloads. |
 | Node spoofing — attacker registers fake nodes | Resource fraud | Hardware integrity check + Secure Enclave attestation (FR-1.3). |
 | Sovereign DB compromise | Data breach | Firestore in production mode with strict rules. PII never publicly readable. Admin access via Console / Admin SDK only. |
-| Sign-up spam / abuse | Garbage data in waitlist | Firebase App Check (reCAPTCHA). Rate limiting. One-entry-per-Google-account. |
+| Sign-up spam / abuse | Garbage data in waitlist | Planned: Firebase App Check (reCAPTCHA). Rate limiting. One-entry-per-Google-account. |
 
 ---
 

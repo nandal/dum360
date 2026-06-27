@@ -103,7 +103,7 @@ Routes inference requests by model size and interconnect quality:
 | Institutional (IITs, NITs, universities) | K3s | LAN + NKN backbone | High | Model parallelism, HPC |
 | Government / PSU | K3s | Sovereign wired | Highest | Emergency, sovereign workloads |
 | Enterprise / MSME | K3s | Business broadband | Med-High | Off-hours batch inference |
-| Renewable (solar GPU rigs) | K3s | Wired / subsea | Medium | Daytime solar-prioritized |
+| Renewable (solar GPU rigs) | K3s | Wired | Medium | Daytime solar-prioritized |
 | Consumer (phones, PCs) | WASM / K3s | Consumer broadband | Zero-trust | Burst, request-parallel only |
 
 ---
