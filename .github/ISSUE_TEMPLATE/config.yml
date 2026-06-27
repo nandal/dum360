@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/nandal/dum360/security/advisories
+    about: Report a security vulnerability (do NOT open a public issue)
+  - name: General Questions
+    url: mailto:hello@dum360.com
+    about: For partnership inquiries or private questions
+  - name: Community Guidelines
+    url: https://github.com/nandal/dum360/blob/main/docs/community/README.md
+    about: Read the community guide before contributing
