@@ -32,7 +32,7 @@
   };
 
   /* ---- 2. PASTE YOUR APP CHECK reCAPTCHA SITE KEY HERE (bot protection) ---- */
-  const APP_CHECK_SITE_KEY = "TODO_APP_CHECK_RECAPTCHA_SITE_KEY";
+  const APP_CHECK_SITE_KEY = "6Ld3wzctAAAAAN5KjfGp5iZPbpJYFvXbSSqQFUNC";
 
   const SIGNUPS_COLLECTION = "signups";
   const FB_VERSION = "10.12.2"; // Firebase JS SDK (modular, CDN)
