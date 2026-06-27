@@ -1,0 +1,22 @@
+# DUM360 Code Owners
+# Automatically requested for review on PRs touching these paths.
+
+# Core / governance
+*           @nandal
+
+# Frontend / website
+*.html      @nandal
+*.css       @nandal
+
+# Firebase / backend
+firebase-config.js  @nandal
+firestore.rules     @nandal
+firebase.json       @nandal
+
+# Documentation
+docs/       @nandal
+*.md        @nandal
+
+# CI / tooling
+.github/    @nandal
+.gitleaks.toml  @nandal
