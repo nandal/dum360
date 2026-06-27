@@ -1,222 +1,816 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <head>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Privacy Policy — DUM360</title>
-<meta name="description" content="DUM360 Privacy Policy — how we collect, store and use waitlist data. DPDP-aligned." />
-<meta name="theme-color" content="#0b1020" />
-<meta name="robots" content="noindex" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<style>
-  :root { --bg:#fff; --ink:#0b1020; --ink-soft:#475069; --muted:#8089a3; --line:#e7ebf3; --brand:#2f6bff; --brand-2:#00c2a8; --brand-ink:#1d4fd0; --bg-soft:#f6f8fc; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); line-height:1.65; -webkit-font-smoothing:antialiased; }
-  a { color:var(--brand-ink); } a:hover { text-decoration:underline; }
-  :focus-visible { outline:3px solid var(--brand); outline-offset:2px; border-radius:6px; }
-  .wrap { max-width:760px; margin:0 auto; padding:0 24px; }
-  header.nav { position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(12px); background:rgba(255,255,255,.82); border-bottom:1px solid var(--line); }
-  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:68px; max-width:1140px; margin:0 auto; padding:0 24px; }
-  .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; letter-spacing:-.02em; color:var(--ink); text-decoration:none; }
-  .logo .mark { width:32px; height:32px; border-radius:8px; display:block; object-fit:contain; }
-  main { padding:56px 0 80px; }
-  h1 { font-size:clamp(30px,5vw,44px); font-weight:900; letter-spacing:-.02em; margin-bottom:8px; }
-  .meta { color:var(--muted); font-size:14px; margin-bottom:28px; }
-  .meta b { color:var(--ink-soft); }
-  .draft-note { background:#fff7f1; border:1px solid #ffe0c7; border-radius:14px; padding:20px 24px; margin-bottom:32px; }
-  .draft-note h2 { font-size:16px; color:#b45309; margin-bottom:8px; }
-  .draft-note p { font-size:14.5px; color:var(--ink-soft); }
-  .draft-note code { background:rgba(180,83,9,.1); padding:2px 6px; border-radius:5px; font-size:13px; }
-  h2.s { font-size:21px; font-weight:800; margin:32px 0 10px; letter-spacing:-.01em; }
-  h3.s { font-size:16.5px; font-weight:700; margin:22px 0 6px; }
-  p { color:var(--ink-soft); font-size:15.5px; margin-bottom:14px; }
-  p strong, li strong, td strong { color:var(--ink); }
-  ul, ol { margin:12px 0 18px 22px; }
-  li { margin:7px 0; color:var(--ink-soft); font-size:15.5px; }
-  blockquote { border-left:4px solid var(--brand); background:var(--bg-soft); padding:14px 18px; margin:18px 0; border-radius:0 10px 10px 0; color:var(--ink-soft); font-size:15px; }
-  blockquote strong { color:var(--ink); }
-  table { width:100%; border-collapse:collapse; margin:18px 0; font-size:14px; }
-  th, td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-soft); }
-  th { color:var(--ink); font-weight:700; background:var(--bg-soft); }
-  .table-scroll { overflow-x:auto; }
-  hr { border:none; border-top:1px solid var(--line); margin:30px 0; }
-  .todo { background:#fff3cd; color:#7a5b00; padding:1px 7px; border-radius:5px; font-size:.9em; font-weight:600; }
-  footer { border-top:1px solid var(--line); padding:32px 0; background:var(--bg-soft); font-size:13.5px; color:var(--muted); }
-  .foot-inner { max-width:760px; margin:0 auto; padding:0 24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
-  .foot-inner a { color:var(--muted); }
-</style>
-</head>
-<body>
-<header class="nav">
-  <div class="nav-inner">
-    <a href="/" class="logo"><img class="mark" src="/branding/dum360-icon.png" alt="" width="32" height="32" /> DUM360</a>
-    <a href="/" style="font-weight:600;color:var(--ink-soft);text-decoration:none;">← Back to home</a>
-  </div>
-</header>
-<main>
-  <div class="wrap">
-    <h1>Privacy Policy</h1>
-    <p class="meta"><b>Effective date:</b> 22 June 2026 · <b>Last updated:</b> 22 June 2026<br>Applies to the DUM360 website at <code>dum360.com</code> (the “Site”) and the contributor waitlist sign-up it hosts.</p>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy — DUM360</title>
+    <meta
+      name="description"
+      content="DUM360 Privacy Policy — how we collect, store and use waitlist data. DPDP-aligned."
+    />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fff;
+        --ink: #0b1020;
+        --ink-soft: #475069;
+        --muted: #8089a3;
+        --line: #e7ebf3;
+        --brand: #2f6bff;
+        --brand-2: #00c2a8;
+        --brand-ink: #1d4fd0;
+        --bg-soft: #f6f8fc;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--brand-ink);
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      :focus-visible {
+        outline: 3px solid var(--brand);
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      header.nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: saturate(180%) blur(12px);
+        background: rgba(255, 255, 255, 0.82);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 68px;
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        font-size: 19px;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .logo .mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: block;
+        object-fit: contain;
+      }
+      main {
+        padding: 56px 0 80px;
+      }
+      h1 {
+        font-size: clamp(30px, 5vw, 44px);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+      .meta b {
+        color: var(--ink-soft);
+      }
+      .draft-note {
+        background: #fff7f1;
+        border: 1px solid #ffe0c7;
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 32px;
+      }
+      .draft-note h2 {
+        font-size: 16px;
+        color: #b45309;
+        margin-bottom: 8px;
+      }
+      .draft-note p {
+        font-size: 14.5px;
+        color: var(--ink-soft);
+      }
+      .draft-note code {
+        background: rgba(180, 83, 9, 0.1);
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-size: 13px;
+      }
+      h2.s {
+        font-size: 21px;
+        font-weight: 800;
+        margin: 32px 0 10px;
+        letter-spacing: -0.01em;
+      }
+      h3.s {
+        font-size: 16.5px;
+        font-weight: 700;
+        margin: 22px 0 6px;
+      }
+      p {
+        color: var(--ink-soft);
+        font-size: 15.5px;
+        margin-bottom: 14px;
+      }
+      p strong,
+      li strong,
+      td strong {
+        color: var(--ink);
+      }
+      ul,
+      ol {
+        margin: 12px 0 18px 22px;
+      }
+      li {
+        margin: 7px 0;
+        color: var(--ink-soft);
+        font-size: 15.5px;
+      }
+      blockquote {
+        border-left: 4px solid var(--brand);
+        background: var(--bg-soft);
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 0 10px 10px 0;
+        color: var(--ink-soft);
+        font-size: 15px;
+      }
+      blockquote strong {
+        color: var(--ink);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 18px 0;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+        color: var(--ink-soft);
+      }
+      th {
+        color: var(--ink);
+        font-weight: 700;
+        background: var(--bg-soft);
+      }
+      .table-scroll {
+        overflow-x: auto;
+      }
+      hr {
+        border: none;
+        border-top: 1px solid var(--line);
+        margin: 30px 0;
+      }
+      .todo {
+        background: #fff3cd;
+        color: #7a5b00;
+        padding: 1px 7px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 32px 0;
+        background: var(--bg-soft);
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .foot-inner {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .foot-inner a {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <a href="/" class="logo"
+          ><img
+            class="mark"
+            src="/branding/dum360-icon.png"
+            alt=""
+            width="32"
+            height="32"
+          />
+          DUM360</a
+        >
+        <a
+          href="/"
+          style="
+            font-weight: 600;
+            color: var(--ink-soft);
+            text-decoration: none;
+          "
+          >← Back to home</a
+        >
+      </div>
+    </header>
+    <main>
+      <div class="wrap">
+        <h1>Privacy Policy</h1>
+        <p class="meta">
+          <b>Effective date:</b> 22 June 2026 · <b>Last updated:</b> 22 June
+          2026<br />Applies to the DUM360 website at
+          <code>dum360.com</code> (the “Site”) and the contributor waitlist
+          sign-up it hosts.
+        </p>
 
-    <div class="draft-note" role="note">
-      <h2>⚠ Draft — pending legal review</h2>
-      <p>This policy was prepared with AI assistance and is <strong>not legal advice</strong>. It must be reviewed and finalised by qualified Indian counsel, and every <span class="todo">TODO</span> placeholder filled, <strong>before collecting any real sign-ups</strong>. The authoritative source is <code>docs/website/legal/PRIVACY_POLICY.md</code>.</p>
-    </div>
+        <div class="draft-note" role="note">
+          <h2>⚠ Draft — pending legal review</h2>
+          <p>
+            This policy was prepared with AI assistance and is
+            <strong>not legal advice</strong>. It must be reviewed and finalised
+            by qualified Indian counsel, and every
+            <span class="todo">TODO</span> placeholder filled,
+            <strong>before collecting any real sign-ups</strong>. The
+            authoritative source is
+            <code>docs/website/legal/PRIVACY_POLICY.md</code>.
+          </p>
+        </div>
 
-    <h2 class="s">1. Who we are</h2>
-    <p>This Site is operated by <strong>BALAJI IT SOLUTIONS</strong> (a sole proprietorship, MSME-registered in India), which operates the DUM360 project (“DUM360”, “we”, “us”, “our”), based in India.</p>
-    <p>Registered/operating address: #246, Ward-1, Jhajjar – 124103, Haryana, India</p>
-    <p>For the purposes of India’s <strong>Digital Personal Data Protection Act, 2023 (“DPDP Act”)</strong>, when you give us your personal data through this Site we act as a <strong>Data Fiduciary</strong> — we decide what data is collected and why. This policy explains, in plain language, what we collect, why, where it is stored, who can touch it, and the rights you have.</p>
-    <blockquote><strong>Scope note (please read).</strong> This policy covers <strong>only this marketing/waitlist website</strong>. The DUM360 <strong>compute platform</strong> (the node app, dashboards, and the orchestration of compute workloads) is a separate product that is not yet open to the public; it will have its own, separate privacy terms before it launches.</blockquote>
+        <h2 class="s">1. Who we are</h2>
+        <p>
+          This Site is operated by <strong>BALAJI IT SOLUTIONS</strong> (a sole
+          proprietorship, MSME-registered in India), which operates the DUM360
+          project (“DUM360”, “we”, “us”, “our”), based in India.
+        </p>
+        <p>
+          Registered/operating address: #246, Ward-1, Jhajjar – 124103, Haryana,
+          India
+        </p>
+        <p>
+          For the purposes of India’s
+          <strong
+            >Digital Personal Data Protection Act, 2023 (“DPDP Act”)</strong
+          >, when you give us your personal data through this Site we act as a
+          <strong>Data Fiduciary</strong> — we decide what data is collected and
+          why. This policy explains, in plain language, what we collect, why,
+          where it is stored, who can touch it, and the rights you have.
+        </p>
+        <blockquote>
+          <strong>Scope note (please read).</strong> This policy covers
+          <strong>only this marketing/waitlist website</strong>. The DUM360
+          <strong>compute platform</strong> (the node app, dashboards, and the
+          orchestration of compute workloads) is a separate product that is not
+          yet open to the public; it will have its own, separate privacy terms
+          before it launches.
+        </blockquote>
 
-    <h2 class="s">2. A quick, honest word on “Indian hosting”</h2>
-    <p>DUM360’s core promise is that the <strong>DUM360 compute platform and all its operational, user, and workload data are hosted in India</strong> and do not cross our borders. That promise is about the <strong>platform</strong>.</p>
-    <p>This <strong>brochure website</strong> is different, and we want to be precise rather than blur it:</p>
-    <ul>
-      <li><strong>The pages, images, and scripts of this Site</strong> are served through <strong>Firebase Hosting</strong>, which is a <strong>global content delivery network (CDN)</strong>. That means the <em>static files that make up the website</em> may be cached on and delivered from edge servers located <strong>outside India</strong> so the Site loads quickly. These static files contain <strong>no personal data</strong> — they are just the web page.</li>
-      <li><strong>The personal data you submit through the sign-up form</strong> (your name, email, etc.) is <strong>not</strong> stored on that global CDN. It is written to <strong>Cloud Firestore in the Mumbai region (<code>asia-south1</code>), in India.</strong> Your sign-up details are stored in India.</li>
-    </ul>
-    <p>So: the <em>website’s delivery</em> uses a global CDN; your <em>personal data</em> stays in India. We tell you this openly rather than imply the whole Site is India-only hosted.</p>
+        <h2 class="s">2. A quick, honest word on “Indian hosting”</h2>
+        <p>
+          DUM360’s core promise is that the
+          <strong
+            >DUM360 compute platform and all its operational, user, and workload
+            data are hosted in India</strong
+          >
+          and do not cross our borders. That promise is about the
+          <strong>platform</strong>.
+        </p>
+        <p>
+          This <strong>brochure website</strong> is different, and we want to be
+          precise rather than blur it:
+        </p>
+        <ul>
+          <li>
+            <strong>The pages, images, and scripts of this Site</strong> are
+            served through <strong>Firebase Hosting</strong>, which is a
+            <strong>global content delivery network (CDN)</strong>. That means
+            the <em>static files that make up the website</em> may be cached on
+            and delivered from edge servers located
+            <strong>outside India</strong> so the Site loads quickly. These
+            static files contain <strong>no personal data</strong> — they are
+            just the web page.
+          </li>
+          <li>
+            <strong
+              >The personal data you submit through the sign-up form</strong
+            >
+            (your name, email, etc.) is <strong>not</strong> stored on that
+            global CDN. It is written to
+            <strong
+              >Cloud Firestore in the Mumbai region (<code>asia-south1</code>),
+              in India.</strong
+            >
+            Your sign-up details are stored in India.
+          </li>
+        </ul>
+        <p>
+          So: the <em>website’s delivery</em> uses a global CDN; your
+          <em>personal data</em> stays in India. We tell you this openly rather
+          than imply the whole Site is India-only hosted.
+        </p>
 
-    <h2 class="s">3. What personal data we collect, and why</h2>
-    <p>We deliberately collect as little as possible. Through the waitlist sign-up form we collect:</p>
-    <div class="table-scroll"><table>
-      <thead><tr><th>Data</th><th>Required?</th><th>Why we collect it (purpose)</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Email address</strong></td><td>Yes</td><td>To contact you about DUM360 and as the unique key that identifies your sign-up</td></tr>
-        <tr><td><strong>Name</strong></td><td>Yes</td><td>To address you correctly in follow-up</td></tr>
-        <tr><td><strong>Audience / contributor type</strong> (citizen, student, university, government/PSU, solar/green operator, enterprise/MSME, AI client, developer/contributor)</td><td>Yes</td><td>To route you to the right team and send relevant information</td></tr>
-        <tr><td><strong>Organisation</strong></td><td>Optional (asked of universities, government/PSU, enterprise/MSME, solar operators)</td><td>To understand who you represent for partnership follow-up</td></tr>
-        <tr><td><strong>Phone number</strong></td><td>Optional</td><td>Only if you prefer a call/WhatsApp follow-up</td></tr>
-        <tr><td><strong>Free-text message / workload or pilot details</strong></td><td>Optional</td><td>So you can tell us about your use-case, pilot, or workload</td></tr>
-        <tr><td><strong>Consent record</strong></td><td>Yes</td><td>Proof that you agreed to be contacted (DPDP requirement)</td></tr>
-      </tbody>
-    </table></div>
-    <p>We also automatically capture a small amount of <strong>technical/source information</strong> with your sign-up:</p>
-    <ul>
-      <li>the <strong>source/referral information</strong> of your visit (e.g. UTM campaign tags, referring page, and the page you signed up from), to understand which outreach is working; and</li>
-      <li>a <strong>coarse, hashed device/browser signal</strong> used only to detect spam and abuse (not used to identify or profile you).</li>
-    </ul>
-    <p><strong>Analytics data</strong> (how the Site is used) is collected <strong>only if you consent</strong> — see Section 7.</p>
-    <p>We do <strong>not</strong> intentionally collect sensitive or special-category data, financial account details, or government identifiers through this Site. Please do not enter such information in the free-text field.</p>
+        <h2 class="s">3. What personal data we collect, and why</h2>
+        <p>
+          We deliberately collect as little as possible. Through the waitlist
+          sign-up form we collect:
+        </p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Required?</th>
+                <th>Why we collect it (purpose)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Email address</strong></td>
+                <td>Yes</td>
+                <td>
+                  To contact you about DUM360 and as the unique key that
+                  identifies your sign-up
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Name</strong></td>
+                <td>Yes</td>
+                <td>To address you correctly in follow-up</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Audience / contributor type</strong> (citizen,
+                  student, university, government/PSU, solar/green operator,
+                  enterprise/MSME, AI client, developer/contributor)
+                </td>
+                <td>Yes</td>
+                <td>
+                  To route you to the right team and send relevant information
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Organisation</strong></td>
+                <td>
+                  Optional (asked of universities, government/PSU,
+                  enterprise/MSME, solar operators)
+                </td>
+                <td>
+                  To understand who you represent for partnership follow-up
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Phone number</strong></td>
+                <td>Optional</td>
+                <td>Only if you prefer a call/WhatsApp follow-up</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Free-text message / workload or pilot details</strong>
+                </td>
+                <td>Optional</td>
+                <td>
+                  So you can tell us about your use-case, pilot, or workload
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Consent record</strong></td>
+                <td>Yes</td>
+                <td>
+                  Proof that you agreed to be contacted (DPDP requirement)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          We also automatically capture a small amount of
+          <strong>technical/source information</strong> with your sign-up:
+        </p>
+        <ul>
+          <li>
+            the <strong>source/referral information</strong> of your visit (e.g.
+            UTM campaign tags, referring page, and the page you signed up from),
+            to understand which outreach is working; and
+          </li>
+          <li>
+            a <strong>coarse, hashed device/browser signal</strong> used only to
+            detect spam and abuse (not used to identify or profile you).
+          </li>
+        </ul>
+        <p>
+          <strong>Analytics data</strong> (how the Site is used) is collected
+          <strong>only if you consent</strong> — see Section 7.
+        </p>
+        <p>
+          We do <strong>not</strong> intentionally collect sensitive or
+          special-category data, financial account details, or government
+          identifiers through this Site. Please do not enter such information in
+          the free-text field.
+        </p>
 
-    <h2 class="s">4. Our lawful basis: your consent</h2>
-    <p>Under the DPDP Act we process your personal data on the basis of your <strong>free, specific, informed, and unambiguous consent</strong>, given by an affirmative action.</p>
-    <ul>
-      <li>The sign-up form has a <strong>consent checkbox that is not pre-ticked</strong>. You must actively tick it to submit.</li>
-      <li>The consent is for a clear, limited purpose: <strong>to add you to the DUM360 contributor/stakeholder waitlist and to contact you about DUM360.</strong></li>
-      <li><strong>You can withdraw your consent at any time</strong> (see Section 9). Withdrawing consent is as easy as giving it; we will then stop processing your data for this purpose and delete or anonymise it unless we are required by law to keep it. Withdrawal does not affect processing already done before withdrawal.</li>
-    </ul>
+        <h2 class="s">4. Our lawful basis: your consent</h2>
+        <p>
+          Under the DPDP Act we process your personal data on the basis of your
+          <strong>free, specific, informed, and unambiguous consent</strong>,
+          given by an affirmative action.
+        </p>
+        <ul>
+          <li>
+            The sign-up form has a
+            <strong>consent checkbox that is not pre-ticked</strong>. You must
+            actively tick it to submit.
+          </li>
+          <li>
+            The consent is for a clear, limited purpose:
+            <strong
+              >to add you to the DUM360 contributor/stakeholder waitlist and to
+              contact you about DUM360.</strong
+            >
+          </li>
+          <li>
+            <strong>You can withdraw your consent at any time</strong> (see
+            Section 9). Withdrawing consent is as easy as giving it; we will
+            then stop processing your data for this purpose and delete or
+            anonymise it unless we are required by law to keep it. Withdrawal
+            does not affect processing already done before withdrawal.
+          </li>
+        </ul>
 
-    <h2 class="s">5. How we use your data (purpose limitation)</h2>
-    <p>We use your data <strong>only</strong> to:</p>
-    <ol>
-      <li>add you to our contributor/stakeholder waitlist, segmented by audience type;</li>
-      <li>contact you (by email, and by phone/WhatsApp only if you provided a number) about DUM360 — updates, your segment’s rollout, pilots, briefings, or early access;</li>
-      <li>understand demand by audience type so our team and partners can follow up appropriately; and</li>
-      <li>keep the Site secure and prevent spam/abuse.</li>
-    </ol>
-    <p>We will <strong>not</strong> use your data for unrelated purposes without asking you again.</p>
+        <h2 class="s">5. How we use your data (purpose limitation)</h2>
+        <p>We use your data <strong>only</strong> to:</p>
+        <ol>
+          <li>
+            add you to our contributor/stakeholder waitlist, segmented by
+            audience type;
+          </li>
+          <li>
+            contact you (by email, and by phone/WhatsApp only if you provided a
+            number) about DUM360 — updates, your segment’s rollout, pilots,
+            briefings, or early access;
+          </li>
+          <li>
+            understand demand by audience type so our team and partners can
+            follow up appropriately; and
+          </li>
+          <li>keep the Site secure and prevent spam/abuse.</li>
+        </ol>
+        <p>
+          We will <strong>not</strong> use your data for unrelated purposes
+          without asking you again.
+        </p>
 
-    <h2 class="s">6. We do NOT sell your data</h2>
-    <p><strong>We do not sell, rent, or trade your personal data to anyone.</strong> We do not share it with advertisers or data brokers. We share it only with the limited service providers (processors) described in Section 8, and only as needed to run the Site and contact you.</p>
+        <h2 class="s">6. We do NOT sell your data</h2>
+        <p>
+          <strong
+            >We do not sell, rent, or trade your personal data to
+            anyone.</strong
+          >
+          We do not share it with advertisers or data brokers. We share it only
+          with the limited service providers (processors) described in Section
+          8, and only as needed to run the Site and contact you.
+        </p>
 
-    <h2 class="s">7. Cookies, analytics, and consent</h2>
-    <p>We keep tracking to a minimum and gate it behind your consent. See the companion <a href="/cookies.html">Analytics &amp; Cookies Notice</a> for full detail. In short:</p>
-    <ul>
-      <li><strong>No analytics or non-essential cookies load until you consent</strong> via the consent banner.</li>
-      <li>If you consent, we use <strong>Google Analytics 4 (GA4)</strong> to understand aggregate usage (which sections work, where sign-ups come from). We configure it to <strong>anonymise IP addresses</strong> and we do <strong>not</strong> put personal data (your name/email) into analytics events.</li>
-      <li>You can decline analytics and still use the Site and sign up normally.</li>
-      <li>A small number of <strong>strictly necessary</strong> items (e.g. remembering your consent choice, security/anti-abuse) may be used regardless, as they are required for the Site to function safely.</li>
-    </ul>
+        <h2 class="s">7. Cookies, analytics, and consent</h2>
+        <p>
+          We keep tracking to a minimum and gate it behind your consent. See the
+          companion
+          <a href="/cookies.html">Analytics &amp; Cookies Notice</a> for full
+          detail. In short:
+        </p>
+        <ul>
+          <li>
+            <strong
+              >No analytics or non-essential cookies load until you
+              consent</strong
+            >
+            via the consent banner.
+          </li>
+          <li>
+            If you consent, we use <strong>Google Analytics 4 (GA4)</strong> to
+            understand aggregate usage (which sections work, where sign-ups come
+            from). We configure it to
+            <strong>anonymise IP addresses</strong> and we do
+            <strong>not</strong> put personal data (your name/email) into
+            analytics events.
+          </li>
+          <li>
+            You can decline analytics and still use the Site and sign up
+            normally.
+          </li>
+          <li>
+            A small number of <strong>strictly necessary</strong> items (e.g.
+            remembering your consent choice, security/anti-abuse) may be used
+            regardless, as they are required for the Site to function safely.
+          </li>
+        </ul>
 
-    <h2 class="s">8. Third-party processors we rely on</h2>
-    <p>We use a small set of trusted service providers (“Data Processors”) who handle data <strong>on our behalf and under our instructions</strong>:</p>
-    <div class="table-scroll"><table>
-      <thead><tr><th>Processor</th><th>What they do for us</th><th>Where</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Google / Firebase</strong> (Google Cloud / Firebase Hosting)</td><td>Serves the website’s static files via global CDN; <strong>no personal data</strong> stored here</td><td>Global edge network</td></tr>
-        <tr><td><strong>Google / Firebase</strong> (Cloud Firestore)</td><td>Stores your sign-up personal data</td><td><strong>Mumbai, India (<code>asia-south1</code>)</strong></td></tr>
-        <tr><td><strong>Google</strong> (Google Analytics 4)</td><td>Aggregate, consent-gated usage analytics</td><td>Google infrastructure (consent-gated; IP-anonymised)</td></tr>
-        <tr><td><strong>Google</strong> (Firebase Authentication / Google Sign-In)</td><td><strong>Only</strong> powers an optional future contributor portal where you can manage your own record. <strong>Never required to join the waitlist.</strong></td><td>Google infrastructure</td></tr>
-        <tr><td><strong>Google / Firebase</strong> (App Check, with reCAPTCHA)</td><td>Detects automated/spam submissions on the sign-up form</td><td>Google infrastructure</td></tr>
-      </tbody>
-    </table></div>
-    <p>Each of these providers operates under its own privacy and security commitments. We choose the <strong>Mumbai (India) region</strong> for the data store that holds your personal data.</p>
-    <p>If, in future, we engage any other processor that handles your personal data, we will update this policy.</p>
+        <h2 class="s">8. Third-party processors we rely on</h2>
+        <p>
+          We use a small set of trusted service providers (“Data Processors”)
+          who handle data
+          <strong>on our behalf and under our instructions</strong>:
+        </p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Processor</th>
+                <th>What they do for us</th>
+                <th>Where</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Google / Firebase</strong> (Google Cloud / Firebase
+                  Hosting)
+                </td>
+                <td>
+                  Serves the website’s static files via global CDN;
+                  <strong>no personal data</strong> stored here
+                </td>
+                <td>Global edge network</td>
+              </tr>
+              <tr>
+                <td><strong>Google / Firebase</strong> (Cloud Firestore)</td>
+                <td>Stores your sign-up personal data</td>
+                <td>
+                  <strong>Mumbai, India (<code>asia-south1</code>)</strong>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Google</strong> (Google Analytics 4)</td>
+                <td>Aggregate, consent-gated usage analytics</td>
+                <td>Google infrastructure (consent-gated; IP-anonymised)</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Google</strong> (Firebase Authentication / Google
+                  Sign-In)
+                </td>
+                <td>
+                  <strong>Only</strong> powers an optional future contributor
+                  portal where you can manage your own record.
+                  <strong>Never required to join the waitlist.</strong>
+                </td>
+                <td>Google infrastructure</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Google / Firebase</strong> (App Check, with reCAPTCHA)
+                </td>
+                <td>Detects automated/spam submissions on the sign-up form</td>
+                <td>Google infrastructure</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Each of these providers operates under its own privacy and security
+          commitments. We choose the <strong>Mumbai (India) region</strong> for
+          the data store that holds your personal data.
+        </p>
+        <p>
+          If, in future, we engage any other processor that handles your
+          personal data, we will update this policy.
+        </p>
 
-    <h2 class="s">9. Your rights under the DPDP Act</h2>
-    <p>As a <strong>Data Principal</strong> under the DPDP Act, you have the right to:</p>
-    <ul>
-      <li><strong>Access</strong> — ask what personal data of yours we hold and how we have processed it (a summary).</li>
-      <li><strong>Correction &amp; updating</strong> — have inaccurate or incomplete data corrected, completed, or updated.</li>
-      <li><strong>Erasure</strong> — ask us to delete your personal data when it is no longer needed for the purpose, or when you withdraw consent (subject to any legal retention obligation).</li>
-      <li><strong>Withdraw consent</strong> — at any time, as easily as you gave it.</li>
-      <li><strong>Grievance redressal</strong> — raise a complaint with our Grievance Officer (Section 11) and have it addressed.</li>
-      <li><strong>Nominate</strong> — nominate another individual to exercise your rights in the event of your death or incapacity.</li>
-    </ul>
-    <p><strong>How to exercise any of these rights:</strong> email us at <a href="mailto:info@balaji.it">info@balaji.it</a> with your request and the email address you signed up with (so we can locate your record). We will respond within a reasonable period and in any case within timelines required by applicable law. We may need to verify your identity before acting on a request.</p>
-    <p>If you are not satisfied with how we handle your request or grievance, you have the right to escalate to the <strong>Data Protection Board of India</strong> once it is operational, as provided under the DPDP Act.</p>
+        <h2 class="s">9. Your rights under the DPDP Act</h2>
+        <p>
+          As a <strong>Data Principal</strong> under the DPDP Act, you have the
+          right to:
+        </p>
+        <ul>
+          <li>
+            <strong>Access</strong> — ask what personal data of yours we hold
+            and how we have processed it (a summary).
+          </li>
+          <li>
+            <strong>Correction &amp; updating</strong> — have inaccurate or
+            incomplete data corrected, completed, or updated.
+          </li>
+          <li>
+            <strong>Erasure</strong> — ask us to delete your personal data when
+            it is no longer needed for the purpose, or when you withdraw consent
+            (subject to any legal retention obligation).
+          </li>
+          <li>
+            <strong>Withdraw consent</strong> — at any time, as easily as you
+            gave it.
+          </li>
+          <li>
+            <strong>Grievance redressal</strong> — raise a complaint with our
+            Grievance Officer (Section 11) and have it addressed.
+          </li>
+          <li>
+            <strong>Nominate</strong> — nominate another individual to exercise
+            your rights in the event of your death or incapacity.
+          </li>
+        </ul>
+        <p>
+          <strong>How to exercise any of these rights:</strong> email us at
+          <a href="mailto:info@balaji.it">info@balaji.it</a> with your request
+          and the email address you signed up with (so we can locate your
+          record). We will respond within a reasonable period and in any case
+          within timelines required by applicable law. We may need to verify
+          your identity before acting on a request.
+        </p>
+        <p>
+          If you are not satisfied with how we handle your request or grievance,
+          you have the right to escalate to the
+          <strong>Data Protection Board of India</strong> once it is
+          operational, as provided under the DPDP Act.
+        </p>
 
-    <h2 class="s">10. Data retention</h2>
-    <p>We keep your sign-up data only for as long as needed for the waitlist and follow-up purpose, and then delete or anonymise it.</p>
-    <ul>
-      <li><strong>Retention period:</strong> We keep your sign-up data until the relevant DUM360 product opens to you and for up to <strong>24 months</strong> thereafter, or until you ask us to delete it, whichever is earlier.</li>
-      <li>We delete or anonymise data sooner if you <strong>withdraw consent</strong> or ask for <strong>erasure</strong>, unless a law requires us to retain it.</li>
-      <li>Aggregate, <strong>non-identifying</strong> statistics (e.g. “how many people signed up”) may be retained indefinitely as they are not personal data.</li>
-    </ul>
+        <h2 class="s">10. Data retention</h2>
+        <p>
+          We keep your sign-up data only for as long as needed for the waitlist
+          and follow-up purpose, and then delete or anonymise it.
+        </p>
+        <ul>
+          <li>
+            <strong>Retention period:</strong> We keep your sign-up data until
+            the relevant DUM360 product opens to you and for up to
+            <strong>24 months</strong> thereafter, or until you ask us to delete
+            it, whichever is earlier.
+          </li>
+          <li>
+            We delete or anonymise data sooner if you
+            <strong>withdraw consent</strong> or ask for
+            <strong>erasure</strong>, unless a law requires us to retain it.
+          </li>
+          <li>
+            Aggregate, <strong>non-identifying</strong> statistics (e.g. “how
+            many people signed up”) may be retained indefinitely as they are not
+            personal data.
+          </li>
+        </ul>
 
-    <h2 class="s">11. Data Protection / Grievance Officer</h2>
-    <p>In line with the DPDP Act, you can contact our Grievance Officer for any privacy question, request, or complaint:</p>
-    <ul>
-      <li><strong>Name:</strong> Sandeep Nandal (Proprietor, BALAJI IT SOLUTIONS)</li>
-      <li><strong>Email:</strong> <a href="mailto:info@balaji.it">info@balaji.it</a></li>
-      <li><strong>Postal address:</strong> #246, Ward-1, Jhajjar – 124103, Haryana, India</li>
-    </ul>
-    <p><em>(Note for internal review: if DUM360 is later classified as a Significant Data Fiduciary, appointment of a Data Protection Officer based in India and additional obligations may apply — Counsel to assess.)</em></p>
+        <h2 class="s">11. Data Protection / Grievance Officer</h2>
+        <p>
+          In line with the DPDP Act, you can contact our Grievance Officer for
+          any privacy question, request, or complaint:
+        </p>
+        <ul>
+          <li>
+            <strong>Name:</strong> Sandeep Nandal (Proprietor, BALAJI IT
+            SOLUTIONS)
+          </li>
+          <li>
+            <strong>Email:</strong>
+            <a href="mailto:info@balaji.it">info@balaji.it</a>
+          </li>
+          <li>
+            <strong>Postal address:</strong> #246, Ward-1, Jhajjar – 124103,
+            Haryana, India
+          </li>
+        </ul>
+        <p>
+          <em
+            >(Note for internal review: if DUM360 is later classified as a
+            Significant Data Fiduciary, appointment of a Data Protection Officer
+            based in India and additional obligations may apply — Counsel to
+            assess.)</em
+          >
+        </p>
 
-    <h2 class="s">12. Children’s data</h2>
-    <p>This Site and the DUM360 waitlist are intended for <strong>adults (18 years or older)</strong> and for institutional/organisational representatives. We do not knowingly collect personal data of children (defined under the DPDP Act as individuals under 18).</p>
-    <p>Under the DPDP Act, processing a child’s data requires verifiable parental/guardian consent, and we do not undertake tracking, behavioural monitoring, or targeted advertising directed at children. If you believe a child has provided us personal data, contact our Grievance Officer (Section 11) and we will delete it.</p>
+        <h2 class="s">12. Children’s data</h2>
+        <p>
+          This Site and the DUM360 waitlist are intended for
+          <strong>adults (18 years or older)</strong> and for
+          institutional/organisational representatives. We do not knowingly
+          collect personal data of children (defined under the DPDP Act as
+          individuals under 18).
+        </p>
+        <p>
+          Under the DPDP Act, processing a child’s data requires verifiable
+          parental/guardian consent, and we do not undertake tracking,
+          behavioural monitoring, or targeted advertising directed at children.
+          If you believe a child has provided us personal data, contact our
+          Grievance Officer (Section 11) and we will delete it.
+        </p>
 
-    <h2 class="s">13. How we protect your data (security)</h2>
-    <p>We take reasonable security safeguards to protect your data, including:</p>
-    <ul>
-      <li>storing sign-up personal data in <strong>Cloud Firestore (Mumbai, India)</strong> with <strong>security rules that prevent public reading</strong> of sign-up records — entries cannot be listed or read by other visitors;</li>
-      <li><strong>encryption in transit</strong> (HTTPS / TLS) for all data sent to and from the Site, and encryption at rest as provided by our cloud processor;</li>
-      <li><strong>collecting the minimum</strong> data necessary;</li>
-      <li><strong>bot/abuse protection</strong> on the sign-up form; and</li>
-      <li>limiting access to sign-up data to authorised team members who need it for follow-up.</li>
-    </ul>
-    <p>No system is perfectly secure, but we work to protect your data and will act promptly on any issue. In the event of a personal data breach, we will notify the Data Protection Board of India and affected individuals as required by the DPDP Act.</p>
+        <h2 class="s">13. How we protect your data (security)</h2>
+        <p>
+          We take reasonable security safeguards to protect your data,
+          including:
+        </p>
+        <ul>
+          <li>
+            storing sign-up personal data in
+            <strong>Cloud Firestore (Mumbai, India)</strong> with
+            <strong>security rules that prevent public reading</strong> of
+            sign-up records — entries cannot be listed or read by other
+            visitors;
+          </li>
+          <li>
+            <strong>encryption in transit</strong> (HTTPS / TLS) for all data
+            sent to and from the Site, and encryption at rest as provided by our
+            cloud processor;
+          </li>
+          <li><strong>collecting the minimum</strong> data necessary;</li>
+          <li>
+            <strong>bot/abuse protection</strong> on the sign-up form; and
+          </li>
+          <li>
+            limiting access to sign-up data to authorised team members who need
+            it for follow-up.
+          </li>
+        </ul>
+        <p>
+          No system is perfectly secure, but we work to protect your data and
+          will act promptly on any issue. In the event of a personal data
+          breach, we will notify the Data Protection Board of India and affected
+          individuals as required by the DPDP Act.
+        </p>
 
-    <h2 class="s">14. Changes to this policy</h2>
-    <p>We may update this policy as the Site or the law evolves. When we make a material change we will update the “Last updated” date above and, where appropriate, notify you. The current version always governs.</p>
+        <h2 class="s">14. Changes to this policy</h2>
+        <p>
+          We may update this policy as the Site or the law evolves. When we make
+          a material change we will update the “Last updated” date above and,
+          where appropriate, notify you. The current version always governs.
+        </p>
 
-    <h2 class="s">15. Contact us</h2>
-    <p>Questions about this policy or your data:</p>
-    <ul>
-      <li><strong>General contact:</strong> <a href="mailto:info@balaji.it">info@balaji.it</a></li>
-      <li><strong>Grievance Officer:</strong> see Section 11.</li>
-      <li><strong>Address:</strong> #246, Ward-1, Jhajjar – 124103, Haryana, India</li>
-    </ul>
+        <h2 class="s">15. Contact us</h2>
+        <p>Questions about this policy or your data:</p>
+        <ul>
+          <li>
+            <strong>General contact:</strong>
+            <a href="mailto:info@balaji.it">info@balaji.it</a>
+          </li>
+          <li><strong>Grievance Officer:</strong> see Section 11.</li>
+          <li>
+            <strong>Address:</strong> #246, Ward-1, Jhajjar – 124103, Haryana,
+            India
+          </li>
+        </ul>
 
-    <hr>
-    <p style="font-size:13.5px;color:var(--muted);"><em>This document is a draft prepared with AI assistance and does not constitute legal advice. It must be reviewed and finalised by qualified Indian counsel before publication.</em></p>
-  </div>
-</main>
-<footer>
-  <div class="foot-inner">
-    <span>© 2026 DUM360 — operated by BALAJI IT SOLUTIONS (MSME, India) · Made in India 🇮🇳</span>
-    <span><a href="/terms.html">Terms</a> · <a href="/cookies.html">Cookies</a> · <a href="/">Home</a></span>
-  </div>
-</footer>
-</body>
+        <hr />
+        <p style="font-size: 13.5px; color: var(--muted)">
+          <em
+            >This document is a draft prepared with AI assistance and does not
+            constitute legal advice. It must be reviewed and finalised by
+            qualified Indian counsel before publication.</em
+          >
+        </p>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-inner">
+        <span
+          >© 2026 DUM360 — operated by
+          <a href="https://balaji.it" target="_blank" rel="noopener"
+            >BALAJI IT SOLUTIONS</a
+          >
+          (MSME, India) · Made in India 🇮🇳</span
+        >
+        <span
+          ><a href="/terms.html">Terms</a> ·
+          <a href="/cookies.html">Cookies</a> · <a href="/">Home</a></span
+        >
+      </div>
+    </footer>
+  </body>
 </html>

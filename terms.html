@@ -1,157 +1,554 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <head>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Terms of Use — DUM360</title>
-<meta name="description" content="DUM360 website & waitlist Terms of Use." />
-<meta name="theme-color" content="#0b1020" />
-<meta name="robots" content="noindex" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<style>
-  :root { --bg:#fff; --ink:#0b1020; --ink-soft:#475069; --muted:#8089a3; --line:#e7ebf3; --brand:#2f6bff; --brand-2:#00c2a8; --brand-ink:#1d4fd0; --bg-soft:#f6f8fc; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); line-height:1.65; -webkit-font-smoothing:antialiased; }
-  a { color:var(--brand-ink); } a:hover { text-decoration:underline; }
-  :focus-visible { outline:3px solid var(--brand); outline-offset:2px; border-radius:6px; }
-  .wrap { max-width:760px; margin:0 auto; padding:0 24px; }
-  header.nav { position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(12px); background:rgba(255,255,255,.82); border-bottom:1px solid var(--line); }
-  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:68px; max-width:1140px; margin:0 auto; padding:0 24px; }
-  .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; letter-spacing:-.02em; color:var(--ink); text-decoration:none; }
-  .logo .mark { width:32px; height:32px; border-radius:8px; display:block; object-fit:contain; }
-  main { padding:56px 0 80px; }
-  h1 { font-size:clamp(30px,5vw,44px); font-weight:900; letter-spacing:-.02em; margin-bottom:8px; }
-  .meta { color:var(--muted); font-size:14px; margin-bottom:28px; }
-  .meta b { color:var(--ink-soft); }
-  .draft-note { background:#fff7f1; border:1px solid #ffe0c7; border-radius:14px; padding:20px 24px; margin-bottom:32px; }
-  .draft-note h2 { font-size:16px; color:#b45309; margin-bottom:8px; }
-  .draft-note p { font-size:14.5px; color:var(--ink-soft); }
-  .draft-note code { background:rgba(180,83,9,.1); padding:2px 6px; border-radius:5px; font-size:13px; }
-  h2.s { font-size:21px; font-weight:800; margin:32px 0 10px; letter-spacing:-.01em; }
-  p { color:var(--ink-soft); font-size:15.5px; margin-bottom:14px; }
-  p strong, li strong { color:var(--ink); }
-  ul, ol { margin:12px 0 18px 22px; }
-  li { margin:7px 0; color:var(--ink-soft); font-size:15.5px; }
-  blockquote { border-left:4px solid var(--brand); background:var(--bg-soft); padding:14px 18px; margin:18px 0; border-radius:0 10px 10px 0; color:var(--ink-soft); font-size:15px; }
-  blockquote strong { color:var(--ink); }
-  hr { border:none; border-top:1px solid var(--line); margin:30px 0; }
-  .todo { background:#fff3cd; color:#7a5b00; padding:1px 7px; border-radius:5px; font-size:.9em; font-weight:600; }
-  footer { border-top:1px solid var(--line); padding:32px 0; background:var(--bg-soft); font-size:13.5px; color:var(--muted); }
-  .foot-inner { max-width:760px; margin:0 auto; padding:0 24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
-  .foot-inner a { color:var(--muted); }
-</style>
-</head>
-<body>
-<header class="nav">
-  <div class="nav-inner">
-    <a href="/" class="logo"><img class="mark" src="/branding/dum360-icon.png" alt="" width="32" height="32" /> DUM360</a>
-    <a href="/" style="font-weight:600;color:var(--ink-soft);text-decoration:none;">← Back to home</a>
-  </div>
-</header>
-<main>
-  <div class="wrap">
-    <h1>Terms of Service — Website &amp; Waitlist</h1>
-    <p class="meta"><b>Effective date:</b> 22 June 2026 · <b>Last updated:</b> 22 June 2026<br>Applies to the DUM360 website at <code>dum360.com</code> (the “Site”) and the contributor/stakeholder waitlist sign-up it offers.</p>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms of Use — DUM360</title>
+    <meta
+      name="description"
+      content="DUM360 website & waitlist Terms of Use."
+    />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fff;
+        --ink: #0b1020;
+        --ink-soft: #475069;
+        --muted: #8089a3;
+        --line: #e7ebf3;
+        --brand: #2f6bff;
+        --brand-2: #00c2a8;
+        --brand-ink: #1d4fd0;
+        --bg-soft: #f6f8fc;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--brand-ink);
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      :focus-visible {
+        outline: 3px solid var(--brand);
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      header.nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: saturate(180%) blur(12px);
+        background: rgba(255, 255, 255, 0.82);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 68px;
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        font-size: 19px;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .logo .mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: block;
+        object-fit: contain;
+      }
+      main {
+        padding: 56px 0 80px;
+      }
+      h1 {
+        font-size: clamp(30px, 5vw, 44px);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+      .meta b {
+        color: var(--ink-soft);
+      }
+      .draft-note {
+        background: #fff7f1;
+        border: 1px solid #ffe0c7;
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 32px;
+      }
+      .draft-note h2 {
+        font-size: 16px;
+        color: #b45309;
+        margin-bottom: 8px;
+      }
+      .draft-note p {
+        font-size: 14.5px;
+        color: var(--ink-soft);
+      }
+      .draft-note code {
+        background: rgba(180, 83, 9, 0.1);
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-size: 13px;
+      }
+      h2.s {
+        font-size: 21px;
+        font-weight: 800;
+        margin: 32px 0 10px;
+        letter-spacing: -0.01em;
+      }
+      p {
+        color: var(--ink-soft);
+        font-size: 15.5px;
+        margin-bottom: 14px;
+      }
+      p strong,
+      li strong {
+        color: var(--ink);
+      }
+      ul,
+      ol {
+        margin: 12px 0 18px 22px;
+      }
+      li {
+        margin: 7px 0;
+        color: var(--ink-soft);
+        font-size: 15.5px;
+      }
+      blockquote {
+        border-left: 4px solid var(--brand);
+        background: var(--bg-soft);
+        padding: 14px 18px;
+        margin: 18px 0;
+        border-radius: 0 10px 10px 0;
+        color: var(--ink-soft);
+        font-size: 15px;
+      }
+      blockquote strong {
+        color: var(--ink);
+      }
+      hr {
+        border: none;
+        border-top: 1px solid var(--line);
+        margin: 30px 0;
+      }
+      .todo {
+        background: #fff3cd;
+        color: #7a5b00;
+        padding: 1px 7px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 32px 0;
+        background: var(--bg-soft);
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .foot-inner {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .foot-inner a {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <a href="/" class="logo"
+          ><img
+            class="mark"
+            src="/branding/dum360-icon.png"
+            alt=""
+            width="32"
+            height="32"
+          />
+          DUM360</a
+        >
+        <a
+          href="/"
+          style="
+            font-weight: 600;
+            color: var(--ink-soft);
+            text-decoration: none;
+          "
+          >← Back to home</a
+        >
+      </div>
+    </header>
+    <main>
+      <div class="wrap">
+        <h1>Terms of Service — Website &amp; Waitlist</h1>
+        <p class="meta">
+          <b>Effective date:</b> 22 June 2026 · <b>Last updated:</b> 22 June
+          2026<br />Applies to the DUM360 website at
+          <code>dum360.com</code> (the “Site”) and the contributor/stakeholder
+          waitlist sign-up it offers.
+        </p>
 
-    <div class="draft-note" role="note">
-      <h2>⚠ Draft — pending legal review</h2>
-      <p>These Terms were prepared with AI assistance and are <strong>not legal advice</strong>. They must be reviewed and finalised by qualified Indian counsel, and every <span class="todo">TODO</span> placeholder filled, <strong>before launch</strong>. The authoritative source is <code>docs/website/legal/TERMS_OF_SERVICE.md</code>.</p>
-    </div>
+        <div class="draft-note" role="note">
+          <h2>⚠ Draft — pending legal review</h2>
+          <p>
+            These Terms were prepared with AI assistance and are
+            <strong>not legal advice</strong>. They must be reviewed and
+            finalised by qualified Indian counsel, and every
+            <span class="todo">TODO</span> placeholder filled,
+            <strong>before launch</strong>. The authoritative source is
+            <code>docs/website/legal/TERMS_OF_SERVICE.md</code>.
+          </p>
+        </div>
 
-    <h2 class="s">1. About these terms</h2>
-    <p>These Terms of Service (“Terms”) govern your use of the <strong>DUM360 marketing website and its waitlist sign-up</strong>, operated by <strong>BALAJI IT SOLUTIONS</strong> (a sole proprietorship, MSME-registered in India), which operates the DUM360 project (“DUM360”, “we”, “us”, “our”), based in India.</p>
-    <blockquote><strong>Important scope note.</strong> These Terms cover <strong>only this website and the waitlist</strong>. They do <strong>not</strong> cover the DUM360 <strong>compute platform</strong> (the node app, provider/client dashboards, payouts, or running compute workloads). That platform is not yet open to the public and will have <strong>its own separate terms and agreements</strong> before you can use it. Nothing here grants you access to, or rights in, that platform.</blockquote>
-    <p>By using the Site or submitting the sign-up form, you agree to these Terms. If you do not agree, please do not use the Site.</p>
+        <h2 class="s">1. About these terms</h2>
+        <p>
+          These Terms of Service (“Terms”) govern your use of the
+          <strong>DUM360 marketing website and its waitlist sign-up</strong>,
+          operated by <strong>BALAJI IT SOLUTIONS</strong> (a sole
+          proprietorship, MSME-registered in India), which operates the DUM360
+          project (“DUM360”, “we”, “us”, “our”), based in India.
+        </p>
+        <blockquote>
+          <strong>Important scope note.</strong> These Terms cover
+          <strong>only this website and the waitlist</strong>. They do
+          <strong>not</strong> cover the DUM360
+          <strong>compute platform</strong> (the node app, provider/client
+          dashboards, payouts, or running compute workloads). That platform is
+          not yet open to the public and will have
+          <strong>its own separate terms and agreements</strong> before you can
+          use it. Nothing here grants you access to, or rights in, that
+          platform.
+        </blockquote>
+        <p>
+          By using the Site or submitting the sign-up form, you agree to these
+          Terms. If you do not agree, please do not use the Site.
+        </p>
 
-    <h2 class="s">2. What this Site is — and what it is not</h2>
-    <p>The Site is <strong>informational</strong> and lets you <strong>register interest</strong> in DUM360 by joining a waitlist.</p>
-    <p><strong>Joining the waitlist is an expression of interest only.</strong> It is <strong>not</strong>:</p>
-    <ul>
-      <li>a binding contract between you and DUM360;</li>
-      <li>a guarantee that you will be selected, onboarded, or able to participate in DUM360 in any capacity (as a provider, partner, client, contributor, or otherwise);</li>
-      <li>an offer, promise, or guarantee of any payment, earnings, income, credits, revenue-share, compute capacity, pricing, partnership, pilot, or other benefit; or</li>
-      <li>the creation of any employment, contractor, agency, or partnership relationship.</li>
-    </ul>
-    <p>We may contact you about DUM360, but we are under no obligation to offer you anything, and either of us may walk away at any time. Any actual participation in DUM360 will be governed by <strong>separate terms</strong> you would agree to later.</p>
+        <h2 class="s">2. What this Site is — and what it is not</h2>
+        <p>
+          The Site is <strong>informational</strong> and lets you
+          <strong>register interest</strong> in DUM360 by joining a waitlist.
+        </p>
+        <p>
+          <strong
+            >Joining the waitlist is an expression of interest only.</strong
+          >
+          It is <strong>not</strong>:
+        </p>
+        <ul>
+          <li>a binding contract between you and DUM360;</li>
+          <li>
+            a guarantee that you will be selected, onboarded, or able to
+            participate in DUM360 in any capacity (as a provider, partner,
+            client, contributor, or otherwise);
+          </li>
+          <li>
+            an offer, promise, or guarantee of any payment, earnings, income,
+            credits, revenue-share, compute capacity, pricing, partnership,
+            pilot, or other benefit; or
+          </li>
+          <li>
+            the creation of any employment, contractor, agency, or partnership
+            relationship.
+          </li>
+        </ul>
+        <p>
+          We may contact you about DUM360, but we are under no obligation to
+          offer you anything, and either of us may walk away at any time. Any
+          actual participation in DUM360 will be governed by
+          <strong>separate terms</strong> you would agree to later.
+        </p>
 
-    <h2 class="s">3. Forward-looking statements &amp; accuracy disclaimer (please read)</h2>
-    <p>DUM360 is an <strong>early-stage project</strong>. The Site describes a <strong>vision, plans, designs, and goals</strong> — much of which is <strong>not yet built or operational</strong>.</p>
-    <ul>
-      <li><strong>Targets and illustrations, not promises.</strong> Any figures on the Site about <strong>compute capacity, performance/throughput (e.g. exaFLOP/s), benchmarks, cost savings, number of nodes, earnings, or comparisons</strong> are <strong>forward-looking targets, bottom-up order-of-magnitude estimates, or illustrative examples</strong> — <strong>not measured results, guarantees, or forecasts.</strong> Estimates are clearly labelled where used and are explained in our published compute benchmark. Actual results may differ materially.</li>
-      <li><strong>Features may change or not ship.</strong> Described features, phases, rollout timelines, and the “Rashtra Seva” emergency mode are <strong>plans/designs</strong>; the emergency mode in particular is a <strong>designed protocol that is not operational today</strong> and whose governance is still being developed with relevant authorities. Nothing on the Site implies any such system is currently running.</li>
-      <li><strong>No reliance.</strong> You should <strong>not</strong> make any decision, investment, or commitment in reliance on forward-looking statements on the Site.</li>
-      <li><strong>Illustrative names.</strong> Any third-party names (e.g. cloud providers, institutions) mentioned as examples are <strong>illustrative</strong> and do <strong>not</strong> assert an existing partnership unless we expressly state one exists.</li>
-    </ul>
-    <p>We try to keep the Site accurate but make <strong>no warranty</strong> that all content is complete, current, or error-free.</p>
+        <h2 class="s">
+          3. Forward-looking statements &amp; accuracy disclaimer (please read)
+        </h2>
+        <p>
+          DUM360 is an <strong>early-stage project</strong>. The Site describes
+          a <strong>vision, plans, designs, and goals</strong> — much of which
+          is <strong>not yet built or operational</strong>.
+        </p>
+        <ul>
+          <li>
+            <strong>Targets and illustrations, not promises.</strong> Any
+            figures on the Site about
+            <strong
+              >compute capacity, performance/throughput (e.g. exaFLOP/s),
+              benchmarks, cost savings, number of nodes, earnings, or
+              comparisons</strong
+            >
+            are
+            <strong
+              >forward-looking targets, bottom-up order-of-magnitude estimates,
+              or illustrative examples</strong
+            >
+            —
+            <strong>not measured results, guarantees, or forecasts.</strong>
+            Estimates are clearly labelled where used and are explained in our
+            published compute benchmark. Actual results may differ materially.
+          </li>
+          <li>
+            <strong>Features may change or not ship.</strong> Described
+            features, phases, rollout timelines, and the “Rashtra Seva”
+            emergency mode are <strong>plans/designs</strong>; the emergency
+            mode in particular is a
+            <strong>designed protocol that is not operational today</strong> and
+            whose governance is still being developed with relevant authorities.
+            Nothing on the Site implies any such system is currently running.
+          </li>
+          <li>
+            <strong>No reliance.</strong> You should <strong>not</strong> make
+            any decision, investment, or commitment in reliance on
+            forward-looking statements on the Site.
+          </li>
+          <li>
+            <strong>Illustrative names.</strong> Any third-party names (e.g.
+            cloud providers, institutions) mentioned as examples are
+            <strong>illustrative</strong> and do <strong>not</strong> assert an
+            existing partnership unless we expressly state one exists.
+          </li>
+        </ul>
+        <p>
+          We try to keep the Site accurate but make
+          <strong>no warranty</strong> that all content is complete, current, or
+          error-free.
+        </p>
 
-    <h2 class="s">4. Acceptable use</h2>
-    <p>When using the Site you agree <strong>not</strong> to:</p>
-    <ul>
-      <li>submit false, misleading, or another person’s information without authority;</li>
-      <li>use the Site or sign-up form for spam, automated scraping, or bulk/bot submissions;</li>
-      <li>attempt to gain unauthorised access to the Site, its data, or its infrastructure, or to disrupt or overload it;</li>
-      <li>introduce malware or attempt to interfere with security or anti-abuse measures;</li>
-      <li>use the Site for any unlawful purpose or in violation of applicable Indian law; or</li>
-      <li>infringe our or anyone else’s intellectual property or other rights.</li>
-    </ul>
-    <p>We may refuse, remove, or suspend any sign-up or access that violates these Terms or that we reasonably believe to be abusive, fraudulent, or unlawful.</p>
+        <h2 class="s">4. Acceptable use</h2>
+        <p>When using the Site you agree <strong>not</strong> to:</p>
+        <ul>
+          <li>
+            submit false, misleading, or another person’s information without
+            authority;
+          </li>
+          <li>
+            use the Site or sign-up form for spam, automated scraping, or
+            bulk/bot submissions;
+          </li>
+          <li>
+            attempt to gain unauthorised access to the Site, its data, or its
+            infrastructure, or to disrupt or overload it;
+          </li>
+          <li>
+            introduce malware or attempt to interfere with security or
+            anti-abuse measures;
+          </li>
+          <li>
+            use the Site for any unlawful purpose or in violation of applicable
+            Indian law; or
+          </li>
+          <li>
+            infringe our or anyone else’s intellectual property or other rights.
+          </li>
+        </ul>
+        <p>
+          We may refuse, remove, or suspend any sign-up or access that violates
+          these Terms or that we reasonably believe to be abusive, fraudulent,
+          or unlawful.
+        </p>
 
-    <h2 class="s">5. Intellectual property</h2>
-    <p>All content on the Site — including text, copy, graphics, the DUM360 name and logo, the mesh visualisation, design, and code — is owned by or licensed to DUM360 and is protected by applicable intellectual property laws.</p>
-    <ul>
-      <li>You may view and share the Site for personal, informational, non-commercial purposes.</li>
-      <li>You may <strong>not</strong> copy, reproduce, modify, distribute, or create derivative works from the Site’s content for commercial purposes without our prior written permission.</li>
-      <li>Where parts of DUM360 are released as <strong>open source</strong>, those are governed by their own published open-source licences (in the project repository), which prevail for that code.</li>
-    </ul>
-    <p>If you submit content to us (e.g. a free-text message describing your workload), you grant us a limited, non-exclusive licence to use that content <strong>for the purpose of following up with you and operating the waitlist</strong>, consistent with our <a href="/privacy.html">Privacy Policy</a>.</p>
+        <h2 class="s">5. Intellectual property</h2>
+        <p>
+          All content on the Site — including text, copy, graphics, the DUM360
+          name and logo, the mesh visualisation, design, and code — is owned by
+          or licensed to DUM360 and is protected by applicable intellectual
+          property laws.
+        </p>
+        <ul>
+          <li>
+            You may view and share the Site for personal, informational,
+            non-commercial purposes.
+          </li>
+          <li>
+            You may <strong>not</strong> copy, reproduce, modify, distribute, or
+            create derivative works from the Site’s content for commercial
+            purposes without our prior written permission.
+          </li>
+          <li>
+            Where parts of DUM360 are released as <strong>open source</strong>,
+            those are governed by their own published open-source licences (in
+            the project repository), which prevail for that code.
+          </li>
+        </ul>
+        <p>
+          If you submit content to us (e.g. a free-text message describing your
+          workload), you grant us a limited, non-exclusive licence to use that
+          content
+          <strong
+            >for the purpose of following up with you and operating the
+            waitlist</strong
+          >, consistent with our <a href="/privacy.html">Privacy Policy</a>.
+        </p>
 
-    <h2 class="s">6. Third-party links and services</h2>
-    <p>The Site may link to third-party websites or services (e.g. our code repository, partner or processor sites). We do not control and are not responsible for the content, accuracy, or practices of those third parties. Visiting them is at your own risk and subject to their terms and privacy policies.</p>
-    <p>The Site relies on third-party infrastructure (e.g. Firebase Hosting, Cloud Firestore, Google Analytics). Your use of the Site is also subject to those providers’ applicable terms. See the <a href="/privacy.html">Privacy Policy</a> for how data is handled.</p>
+        <h2 class="s">6. Third-party links and services</h2>
+        <p>
+          The Site may link to third-party websites or services (e.g. our code
+          repository, partner or processor sites). We do not control and are not
+          responsible for the content, accuracy, or practices of those third
+          parties. Visiting them is at your own risk and subject to their terms
+          and privacy policies.
+        </p>
+        <p>
+          The Site relies on third-party infrastructure (e.g. Firebase Hosting,
+          Cloud Firestore, Google Analytics). Your use of the Site is also
+          subject to those providers’ applicable terms. See the
+          <a href="/privacy.html">Privacy Policy</a> for how data is handled.
+        </p>
 
-    <h2 class="s">7. Privacy</h2>
-    <p>Your use of the Site and the waitlist is also governed by our <strong><a href="/privacy.html">Privacy Policy</a></strong>, which explains what data we collect, why, where it is stored (sign-up data in <strong>Firestore Mumbai, India</strong>), and your rights under the <strong>Digital Personal Data Protection Act, 2023</strong>. Please read it.</p>
+        <h2 class="s">7. Privacy</h2>
+        <p>
+          Your use of the Site and the waitlist is also governed by our
+          <strong><a href="/privacy.html">Privacy Policy</a></strong
+          >, which explains what data we collect, why, where it is stored
+          (sign-up data in <strong>Firestore Mumbai, India</strong>), and your
+          rights under the
+          <strong>Digital Personal Data Protection Act, 2023</strong>. Please
+          read it.
+        </p>
 
-    <h2 class="s">8. Disclaimers and limitation of liability</h2>
-    <ul>
-      <li>The Site is provided <strong>“as is” and “as available”</strong>, without warranties of any kind, express or implied, including fitness for a particular purpose, accuracy, or uninterrupted/error-free operation, to the maximum extent permitted by law.</li>
-      <li>To the maximum extent permitted by applicable law, <strong>DUM360 and its founders, team, and affiliates will not be liable</strong> for any indirect, incidental, special, consequential, or punitive damages, or for any loss of profits, data, goodwill, or anticipated benefits, arising from or related to your use of (or inability to use) the Site or the waitlist, or your reliance on any content (including forward-looking statements).</li>
-      <li>Nothing in these Terms excludes or limits liability that cannot lawfully be excluded or limited under Indian law.</li>
-    </ul>
+        <h2 class="s">8. Disclaimers and limitation of liability</h2>
+        <ul>
+          <li>
+            The Site is provided <strong>“as is” and “as available”</strong>,
+            without warranties of any kind, express or implied, including
+            fitness for a particular purpose, accuracy, or
+            uninterrupted/error-free operation, to the maximum extent permitted
+            by law.
+          </li>
+          <li>
+            To the maximum extent permitted by applicable law,
+            <strong
+              >DUM360 and its founders, team, and affiliates will not be
+              liable</strong
+            >
+            for any indirect, incidental, special, consequential, or punitive
+            damages, or for any loss of profits, data, goodwill, or anticipated
+            benefits, arising from or related to your use of (or inability to
+            use) the Site or the waitlist, or your reliance on any content
+            (including forward-looking statements).
+          </li>
+          <li>
+            Nothing in these Terms excludes or limits liability that cannot
+            lawfully be excluded or limited under Indian law.
+          </li>
+        </ul>
 
-    <h2 class="s">9. Indemnity</h2>
-    <p>You agree to indemnify and hold harmless DUM360, its founders, team, and affiliates from any claims, losses, or expenses arising out of your misuse of the Site, your violation of these Terms, or your violation of any law or third-party right.</p>
+        <h2 class="s">9. Indemnity</h2>
+        <p>
+          You agree to indemnify and hold harmless DUM360, its founders, team,
+          and affiliates from any claims, losses, or expenses arising out of
+          your misuse of the Site, your violation of these Terms, or your
+          violation of any law or third-party right.
+        </p>
 
-    <h2 class="s">10. Changes to the Site and to these Terms</h2>
-    <p>We may change, suspend, or discontinue any part of the Site at any time. We may also update these Terms; when we make a material change we will update the “Last updated” date and, where appropriate, give notice. Continued use of the Site after changes means you accept the updated Terms.</p>
+        <h2 class="s">10. Changes to the Site and to these Terms</h2>
+        <p>
+          We may change, suspend, or discontinue any part of the Site at any
+          time. We may also update these Terms; when we make a material change
+          we will update the “Last updated” date and, where appropriate, give
+          notice. Continued use of the Site after changes means you accept the
+          updated Terms.
+        </p>
 
-    <h2 class="s">11. Governing law and jurisdiction</h2>
-    <p>These Terms are governed by the laws of <strong>India</strong>. Subject to any non-waivable consumer-protection rights you may have, the courts at <strong>Jhajjar, Haryana, India</strong> shall have exclusive jurisdiction over any dispute arising out of or relating to these Terms or the Site.</p>
+        <h2 class="s">11. Governing law and jurisdiction</h2>
+        <p>
+          These Terms are governed by the laws of <strong>India</strong>.
+          Subject to any non-waivable consumer-protection rights you may have,
+          the courts at <strong>Jhajjar, Haryana, India</strong> shall have
+          exclusive jurisdiction over any dispute arising out of or relating to
+          these Terms or the Site.
+        </p>
 
-    <h2 class="s">12. Contact</h2>
-    <p>Questions about these Terms:</p>
-    <ul>
-      <li><strong>Email:</strong> <a href="mailto:info@balaji.it">info@balaji.it</a></li>
-      <li><strong>Operator:</strong> BALAJI IT SOLUTIONS (sole proprietorship, MSME, India)</li>
-      <li><strong>Address:</strong> #246, Ward-1, Jhajjar – 124103, Haryana, India</li>
-    </ul>
+        <h2 class="s">12. Contact</h2>
+        <p>Questions about these Terms:</p>
+        <ul>
+          <li>
+            <strong>Email:</strong>
+            <a href="mailto:info@balaji.it">info@balaji.it</a>
+          </li>
+          <li>
+            <strong>Operator:</strong> BALAJI IT SOLUTIONS (sole proprietorship,
+            MSME, India)
+          </li>
+          <li>
+            <strong>Address:</strong> #246, Ward-1, Jhajjar – 124103, Haryana,
+            India
+          </li>
+        </ul>
 
-    <hr>
-    <p style="font-size:13.5px;color:var(--muted);"><em>This document is a draft prepared with AI assistance and does not constitute legal advice. It must be reviewed and finalised by qualified Indian counsel before publication.</em></p>
-  </div>
-</main>
-<footer>
-  <div class="foot-inner">
-    <span>© 2026 DUM360 — operated by BALAJI IT SOLUTIONS (MSME, India) · Made in India 🇮🇳</span>
-    <span><a href="/privacy.html">Privacy Policy</a> · <a href="/cookies.html">Cookies</a> · <a href="/">Home</a></span>
-  </div>
-</footer>
-</body>
+        <hr />
+        <p style="font-size: 13.5px; color: var(--muted)">
+          <em
+            >This document is a draft prepared with AI assistance and does not
+            constitute legal advice. It must be reviewed and finalised by
+            qualified Indian counsel before publication.</em
+          >
+        </p>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-inner">
+        <span
+          >© 2026 DUM360 — operated by
+          <a href="https://balaji.it" target="_blank" rel="noopener"
+            >BALAJI IT SOLUTIONS</a
+          >
+          (MSME, India) · Made in India 🇮🇳</span
+        >
+        <span
+          ><a href="/privacy.html">Privacy Policy</a> ·
+          <a href="/cookies.html">Cookies</a> · <a href="/">Home</a></span
+        >
+      </div>
+    </footer>
+  </body>
 </html>

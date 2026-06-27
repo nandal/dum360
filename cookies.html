@@ -1,126 +1,399 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <head>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Analytics &amp; Cookies — DUM360</title>
-<meta name="description" content="How the DUM360 website uses cookies and analytics, and how you stay in control." />
-<meta name="theme-color" content="#0b1020" />
-<meta name="robots" content="noindex" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-<style>
-  :root { --bg:#fff; --ink:#0b1020; --ink-soft:#475069; --muted:#8089a3; --line:#e7ebf3; --brand:#2f6bff; --brand-2:#00c2a8; --brand-ink:#1d4fd0; --bg-soft:#f6f8fc; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); line-height:1.65; -webkit-font-smoothing:antialiased; }
-  a { color:var(--brand-ink); } a:hover { text-decoration:underline; }
-  :focus-visible { outline:3px solid var(--brand); outline-offset:2px; border-radius:6px; }
-  .wrap { max-width:760px; margin:0 auto; padding:0 24px; }
-  header.nav { position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(12px); background:rgba(255,255,255,.82); border-bottom:1px solid var(--line); }
-  .nav-inner { display:flex; align-items:center; justify-content:space-between; height:68px; max-width:1140px; margin:0 auto; padding:0 24px; }
-  .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; letter-spacing:-.02em; color:var(--ink); text-decoration:none; }
-  .logo .mark { width:32px; height:32px; border-radius:8px; display:block; object-fit:contain; }
-  main { padding:56px 0 80px; }
-  h1 { font-size:clamp(30px,5vw,44px); font-weight:900; letter-spacing:-.02em; margin-bottom:8px; }
-  .meta { color:var(--muted); font-size:14px; margin-bottom:28px; }
-  .meta b { color:var(--ink-soft); }
-  .draft-note { background:#fff7f1; border:1px solid #ffe0c7; border-radius:14px; padding:20px 24px; margin-bottom:32px; }
-  .draft-note h2 { font-size:16px; color:#b45309; margin-bottom:8px; }
-  .draft-note p { font-size:14.5px; color:var(--ink-soft); }
-  .draft-note code { background:rgba(180,83,9,.1); padding:2px 6px; border-radius:5px; font-size:13px; }
-  h2.s { font-size:21px; font-weight:800; margin:32px 0 10px; letter-spacing:-.01em; }
-  p { color:var(--ink-soft); font-size:15.5px; margin-bottom:14px; }
-  p strong, li strong { color:var(--ink); }
-  ul, ol { margin:12px 0 18px 22px; }
-  li { margin:7px 0; color:var(--ink-soft); font-size:15.5px; }
-  hr { border:none; border-top:1px solid var(--line); margin:30px 0; }
-  .todo { background:#fff3cd; color:#7a5b00; padding:1px 7px; border-radius:5px; font-size:.9em; font-weight:600; }
-  footer { border-top:1px solid var(--line); padding:32px 0; background:var(--bg-soft); font-size:13.5px; color:var(--muted); }
-  .foot-inner { max-width:760px; margin:0 auto; padding:0 24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
-  .foot-inner a { color:var(--muted); }
-</style>
-</head>
-<body>
-<header class="nav">
-  <div class="nav-inner">
-    <a href="/" class="logo"><img class="mark" src="/branding/dum360-icon.png" alt="" width="32" height="32" /> DUM360</a>
-    <a href="/" style="font-weight:600;color:var(--ink-soft);text-decoration:none;">← Back to home</a>
-  </div>
-</header>
-<main>
-  <div class="wrap">
-    <h1>Analytics &amp; Cookies Notice</h1>
-    <p class="meta"><b>Effective date:</b> 22 June 2026 · <b>Last updated:</b> 22 June 2026<br>Applies to the DUM360 website at <code>dum360.com</code> (the “Site”).</p>
-    <p>This short notice explains how the DUM360 website uses cookies and analytics, and how you stay in control. It supplements our <a href="/privacy.html">Privacy Policy</a>.</p>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analytics &amp; Cookies — DUM360</title>
+    <meta
+      name="description"
+      content="How the DUM360 website uses cookies and analytics, and how you stay in control."
+    />
+    <meta name="theme-color" content="#0b1020" />
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fff;
+        --ink: #0b1020;
+        --ink-soft: #475069;
+        --muted: #8089a3;
+        --line: #e7ebf3;
+        --brand: #2f6bff;
+        --brand-2: #00c2a8;
+        --brand-ink: #1d4fd0;
+        --bg-soft: #f6f8fc;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: var(--brand-ink);
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      :focus-visible {
+        outline: 3px solid var(--brand);
+        outline-offset: 2px;
+        border-radius: 6px;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      header.nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: saturate(180%) blur(12px);
+        background: rgba(255, 255, 255, 0.82);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 68px;
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        font-size: 19px;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .logo .mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: block;
+        object-fit: contain;
+      }
+      main {
+        padding: 56px 0 80px;
+      }
+      h1 {
+        font-size: clamp(30px, 5vw, 44px);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+      .meta b {
+        color: var(--ink-soft);
+      }
+      .draft-note {
+        background: #fff7f1;
+        border: 1px solid #ffe0c7;
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 32px;
+      }
+      .draft-note h2 {
+        font-size: 16px;
+        color: #b45309;
+        margin-bottom: 8px;
+      }
+      .draft-note p {
+        font-size: 14.5px;
+        color: var(--ink-soft);
+      }
+      .draft-note code {
+        background: rgba(180, 83, 9, 0.1);
+        padding: 2px 6px;
+        border-radius: 5px;
+        font-size: 13px;
+      }
+      h2.s {
+        font-size: 21px;
+        font-weight: 800;
+        margin: 32px 0 10px;
+        letter-spacing: -0.01em;
+      }
+      p {
+        color: var(--ink-soft);
+        font-size: 15.5px;
+        margin-bottom: 14px;
+      }
+      p strong,
+      li strong {
+        color: var(--ink);
+      }
+      ul,
+      ol {
+        margin: 12px 0 18px 22px;
+      }
+      li {
+        margin: 7px 0;
+        color: var(--ink-soft);
+        font-size: 15.5px;
+      }
+      hr {
+        border: none;
+        border-top: 1px solid var(--line);
+        margin: 30px 0;
+      }
+      .todo {
+        background: #fff3cd;
+        color: #7a5b00;
+        padding: 1px 7px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        font-weight: 600;
+      }
+      footer {
+        border-top: 1px solid var(--line);
+        padding: 32px 0;
+        background: var(--bg-soft);
+        font-size: 13.5px;
+        color: var(--muted);
+      }
+      .foot-inner {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .foot-inner a {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <a href="/" class="logo"
+          ><img
+            class="mark"
+            src="/branding/dum360-icon.png"
+            alt=""
+            width="32"
+            height="32"
+          />
+          DUM360</a
+        >
+        <a
+          href="/"
+          style="
+            font-weight: 600;
+            color: var(--ink-soft);
+            text-decoration: none;
+          "
+          >← Back to home</a
+        >
+      </div>
+    </header>
+    <main>
+      <div class="wrap">
+        <h1>Analytics &amp; Cookies Notice</h1>
+        <p class="meta">
+          <b>Effective date:</b> 22 June 2026 · <b>Last updated:</b> 22 June
+          2026<br />Applies to the DUM360 website at
+          <code>dum360.com</code> (the “Site”).
+        </p>
+        <p>
+          This short notice explains how the DUM360 website uses cookies and
+          analytics, and how you stay in control. It supplements our
+          <a href="/privacy.html">Privacy Policy</a>.
+        </p>
 
-    <div class="draft-note" role="note">
-      <h2>⚠ Draft — pending legal review</h2>
-      <p>This notice was prepared with AI assistance and is <strong>not legal advice</strong>. It must be reviewed by qualified Indian counsel and every <span class="todo">TODO</span> filled before launch. The authoritative source is <code>docs/website/legal/ANALYTICS_AND_COOKIES.md</code>.</p>
-    </div>
+        <div class="draft-note" role="note">
+          <h2>⚠ Draft — pending legal review</h2>
+          <p>
+            This notice was prepared with AI assistance and is
+            <strong>not legal advice</strong>. It must be reviewed by qualified
+            Indian counsel and every <span class="todo">TODO</span> filled
+            before launch. The authoritative source is
+            <code>docs/website/legal/ANALYTICS_AND_COOKIES.md</code>.
+          </p>
+        </div>
 
-    <h2 class="s">1. The short version</h2>
-    <ul>
-      <li><strong>We keep tracking to a minimum.</strong></li>
-      <li><strong>No analytics and no non-essential cookies load until you give consent</strong> via the banner shown on the Site.</li>
-      <li><strong>You can decline analytics</strong> and still browse the Site and join the waitlist normally.</li>
-      <li><strong>We never sell your data</strong>, and we don’t put your name or email into analytics.</li>
-    </ul>
+        <h2 class="s">1. The short version</h2>
+        <ul>
+          <li><strong>We keep tracking to a minimum.</strong></li>
+          <li>
+            <strong
+              >No analytics and no non-essential cookies load until you give
+              consent</strong
+            >
+            via the banner shown on the Site.
+          </li>
+          <li>
+            <strong>You can decline analytics</strong> and still browse the Site
+            and join the waitlist normally.
+          </li>
+          <li>
+            <strong>We never sell your data</strong>, and we don’t put your name
+            or email into analytics.
+          </li>
+        </ul>
 
-    <h2 class="s">2. What are cookies and similar technologies?</h2>
-    <p>Cookies are small files a website stores in your browser. Similar technologies (local storage, pixels) work the same way. They can remember settings or help measure how a site is used.</p>
-    <p>We group them into two kinds: <strong>strictly necessary</strong> and <strong>analytics (optional)</strong>.</p>
+        <h2 class="s">2. What are cookies and similar technologies?</h2>
+        <p>
+          Cookies are small files a website stores in your browser. Similar
+          technologies (local storage, pixels) work the same way. They can
+          remember settings or help measure how a site is used.
+        </p>
+        <p>
+          We group them into two kinds: <strong>strictly necessary</strong> and
+          <strong>analytics (optional)</strong>.
+        </p>
 
-    <h2 class="s">3. Strictly necessary (always on)</h2>
-    <p>These are required for the Site to work safely and cannot be switched off. They do <strong>not</strong> track you for advertising. They include:</p>
-    <ul>
-      <li><strong>Remembering your consent choice</strong> — so we don’t ask you on every page.</li>
-      <li><strong>Security / anti-abuse</strong> — to detect spam or automated bot submissions on the sign-up form (we use <strong>Firebase App Check</strong>, with reCAPTCHA).</li>
-    </ul>
+        <h2 class="s">3. Strictly necessary (always on)</h2>
+        <p>
+          These are required for the Site to work safely and cannot be switched
+          off. They do <strong>not</strong> track you for advertising. They
+          include:
+        </p>
+        <ul>
+          <li>
+            <strong>Remembering your consent choice</strong> — so we don’t ask
+            you on every page.
+          </li>
+          <li>
+            <strong>Security / anti-abuse</strong> — to detect spam or automated
+            bot submissions on the sign-up form (we use
+            <strong>Firebase App Check</strong>, with reCAPTCHA).
+          </li>
+        </ul>
 
-    <h2 class="s">4. Analytics (only with your consent)</h2>
-    <p>If — and only if — you <strong>accept</strong> in the consent banner, we use <strong>Google Analytics 4 (GA4)</strong> to understand, in aggregate, how the Site is used: which sections people read, where sign-ups come from, and how the sign-up flow performs. This helps us improve the Site.</p>
-    <p>How we limit it:</p>
-    <ul>
-      <li><strong>Consent-gated:</strong> GA4 does <strong>not</strong> load or set analytics cookies until you consent.</li>
-      <li><strong>IP anonymisation</strong> is enabled.</li>
-      <li><strong>No personal data in analytics:</strong> we do <strong>not</strong> send your name, email, phone, or message into analytics events.</li>
-      <li>We track aggregate, non-identifying events (for example: a CTA was clicked, the sign-up form was opened, a sign-up was submitted/succeeded, and how far down the page visitors scroll).</li>
-    </ul>
-    <p>GA4 is provided by <strong>Google</strong>. Your use of it is also subject to Google’s own terms and privacy practices.</p>
-    <p>The Site is also hosted on <strong>Firebase Hosting</strong> (a global CDN) and stores sign-up data in <strong>Cloud Firestore (Mumbai, India)</strong> — see the <a href="/privacy.html">Privacy Policy</a> for what that means for your data.</p>
+        <h2 class="s">4. Analytics (only with your consent)</h2>
+        <p>
+          If — and only if — you <strong>accept</strong> in the consent banner,
+          we use <strong>Google Analytics 4 (GA4)</strong> to understand, in
+          aggregate, how the Site is used: which sections people read, where
+          sign-ups come from, and how the sign-up flow performs. This helps us
+          improve the Site.
+        </p>
+        <p>How we limit it:</p>
+        <ul>
+          <li>
+            <strong>Consent-gated:</strong> GA4 does <strong>not</strong> load
+            or set analytics cookies until you consent.
+          </li>
+          <li><strong>IP anonymisation</strong> is enabled.</li>
+          <li>
+            <strong>No personal data in analytics:</strong> we do
+            <strong>not</strong> send your name, email, phone, or message into
+            analytics events.
+          </li>
+          <li>
+            We track aggregate, non-identifying events (for example: a CTA was
+            clicked, the sign-up form was opened, a sign-up was
+            submitted/succeeded, and how far down the page visitors scroll).
+          </li>
+        </ul>
+        <p>
+          GA4 is provided by <strong>Google</strong>. Your use of it is also
+          subject to Google’s own terms and privacy practices.
+        </p>
+        <p>
+          The Site is also hosted on <strong>Firebase Hosting</strong> (a global
+          CDN) and stores sign-up data in
+          <strong>Cloud Firestore (Mumbai, India)</strong> — see the
+          <a href="/privacy.html">Privacy Policy</a> for what that means for
+          your data.
+        </p>
 
-    <h2 class="s">5. Your choices and how to change them</h2>
-    <ul>
-      <li><strong>At first visit:</strong> choose <strong>Accept</strong> or <strong>Decline</strong> analytics in the consent banner.</li>
-      <li><strong>Change your mind later:</strong> <span class="todo">TODO — describe the mechanism, e.g. “click the ‘Cookie settings’ link in the footer to update your choice”</span>.</li>
-      <li><strong>Browser controls:</strong> you can also block or delete cookies in your browser settings. Blocking strictly necessary items may affect how the Site works.</li>
-    </ul>
-    <p>Declining analytics has <strong>no effect</strong> on your ability to use the Site or join the waitlist.</p>
+        <h2 class="s">5. Your choices and how to change them</h2>
+        <ul>
+          <li>
+            <strong>At first visit:</strong> choose <strong>Accept</strong> or
+            <strong>Decline</strong> analytics in the consent banner.
+          </li>
+          <li>
+            <strong>Change your mind later:</strong>
+            <span class="todo"
+              >TODO — describe the mechanism, e.g. “click the ‘Cookie settings’
+              link in the footer to update your choice”</span
+            >.
+          </li>
+          <li>
+            <strong>Browser controls:</strong> you can also block or delete
+            cookies in your browser settings. Blocking strictly necessary items
+            may affect how the Site works.
+          </li>
+        </ul>
+        <p>
+          Declining analytics has <strong>no effect</strong> on your ability to
+          use the Site or join the waitlist.
+        </p>
 
-    <h2 class="s">6. Changes to this notice</h2>
-    <p>We may update this notice as the Site or the law changes. We will update the “Last updated” date above when we do.</p>
+        <h2 class="s">6. Changes to this notice</h2>
+        <p>
+          We may update this notice as the Site or the law changes. We will
+          update the “Last updated” date above when we do.
+        </p>
 
-    <h2 class="s">7. Contact</h2>
-    <ul>
-      <li><strong>Email:</strong> <a href="mailto:info@balaji.it">info@balaji.it</a></li>
-      <li><strong>Grievance / Data Protection Officer:</strong> see the <a href="/privacy.html">Privacy Policy</a>.</li>
-    </ul>
+        <h2 class="s">7. Contact</h2>
+        <ul>
+          <li>
+            <strong>Email:</strong>
+            <a href="mailto:info@balaji.it">info@balaji.it</a>
+          </li>
+          <li>
+            <strong>Grievance / Data Protection Officer:</strong> see the
+            <a href="/privacy.html">Privacy Policy</a>.
+          </li>
+        </ul>
 
-    <hr>
-    <p style="font-size:13.5px;color:var(--muted);"><em>This document is a draft prepared with AI assistance and does not constitute legal advice. It must be reviewed and finalised by qualified Indian counsel before publication.</em></p>
-  </div>
-</main>
-<footer>
-  <div class="foot-inner">
-    <span>© 2026 DUM360 — operated by BALAJI IT SOLUTIONS (MSME, India) · Made in India 🇮🇳</span>
-    <span><a href="/privacy.html">Privacy Policy</a> · <a href="/terms.html">Terms</a> · <a href="/">Home</a></span>
-  </div>
-</footer>
-</body>
+        <hr />
+        <p style="font-size: 13.5px; color: var(--muted)">
+          <em
+            >This document is a draft prepared with AI assistance and does not
+            constitute legal advice. It must be reviewed and finalised by
+            qualified Indian counsel before publication.</em
+          >
+        </p>
+      </div>
+    </main>
+    <footer>
+      <div class="foot-inner">
+        <span
+          >© 2026 DUM360 — operated by
+          <a href="https://balaji.it" target="_blank" rel="noopener"
+            >BALAJI IT SOLUTIONS</a
+          >
+          (MSME, India) · Made in India 🇮🇳</span
+        >
+        <span
+          ><a href="/privacy.html">Privacy Policy</a> ·
+          <a href="/terms.html">Terms</a> · <a href="/">Home</a></span
+        >
+      </div>
+    </footer>
+  </body>
 </html>

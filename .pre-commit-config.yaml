@@ -1,0 +1,6 @@
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.23.3
+    hooks:
+      - id: gitleaks
+        args: ["--source", ".", "--no-git", "--config", ".gitleaks.toml"]

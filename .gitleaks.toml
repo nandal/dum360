@@ -1,0 +1,20 @@
+# Gitleaks configuration for DUM360
+# Detects secrets accidentally committed to the repo.
+# Run locally: gitleaks detect --no-git --source .
+# CI: .github/workflows/gitleaks.yml
+
+title = "DUM360 Gitleaks Config"
+
+[allowlist]
+  description = "DUM360 allowlist — intentionally public or false positives"
+
+  # Firebase web API keys are NOT secrets. They identify the Firebase project
+  # to the browser. Security is enforced by Firestore security rules + App Check,
+  # not by hiding the config. See: https://firebase.google.com/docs/projects/api-keys
+  paths = [
+    "firebase-config.js",
+    "docs/",
+    "privacy.html",
+    "terms.html",
+    "cookies.html",
+  ]
