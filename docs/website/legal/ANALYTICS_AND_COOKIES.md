@@ -1,5 +1,3 @@
-[DRAFT — AI-generated analysis, not legal advice. Must be reviewed by qualified Indian counsel before publishing. Placeholders marked TODO.]
-
 # Analytics & Cookies Notice
 
 **Effective date:** 22 June 2026
@@ -56,7 +54,7 @@ The Site is also hosted on **Firebase Hosting** (a global CDN) and stores sign-u
 ## 5. Your choices and how to change them
 
 - **At first visit:** choose **Accept** or **Decline** analytics in the consent banner.
-- **Change your mind later:** TODO _(describe the mechanism — e.g. "click the 'Cookie settings' link in the footer to update your choice")._
+- **Change your mind later:** Email us at [info@balaji.it](mailto:info@balaji.it) to withdraw consent. A self-service cookie preferences panel will be added in a future update.
 - **Browser controls:** you can also block or delete cookies in your browser settings. Blocking strictly necessary items may affect how the Site works.
 
 Declining analytics has **no effect** on your ability to use the Site or join the waitlist.
@@ -78,4 +76,4 @@ Questions about cookies or analytics:
 
 ---
 
-_This document is a draft prepared with AI assistance and does not constitute legal advice. It must be reviewed and finalised by qualified Indian counsel before publication._
+_Last updated: 22 June 2026. Operated by [BALAJI IT SOLUTIONS](https://balaji.it)._

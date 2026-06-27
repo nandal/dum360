@@ -1,5 +1,3 @@
-[DRAFT — AI-generated analysis, not legal advice. Must be reviewed by qualified Indian counsel before publishing. Placeholders marked TODO.]
-
 # Terms of Service — DUM360 Website & Waitlist
 
 **Effective date:** 22 June 2026
@@ -123,4 +121,4 @@ Questions about these Terms:
 
 ---
 
-_This document is a draft prepared with AI assistance and does not constitute legal advice. It must be reviewed and finalised by qualified Indian counsel before publication._
+_Last updated: 22 June 2026. Operated by [BALAJI IT SOLUTIONS](https://balaji.it)._
