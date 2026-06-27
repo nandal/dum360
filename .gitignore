@@ -3,3 +3,5 @@
 
 # Firebase CLI local deploy cache
 .firebase/
+.awareness/
+.supervisor/
