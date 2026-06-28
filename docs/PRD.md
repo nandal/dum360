@@ -394,7 +394,7 @@ Server comments on GitHub Issue with PR link
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
-| `POST` | `/register` | Register a new node | None (initial) |
+| `POST` | `/register` | Register a new node | Pre-shared registration token |
 | `POST` | `/heartbeat` | Node heartbeat + status update | JWT |
 | `GET` | `/tasks/next` | Node polls for next assigned task | JWT |
 | `PATCH` | `/tasks/:id/result` | Node reports task completion | JWT |
@@ -412,7 +412,14 @@ Node starts
     │
     ▼
 POST /register
+  Headers: { Authorization: Bearer <registration-token> }
   Payload: { name, version, capabilities }
+    │
+    ▼
+Server validates registration token
+    │
+    ▼
+Server runs capability attestation
     │
     ▼
 Server returns:
@@ -429,9 +436,101 @@ Heartbeat every 15s
 Server updates availability
 ```
 
+### Registration Security
+
+Node registration is the trust bootstrap point. The server requires a **pre-shared registration token** (configured via `REGISTRATION_TOKEN` env var / Docker secret). Without it, registration is rejected with `401 Unauthorized`.
+
+```
+Registration token → Server validates → Node gets JWT
+```
+
+This prevents unauthorized actors from:
+- Registering rogue nodes
+- Flooding the system with fake registrations
+- Impersonating legitimate workers
+
+### Capability Attestation
+
+Self-declared capabilities are **verified by the server** at registration time before a node can receive work.
+
+**Attestation mechanism (MVP):**
+
+1. Node declares capabilities in the registration payload
+2. Server runs lightweight probes:
+   - **Executors:** server sends a no-op probe task; node must acknowledge it understands the executor protocol
+   - **Tools:** server requests version output (e.g., `git --version`, `gh --version`)
+   - **Runtimes:** server requests runtime version (e.g., `go version`, `python --version`)
+   - **Services:** server requests service availability check (e.g., `claude --version`)
+3. Only **attested** capabilities are stored and used for scheduling
+4. Node re-attests on restart or capability change
+
+Capabilities that fail attestation are **dropped** — the node cannot receive tasks requiring them.
+
+### Heartbeat & Node Liveness
+
+Nodes send heartbeats every **15 seconds**. The server enforces liveness:
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| Heartbeat Interval | 15s | How often nodes report status |
+| Grace Period | 30s | Additional window after missed heartbeat |
+| Offline Threshold | 45s | Node marked "offline" after 45s of silence |
+
+**Offline Detection:**
+
+```
+Heartbeat received → lastHeartbeat = now()
+Every 5s sweep → if now() - lastHeartbeat > 45s:
+  ├── Mark node status = "offline"
+  └── If node had currentTask:
+        ├── Mark task status = "failed"
+        └── Re-queue task for reassignment
+```
+
+**Orphaned Task Recovery:** If a node disappears mid-execution, its in-flight task is immediately re-queued. The next scheduling cycle picks it up and assigns it to another available node.
+
+### Repository Access Delegation
+
+A node's local `GITHUB_TOKEN` may not have access to every repository. To guarantee access:
+
+1. The server holds a **GitHub App installation token** (central, scoped to the org/repos DUM360 is installed on)
+2. When assigning a task to a node, the server:
+   - Verifies the GitHub App installation covers the target repository
+   - Generates a **short-lived installation access token** for that repository
+   - Includes the token in the task payload sent to the node
+3. The node uses this delegated token for `git clone`, `git push`, and `gh pr create`
+4. Token expires after the task timeout — invalid after use
+
+This ensures:
+- No central GitHub token is stored on nodes
+- Server controls which repos a task can access
+- Tokens are ephemeral and per-task
+
 ---
 
 ## Execution Pipeline
+
+### Input Sanitization
+
+All user-supplied fields in a task payload are validated and sanitized before reaching the executor:
+
+| Field | Validation |
+|-------|-----------|
+| `repository` | Must match `^[\w.-]+/[\w.-]+$` — no shell metacharacters |
+| `branch` | Must match `^[\w./-]+$` — no `;`, `|`, `$()`, backticks |
+| `instructions` | Stored as-is but passed to AI CLI via **stdin or temp file** — never interpolated into shell commands |
+| `aiProvider` | Must be one of an allowlisted set: `claude`, `codex`, `gemini` |
+| `executor` | Must match a registered executor ID on the node |
+
+The executor constructs all commands using **parameterized execution** (Go's `exec.Command` with separate args array), never string interpolation. Example:
+
+```go
+// Safe: args are passed separately, no shell parsing
+cmd := exec.Command("git", "clone", repoURL, workDir)
+
+// Unsafe: shell interprets metacharacters
+cmd := exec.Command("sh", "-c", fmt.Sprintf("git clone %s %s", repoURL, workDir))
+```
 
 ### GitHub Executor — Step by Step
 
@@ -476,19 +575,25 @@ The MVP scheduler is intentionally **simple**. No complex optimization.
 ```
 1. Filter nodes
    ├── Status = "online"
-   └── Current Task = null (idle)
+   ├── Current Task = null (idle)
+   └── lastHeartbeat within offline threshold (45s)
 
 2. Filter by capability match
-   └── Node has ALL required capabilities for the task
+   └── Node has ALL required capabilities (matched by ID across all categories)
 
-3. Sort descending
-   └── By RAM (highest first)
+3. Sort by utilization (ascending — least utilized first)
+   └── utilization = (cpu.used/cpu.total + ram.used/ram.total) / 2
+   └── In case of tie, prefer higher total RAM
 
 4. Take first match
    └── Assign task to that node
 ```
 
-### Capability Matching (Future)
+This load-balancing approach ensures work spreads across nodes rather than always hitting the largest one, preventing a single large node from being overloaded while smaller nodes sit idle.
+
+### Capability Matching Semantics
+
+Task requirements specify capabilities as a flat list of IDs. The scheduler matches **across all capability categories** (executors, resources, tools, runtimes, services) — a capability ID is globally unique within a node's declared set.
 
 The scheduler asks:
 
@@ -506,8 +611,21 @@ Task Requirements:
     - id: docker
     - id: gh
 
+Node capability pool = flatten(all categories) → { git, gh, docker, claude, codex, go, python, … }
+
 Node matches if:
-  ∀ required ∩ node.available == required
+  ∀ required ⊆ node capability pool
+```
+
+Future iterations may add optional **category scoping** for stricter matching:
+
+```yaml
+requirements:
+  capabilities:
+    - category: tools
+      ids: [git, gh]
+    - category: services
+      ids: [claude]
 ```
 
 ---
@@ -516,13 +634,16 @@ Node matches if:
 
 | Concern | Approach |
 |---------|----------|
+| **Registration Auth** | Pre-shared registration token required; server validates before issuing JWT |
 | **Node Authentication** | JWT issued at registration, verified on every request |
-| **Repository Access** | GitHub App installation token — scoped, revocable |
+| **Capability Attestation** | Server probes node capabilities at registration; only attested capabilities are trusted for scheduling |
+| **Repository Access** | GitHub App installation token delegated by server per-task; server verifies repo coverage before assignment |
+| **Input Sanitization** | All user-supplied fields validated against allowlists; commands use parameterized execution, never raw shell |
 | **Network Direction** | Nodes always initiate connections to server — no inbound to nodes |
 | **No Remote Shell** | Nodes execute predefined executor pipelines only — no arbitrary commands |
 | **Approved Task Types** | Server whitelists executable task types |
 | **Task Isolation** | Each task runs in its own worktree / clone |
-| **Secrets** | GitHub tokens never leave the node; server never sees repo credentials |
+| **Secrets** | Tokens are per-task and ephemeral; secrets managed via Docker secrets or external vault |
 
 ---
 
@@ -541,9 +662,11 @@ services:
     environment:
       - DATABASE_URL=postgres://dum360:dum360@postgres:5432/dum360
       - REDIS_URL=redis://redis:6379
-      - GITHUB_APP_ID=
-      - GITHUB_APP_PRIVATE_KEY=
-      - JWT_SECRET=
+      - GITHUB_APP_ID=${GITHUB_APP_ID}
+    secrets:
+      - github_app_private_key
+      - jwt_secret
+      - registration_token
     depends_on:
       - postgres
       - redis
@@ -554,7 +677,8 @@ services:
       - SERVER_URL=http://server:8080
       - NODE_NAME=local-node
       - AI_PROVIDER=claude
-      - GITHUB_TOKEN=
+    secrets:
+      - registration_token
     depends_on:
       - server
 
@@ -562,17 +686,30 @@ services:
     image: postgres:16-alpine
     environment:
       - POSTGRES_USER=dum360
-      - POSTGRES_PASSWORD=dum360
-      - POSTGRES_DB=dum360
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_password
     volumes:
       - pgdata:/var/lib/postgresql/data
 
   redis:
     image: redis:7-alpine
 
+secrets:
+  github_app_private_key:
+    file: ./secrets/github_app_private_key.pem
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt
+  registration_token:
+    file: ./secrets/registration_token.txt
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+
 volumes:
   pgdata:
 ```
+
+> **Secrets are never stored as plain environment variables.** All sensitive values (GitHub App private key, JWT secret, registration token, database password) are injected via Docker secrets and mounted as files at `/run/secrets/<name>`. The server reads them from the filesystem, not the environment.
 
 ### Running
 
