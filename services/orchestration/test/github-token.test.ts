@@ -29,7 +29,7 @@ describe("GitHubTokenService", () => {
 		reset();
 		process.env.NODE_ENV = "test";
 		await expect(
-			new GitHubTokenService().mintForRepo("owner/repo"),
+			new GitHubTokenService().mintForTask({ repository: "owner/repo", taskId: "t_1" }),
 		).rejects.toThrow(/No GitHub credentials/);
 	});
 
@@ -37,7 +37,7 @@ describe("GitHubTokenService", () => {
 		reset();
 		process.env.NODE_ENV = "test";
 		process.env.GITHUB_TOKEN = "ghs_devtoken";
-		const minted = await new GitHubTokenService().mintForRepo("owner/repo");
+		const minted = await new GitHubTokenService().mintForTask({ repository: "owner/repo", taskId: "t_1" });
 		expect(minted.token).toBe("ghs_devtoken");
 		expect(minted.expiresAt).toBeInstanceOf(Date);
 	});
@@ -47,7 +47,7 @@ describe("GitHubTokenService", () => {
 		process.env.NODE_ENV = "production";
 		process.env.GITHUB_TOKEN = "ghs_devtoken";
 		await expect(
-			new GitHubTokenService().mintForRepo("owner/repo"),
+			new GitHubTokenService().mintForTask({ repository: "owner/repo", taskId: "t_1" }),
 		).rejects.toThrow(/No GitHub credentials/);
 	});
 

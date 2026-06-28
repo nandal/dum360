@@ -108,8 +108,8 @@ export class TasksService {
     return {
       ...toTask(row),
       requirements: reqs.map((r) => ({ capabilityName: r.capabilityName })),
-      repoToken: row.repoToken ?? undefined,
-      tokenExpiresAt: row.tokenExpiresAt?.toISOString(),
+      // repoToken is a live credential — only delivered via the node-facing
+      // task payload, never exposed in the operator detail view.
       stateTransitions: transitions.map(toStateTransition),
     };
   }
@@ -136,8 +136,12 @@ export class TasksService {
 
     // Mint a per-task, repo-scoped, short-lived credential (GitHub App when
     // configured; dev static token otherwise). Never a shared placeholder.
-    // NOTE: self-hosted tier (#17) will skip minting and use node-local creds.
-    const minted = await this.gitHubToken.mintForRepo(task.repository);
+    // Task context is passed (not just the repo) so the self-hosted tier (#17)
+    // can later decide to skip server-side minting and use node-local creds.
+    const minted = await this.gitHubToken.mintForTask({
+      repository: task.repository,
+      taskId: task.id,
+    });
     const repoToken = minted.token;
     const expiresAt = minted.expiresAt.toISOString();
 
@@ -190,12 +194,30 @@ export class TasksService {
 
     if (!task) return null;
 
-    // Mark as delivered so a subsequent poll won't hand out the same task.
-    await this.db
+    // Atomically claim delivery: only the poll that flips startedAt from null
+    // wins, so concurrent polls can't both receive the same task.
+    const claimed = await this.db
       .update(schema.tasks)
       .set({ startedAt: new Date() })
-      .where(eq(schema.tasks.id, task.id));
+      .where(and(eq(schema.tasks.id, task.id), isNull(schema.tasks.startedAt)))
+      .returning({ id: schema.tasks.id });
 
-    return this.getTaskPayload(task.id);
+    if (claimed.length === 0) return null; // another poll already claimed it
+
+    try {
+      return await this.getTaskPayload(task.id);
+    } catch (error) {
+      // Minting can fail (misconfig, GitHub outage, app-not-installed). Roll the
+      // claim back so the task stays redeliverable, and return "no task" rather
+      // than a 500 to the polling node.
+      await this.db
+        .update(schema.tasks)
+        .set({ startedAt: null })
+        .where(eq(schema.tasks.id, task.id));
+      this.logger.error(
+        `Could not prepare task ${task.id} for node ${nodeId}: ${(error as Error).message}`,
+      );
+      return null;
+    }
   }
 }

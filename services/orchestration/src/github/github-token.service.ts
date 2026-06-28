@@ -14,6 +14,7 @@
  * Octokit is imported lazily so deployments/tests that don't use the App path
  * never load it.
  */
+import { readFileSync } from "node:fs";
 import { Injectable, Logger } from "@nestjs/common";
 
 export interface MintedToken {
@@ -21,15 +22,30 @@ export interface MintedToken {
 	expiresAt: Date;
 }
 
+/**
+ * Context for minting a task credential. Currently only the repo is needed;
+ * the self-hosted tier (#17) will extend this with owner/tier so the provider
+ * can decide between server-side minting and node-local creds without a
+ * signature change at the call site.
+ */
+export interface TokenRequest {
+	repository: string;
+	taskId: string;
+}
+
+/** Load the App private key from a Docker-secret file when provided, else env. */
+function loadPrivateKey(): string | undefined {
+	const file = process.env.GITHUB_APP_PRIVATE_KEY_FILE;
+	if (file) return readFileSync(file, "utf-8");
+	// Accept literal "\n" (common when injected via a single-line env var).
+	return process.env.GITHUB_APP_PRIVATE_KEY?.replace(/\\n/g, "\n");
+}
+
 @Injectable()
 export class GitHubTokenService {
 	private readonly logger = new Logger(GitHubTokenService.name);
 	private readonly appId = process.env.GITHUB_APP_ID;
-	// Allow the PEM to be supplied with literal "\n" (common in env injection).
-	private readonly privateKey = process.env.GITHUB_APP_PRIVATE_KEY?.replace(
-		/\\n/g,
-		"\n",
-	);
+	private readonly privateKey = loadPrivateKey();
 	private readonly devToken = process.env.GITHUB_TOKEN;
 	private readonly isProd = process.env.NODE_ENV === "production";
 
@@ -37,9 +53,9 @@ export class GitHubTokenService {
 		return Boolean(this.appId && this.privateKey);
 	}
 
-	/** Mint a credential for a single repository ("owner/repo"). */
-	async mintForRepo(repository: string): Promise<MintedToken> {
-		if (this.appConfigured) return this.mintInstallationToken(repository);
+	/** Mint a credential for a task (scoped to its single repository). */
+	async mintForTask(req: TokenRequest): Promise<MintedToken> {
+		if (this.appConfigured) return this.mintInstallationToken(req.repository);
 
 		if (this.devToken && !this.isProd) {
 			this.logger.warn(
@@ -64,12 +80,17 @@ export class GitHubTokenService {
 			await octokit.request("DELETE /installation/token");
 			this.logger.log("Revoked per-task installation token");
 		} catch (error) {
-			this.logger.warn(`Token revoke failed (will expire on TTL): ${error}`);
+			this.logger.warn(
+				`Token revoke failed (will expire on TTL): ${(error as Error).message}`,
+			);
 		}
 	}
 
 	private async mintInstallationToken(repository: string): Promise<MintedToken> {
 		const [owner, repo] = repository.split("/");
+		if (!owner || !repo) {
+			throw new Error(`Invalid repository (expected owner/repo): ${repository}`);
+		}
 		const { Octokit } = await import("@octokit/rest");
 		const { createAppAuth } = await import("@octokit/auth-app");
 
