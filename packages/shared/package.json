@@ -1,0 +1,33 @@
+{
+  "name": "@dum360/shared",
+  "version": "0.1.0",
+  "description": "Shared types, Zod schemas, auth guards, and database utilities for DUM360 microservices",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.0",
+    "@nestjs/swagger": "^11.0.0",
+    "@nestjs/websockets": "^11.0.0",
+    "drizzle-orm": "^0.40.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "postgres": "^3.4.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0",
+    "zod": "^3.24.0"
+  },
+  "peerDependencies": {
+    "drizzle-orm": "^0.40.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/passport-jwt": "^4.0.0",
+    "typescript": "^5.7.0"
+  }
+}
