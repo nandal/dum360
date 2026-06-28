@@ -1,0 +1,47 @@
+version: "3.9"
+
+# ─── DUM360 Node — Standalone worker agent ───────────────────────────────
+#
+#  Run alongside the main docker-compose.yml:
+#    docker compose up                     # Start server stack
+#    docker compose -f docker-compose.node.yml up  # Start 1 node
+#    docker compose -f docker-compose.node.yml up --scale node=3  # Start 3 nodes
+#
+#  The node container simulates a "blank Linux machine" that registers
+#  with the DUM360 server and executes GitHub tasks.
+
+services:
+  node:
+    build:
+      context: ./services/node
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_URL=http://gateway:8080
+      - NODE_NAME=${NODE_NAME:-docker-node}
+      - NODE_VERSION=0.1.0
+      - AI_PROVIDER=${AI_PROVIDER:-claude}
+      - POLL_INTERVAL=5
+      - HEARTBEAT_INTERVAL=15
+      - MAX_CONCURRENT_TASKS=1
+      - WORK_DIR=/tmp/dum360/workspaces
+      - LOCAL_API_PORT=9090
+      - REGISTRATION_TOKEN=${REGISTRATION_TOKEN:?REGISTRATION_TOKEN must be set}
+    ports:
+      - "${LOCAL_API_PORT:-9090}:9090"
+    volumes:
+      - node-workspace:/tmp/dum360/workspaces
+    networks:
+      - dum360-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9090/health | grep -q healthy"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  node-workspace:
+
+networks:
+  dum360-net:
+    external: true
+    name: dum360_default

@@ -1,8 +1,9 @@
 version: "3.9"
 
 # ─── DUM360 — Distributed AI Execution Mesh ──────────────────────────────
-#  docker compose up  →  PostgreSQL, Redis, Elasticsearch, Kibana,
-#                         API Gateway, Registry, Orchestration, Log Service
+#  docker compose up  →  10 services: PostgreSQL, Redis, Elasticsearch,
+#                         Kibana, Gateway, Registry, Orchestration, Log,
+#                         2 Node Agents
 
 services:
   # ── Infrastructure ────────────────────────────────────────────────────
@@ -64,7 +65,7 @@ services:
       elasticsearch:
         condition: service_healthy
 
-  # ── DUM360 Services ───────────────────────────────────────────────────
+  # ── DUM360 Server ─────────────────────────────────────────────────────
 
   gateway:
     build:
@@ -104,8 +105,7 @@ services:
       - "8081:8081"
     environment:
       PORT: "8081"
-      DATABASE_URL: postgres://dumuser:dumpass@postgres:5432/dum360
-      DATABASE_PASSWORD_FILE: /run/secrets/postgres_password
+      DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       JWT_SECRET_FILE: /run/secrets/jwt_secret
@@ -134,8 +134,7 @@ services:
       - "8082:8082"
     environment:
       PORT: "8082"
-      DATABASE_URL: postgres://dumuser:dumpass@postgres:5432/dum360
-      DATABASE_PASSWORD_FILE: /run/secrets/postgres_password
+      DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       JWT_SECRET_FILE: /run/secrets/jwt_secret
@@ -176,16 +175,59 @@ services:
       timeout: 5s
       retries: 3
 
+  # ── Node Agents (MVP: 2 nodes) ────────────────────────────────────────
+
+  node-1:
+    build:
+      context: ./services/node
+      dockerfile: Dockerfile
+    environment:
+      SERVER_URL: http://gateway:8080
+      NODE_NAME: node-1
+      NODE_VERSION: "0.1.0"
+      AI_PROVIDER: claude
+      POLL_INTERVAL: "5"
+      HEARTBEAT_INTERVAL: "15"
+      MAX_CONCURRENT_TASKS: "1"
+      WORK_DIR: /tmp/dum360/workspaces
+      LOCAL_API_PORT: "9090"
+      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
+    secrets:
+      - registration_token
+    ports:
+      - "9091:9090"
+    volumes:
+      - node1-workspace:/tmp/dum360/workspaces
+    depends_on:
+      gateway:
+        condition: service_healthy
+
+  node-2:
+    build:
+      context: ./services/node
+      dockerfile: Dockerfile
+    environment:
+      SERVER_URL: http://gateway:8080
+      NODE_NAME: node-2
+      NODE_VERSION: "0.1.0"
+      AI_PROVIDER: claude
+      POLL_INTERVAL: "5"
+      HEARTBEAT_INTERVAL: "15"
+      MAX_CONCURRENT_TASKS: "1"
+      WORK_DIR: /tmp/dum360/workspaces
+      LOCAL_API_PORT: "9090"
+      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
+    secrets:
+      - registration_token
+    ports:
+      - "9092:9090"
+    volumes:
+      - node2-workspace:/tmp/dum360/workspaces
+    depends_on:
+      gateway:
+        condition: service_healthy
+
 # ─── Secrets ─────────────────────────────────────────────────────────────
-#
-#  Create these files before running:
-#    mkdir -p secrets
-#    echo "dumpass"       > secrets/postgres_password.txt
-#    openssl rand -hex 32 > secrets/jwt_secret.txt
-#    openssl rand -hex 32 > secrets/registration_token.txt
-#    cp /path/to/github-app.pem secrets/github_app_private_key.pem
-#
-#  Never commit the secrets/ directory.
 
 secrets:
   postgres_password:
@@ -203,3 +245,5 @@ volumes:
   pgdata:
   redisdata:
   esdata:
+  node1-workspace:
+  node2-workspace:
