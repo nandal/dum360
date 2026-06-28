@@ -38,7 +38,7 @@ jobs:
           node-version: 22
           cache: "npm"
       - run: npm ci
-      - run: npx vitest run --reporter=github
+      - run: npx vitest run --reporter=github-actions
         env:
           JWT_SECRET: test-jwt-secret-32-bytes-minimum!!
           REGISTRATION_TOKEN: test-registration-token
