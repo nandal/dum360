@@ -103,8 +103,10 @@ services:
     build:
       context: .
       dockerfile: services/registry/Dockerfile
-    ports:
-      - "8081:8081"
+    # Internal service — reachable only via the gateway on the compose network.
+    # Not published to the host (the gateway is the sole authenticated entry point).
+    expose:
+      - "8081"
     environment:
       PORT: "8081"
       DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
@@ -133,8 +135,11 @@ services:
     build:
       context: .
       dockerfile: services/orchestration/Dockerfile
-    ports:
-      - "8082:8082"
+    # Internal service — not published to the host. The node-facing /tasks/next
+    # endpoint trusts x-node-id, which the gateway sets from the verified JWT;
+    # keeping this off the host prevents direct, unauthenticated impersonation.
+    expose:
+      - "8082"
     environment:
       PORT: "8082"
       DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
@@ -162,8 +167,9 @@ services:
     build:
       context: .
       dockerfile: services/log/Dockerfile
-    ports:
-      - "8083:8083"
+    # Internal service — reachable only via the gateway on the compose network.
+    expose:
+      - "8083"
     environment:
       PORT: "8083"
       ELASTICSEARCH_URL: http://elasticsearch:9200

@@ -17,7 +17,7 @@
  *                    exit code 0 = success, non-zero = failure
  */
 import { execFile, spawn } from "node:child_process";
-import { mkdirSync, readFileSync, existsSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { isValidRepository, isValidBranch } from "@dum360/shared";
@@ -88,8 +88,14 @@ export class DockerExecutor implements Executor {
 			throw new Error(`Invalid task id: ${task.taskId}`);
 		}
 
-		const artifactsDir = join(this.options.workDir, task.taskId, "artifacts");
+		const taskDir = join(this.options.workDir, task.taskId);
+		const artifactsDir = join(taskDir, "artifacts");
 		mkdirSync(artifactsDir, { recursive: true });
+
+		// Secrets go in a 0600 env-file (not the container's mounted /artifacts),
+		// so they never appear in the node host's process list (`ps`/argv).
+		const envFile = join(taskDir, ".docker-env");
+		writeFileSync(envFile, this.renderSecretEnvFile(task), { mode: 0o600 });
 
 		let loggedInRegistry: string | undefined;
 		try {
@@ -109,7 +115,7 @@ export class DockerExecutor implements Executor {
 
 			// 3. Run container (streamed)
 			await log("run", `Running container from ${task.image}...`);
-			const exitCode = await this.runContainer(task, artifactsDir, log);
+			const exitCode = await this.runContainer(task, artifactsDir, envFile, log);
 
 			// 4. Collect artifacts
 			const artifacts = this.readArtifacts(artifactsDir);
@@ -125,6 +131,8 @@ export class DockerExecutor implements Executor {
 			await log("error", `Execution failed: ${error}`, "error");
 			throw error;
 		} finally {
+			// Always shred the secret env-file.
+			rmSync(envFile, { force: true });
 			if (loggedInRegistry !== undefined) {
 				await this.dockerLogout(loggedInRegistry).catch(() => undefined);
 			}
@@ -152,7 +160,10 @@ export class DockerExecutor implements Executor {
 		await execFileAsync(this.docker, args, { timeout: 10_000 });
 	}
 
-	/** Build env injection list (no secrets in the returned strings are logged). */
+	/**
+	 * Non-secret task context, passed as `--env` (safe to appear in `ps`/argv).
+	 * Values may contain newlines (instructions/body), which env-files can't hold.
+	 */
 	private buildEnvArgs(task: TaskAssignPayload): string[] {
 		const env: Record<string, string> = {
 			DUM360_TASK_ID: task.taskId,
@@ -160,9 +171,7 @@ export class DockerExecutor implements Executor {
 			DUM360_BRANCH: task.branch,
 			DUM360_INSTRUCTIONS: task.instructions,
 			DUM360_AI_PROVIDER: task.aiProvider,
-			GITHUB_TOKEN: task.repoToken,
 		};
-		if (this.options.aiApiKey) env.AI_API_KEY = this.options.aiApiKey;
 		if (task.issue) {
 			env.DUM360_ISSUE_NUMBER = String(task.issue.number);
 			env.DUM360_ISSUE_TITLE = task.issue.title;
@@ -171,15 +180,31 @@ export class DockerExecutor implements Executor {
 		return Object.entries(env).flatMap(([k, v]) => ["--env", `${k}=${v}`]);
 	}
 
+	/**
+	 * Secrets, rendered as KEY=VALUE lines for `--env-file`. These are single-line
+	 * tokens, so the env-file format is safe (no newline values). Kept off argv.
+	 */
+	private renderSecretEnvFile(task: TaskAssignPayload): string {
+		const secrets: Record<string, string> = { GITHUB_TOKEN: task.repoToken };
+		if (this.options.aiApiKey) secrets.AI_API_KEY = this.options.aiApiKey;
+		return Object.entries(secrets)
+			.map(([k, v]) => `${k}=${v}`)
+			.join("\n");
+	}
+
 	/** Run the container, streaming output to the log sink. Resolves with exit code. */
 	private runContainer(
 		task: TaskAssignPayload,
 		artifactsDir: string,
+		envFile: string,
 		log: (step: string, message: string, level?: LogEntry["level"]) => Promise<void>,
 	): Promise<number> {
 		const args = [
 			"run",
 			"--rm",
+			// Prevent privilege escalation inside the (untrusted) image.
+			"--security-opt",
+			"no-new-privileges",
 			"--memory",
 			this.options.memory,
 			"--cpus",
@@ -188,6 +213,8 @@ export class DockerExecutor implements Executor {
 			"512",
 			"--volume",
 			`${artifactsDir}:/artifacts`,
+			"--env-file",
+			envFile,
 			...this.buildEnvArgs(task),
 			task.image as string,
 		];

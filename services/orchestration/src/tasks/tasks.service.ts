@@ -25,12 +25,6 @@ export class TasksService {
 
   /** Create a new task from an API/webhook request. Sets initial state to queued. */
   async create(req: CreateTaskRequest): Promise<Task> {
-    const [queued] = await this.db
-      .select({ count: sql<number>`count(*)` })
-      .from(schema.tasks)
-      .where(eq(schema.tasks.status, 'queued'));
-    const queuedCount = Number(queued?.count ?? 0);
-
     const [task] = await this.db
       .insert(schema.tasks)
       .values({
@@ -46,7 +40,9 @@ export class TasksService {
         registryCredentials: req.registryCredentials ?? null,
         timeoutSeconds: req.timeout ?? 3600,
         priority: req.priority ?? 'normal',
-        position: queuedCount + 1,
+        // Compute the queue position atomically inside the INSERT so concurrent
+        // creates can't read the same count and collide on a position.
+        position: sql`(SELECT COUNT(*) + 1 FROM ${schema.tasks} WHERE ${schema.tasks.status} = 'queued')`,
       })
       .returning();
 
@@ -153,7 +149,8 @@ export class TasksService {
       issue: task.issueNumber
         ? {
             number: task.issueNumber,
-            title: task.issueTitle ?? '',
+            // title must be non-empty (IssueRef contract) — fall back when null.
+            title: task.issueTitle?.trim() || `Issue #${task.issueNumber}`,
             body: task.issueBody ?? undefined,
           }
         : null,

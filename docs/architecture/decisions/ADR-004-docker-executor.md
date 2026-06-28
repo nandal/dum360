@@ -63,13 +63,25 @@ node image installs `docker-cli`.
 **Positive:** partners ship their own agent images; container isolation; the
 existing executor-registry/poll/report machinery is reused unchanged.
 
+**Hardening applied (PR #12 review):**
+- Secrets (`GITHUB_TOKEN`, `AI_API_KEY`) injected via a 0600 `--env-file`, not
+  `--env` argv, so they don't appear in the node host's process list.
+- `docker run --security-opt no-new-privileges` on the (untrusted) image.
+- Internal services (registry/orchestration/log) are no longer published to the
+  host — the gateway is the sole authenticated entry point, and it sets
+  `x-node-id` from the verified node JWT (clients cannot spoof it).
+- Queue position computed atomically inside the INSERT (no count→insert race).
+
 **Trade-offs / follow-ups:**
-- **Socket mount** gives the node broad host privileges (sibling containers).
-  DinD or a rootless-daemon setup is a hardening follow-up.
-- **Secrets at rest:** `registry_credentials` is stored unencrypted for MVP.
-- **GitHub token:** still the static `GITHUB_TOKEN` placeholder; real GitHub App
-  installation-token minting is out of scope here.
-- Container images run arbitrary code — agent images must be trusted/curated.
+- **Socket mount** still gives the node broad host privileges (sibling
+  containers). DinD or a rootless-daemon setup is a hardening follow-up.
+- **Secrets at rest:** `registry_credentials` is stored unencrypted for MVP
+  (see #13).
+- **GitHub token:** still the static `GITHUB_TOKEN` placeholder; per-task GitHub
+  App minting tracked in #13.
+- **Orphaned tasks & internal service-to-service auth:** tracked in #14.
+- Container images run arbitrary code — agent images must be trusted/curated;
+  the env-var token is still readable from inside the container (Grade-3 in #13).
 
 ## Out of scope
 GPU scheduling, image cache hints, container telemetry in heartbeat, encrypted
