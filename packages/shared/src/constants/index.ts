@@ -22,10 +22,10 @@ export const SERVICE_PORTS = {
 
 // ─── Queue ──────────────────────────────────────────────────────────────
 export const QUEUE_NAMES = {
-	TASK_DISPATCH: "task:dispatch",
-	LIVENESS_SWEEP: "liveness:sweep",
-	LOG_RETENTION: "log:retention",
-	WEBHOOK_PROCESS: "webhook:process",
+	TASK_DISPATCH: "task-dispatch",
+	LIVENESS_SWEEP: "liveness-sweep",
+	LOG_RETENTION: "log-retention",
+	WEBHOOK_PROCESS: "webhook-process",
 } as const;
 
 // ─── Database ───────────────────────────────────────────────────────────

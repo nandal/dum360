@@ -1,31 +1,38 @@
-# DUM360 Node Agent - Blank Linux Machine (MVP)
 FROM node:22-alpine
 
 RUN apk add --no-cache git openssh-client curl wget bash
 
-RUN echo '#!/bin/sh' > /tmp/gh-stub && echo 'echo "[gh stub] \$@"' >> /tmp/gh-stub && chmod +x /tmp/gh-stub && mv /tmp/gh-stub /usr/local/bin/gh
-RUN echo '#!/bin/sh' > /tmp/cl-stub && echo 'echo "[claude stub] Done."' >> /tmp/cl-stub && chmod +x /tmp/cl-stub && mv /tmp/cl-stub /usr/local/bin/claude
-RUN echo '#!/bin/sh' > /tmp/cx-stub && echo 'echo "[codex stub] \$@"' >> /tmp/cx-stub && chmod +x /tmp/cx-stub && mv /tmp/cx-stub /usr/local/bin/codex
-RUN echo '#!/bin/sh' > /tmp/gm-stub && echo 'echo "[gemini stub] \$@"' >> /tmp/gm-stub && chmod +x /tmp/gm-stub && mv /tmp/gm-stub /usr/local/bin/gemini
+# CLI stubs (MPP — production uses real gh, claude, codex, gemini)
+RUN printf '#!/bin/sh\necho "[gh stub] $@"' | tee /usr/local/bin/gh > /dev/null && chmod +x /usr/local/bin/gh
+RUN printf '#!/bin/sh\necho "[claude stub] Done."' | tee /usr/local/bin/claude > /dev/null && chmod +x /usr/local/bin/claude
+RUN printf '#!/bin/sh\necho "[codex stub] \$@"' | tee /usr/local/bin/codex > /dev/null && chmod +x /usr/local/bin/codex
+RUN printf '#!/bin/sh\necho "[gemini stub] \$@"' | tee /usr/local/bin/gemini > /dev/null && chmod +x /usr/local/bin/gemini
 
 WORKDIR /app
-COPY package.json tsconfig.json ./
-COPY src/ ./src/
-RUN npm install
+
+COPY packages/shared/package.json /app/packages/shared/
+COPY packages/shared/src/ /app/packages/shared/src/
+COPY packages/shared/tsconfig.json /app/packages/shared/
+
+COPY services/node/package.json /app/services/node/
+COPY services/node/src/ /app/services/node/src/
+COPY services/node/tsconfig.json /app/services/node/
+
+COPY package.json turbo.json /app/
+
+RUN npm install --ignore-scripts
 
 RUN mkdir -p /tmp/dum360/workspaces
 
-ENV SERVER_URL=http://gateway:8080
-ENV NODE_NAME=docker-node
 ENV NODE_VERSION=0.1.0
-ENV AI_PROVIDER=claude
 ENV POLL_INTERVAL=5
 ENV HEARTBEAT_INTERVAL=15
 ENV MAX_CONCURRENT_TASKS=1
 ENV WORK_DIR=/tmp/dum360/workspaces
 ENV LOCAL_API_PORT=9090
 
+WORKDIR /app/services/node
 EXPOSE 9090
-HEALTHCHECK --interval=15s --timeout=5s --retries=3 CMD wget -qO= http://127.0.0.1:9090/health | grep -q healthy || exit 1
-
+HEALTHCHECK --interval=15s --timeout=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:9090/health 2>/dev/null | grep -q healthy || exit 1
 CMD ["npx", "tsx", "src/main.ts"]

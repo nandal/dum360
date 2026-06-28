@@ -28,7 +28,7 @@ import {
   type TaskAssignPayload,
   type LogIngestResponse,
 } from '@dum360/shared';
-import type { ProxyService } from '../proxy/proxy.service';
+import { ProxyService } from '../proxy/proxy.service';
 
 @ApiTags('Node')
 @Controller()

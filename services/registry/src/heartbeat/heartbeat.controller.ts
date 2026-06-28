@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import type { HeartbeatRequest, HeartbeatResponse } from '@dum360/shared';
-import type { HeartbeatService } from './heartbeat.service';
+import { HeartbeatService } from './heartbeat.service';
 
 @ApiTags('Heartbeat')
 @Controller()

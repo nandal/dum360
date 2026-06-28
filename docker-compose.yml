@@ -1,9 +1,7 @@
 version: "3.9"
 
-# ─── DUM360 — Distributed AI Execution Mesh ──────────────────────────────
-#  docker compose up  →  10 services: PostgreSQL, Redis, Elasticsearch,
-#                         Kibana, Gateway, Registry, Orchestration, Log,
-#                         2 Node Agents
+# ─── DUM360 — Local Dev Cluster ─────────────────────────────────────────
+#  docker compose up --build
 
 services:
   # ── Infrastructure ────────────────────────────────────────────────────
@@ -13,9 +11,7 @@ services:
     environment:
       POSTGRES_USER: dum360
       POSTGRES_DB: dum360
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
-    secrets:
-      - postgres_password
+      POSTGRES_PASSWORD: dum360
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -50,11 +46,7 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -sf http://localhost:9200/_cluster/health | grep -v red",
-        ]
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health | grep -v red"]
       interval: 10s
       timeout: 5s
       retries: 8
@@ -69,25 +61,22 @@ services:
       elasticsearch:
         condition: service_healthy
 
-  # ── DUM360 Server ─────────────────────────────────────────────────────
+  # ── DUM360 Services ───────────────────────────────────────────────────
 
   gateway:
     build:
-      context: ./services/gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/gateway/Dockerfile
     ports:
       - "8080:8080"
     environment:
       PORT: "8080"
-      JWT_SECRET_FILE: /run/secrets/jwt_secret
-      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
+      REGISTRATION_TOKEN: test-token-please-change
+      JWT_SECRET: test-jwt-secret-32-bytes-minimum!!
       CORS_ORIGIN: "*"
       REGISTRY_HOST: registry
       ORCHESTRATION_HOST: orchestration
       LOG_HOST: log
-    secrets:
-      - jwt_secret
-      - registration_token
     depends_on:
       registry:
         condition: service_healthy
@@ -96,19 +85,16 @@ services:
       log:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget -qO- http://localhost:8080/health | grep -q healthy",
-        ]
-      interval: 15s
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health 2>/dev/null | grep -q healthy"]
+      interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
+      start_period: 15s
 
   registry:
     build:
-      context: ./services/registry
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/registry/Dockerfile
     ports:
       - "8081:8081"
     environment:
@@ -116,32 +102,25 @@ services:
       DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
       REDIS_HOST: redis
       REDIS_PORT: "6379"
-      JWT_SECRET_FILE: /run/secrets/jwt_secret
-      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
+      JWT_SECRET: test-jwt-secret-32-bytes-minimum!!
+      REGISTRATION_TOKEN: test-token-please-change
       NODE_ENV: development
-    secrets:
-      - postgres_password
-      - jwt_secret
-      - registration_token
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget -qO- http://localhost:8081/health | grep -q healthy",
-        ]
-      interval: 15s
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/health 2>/dev/null | grep -q healthy"]
+      interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
+      start_period: 15s
 
   orchestration:
     build:
-      context: ./services/orchestration
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/orchestration/Dockerfile
     ports:
       - "8082:8082"
     environment:
@@ -149,33 +128,24 @@ services:
       DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
       REDIS_HOST: redis
       REDIS_PORT: "6379"
-      JWT_SECRET_FILE: /run/secrets/jwt_secret
-      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
-      GITHUB_APP_ID: ${GITHUB_APP_ID:-}
+      JWT_SECRET: test-jwt-secret-32-bytes-minimum!!
       NODE_ENV: development
-    secrets:
-      - postgres_password
-      - jwt_secret
-      - github_app_private_key
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget -qO- http://localhost:8082/health | grep -q healthy",
-        ]
-      interval: 15s
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/health 2>/dev/null | grep -q healthy"]
+      interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
+      start_period: 15s
 
   log:
     build:
-      context: ./services/log
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/log/Dockerfile
     ports:
       - "8083:8083"
     environment:
@@ -186,84 +156,45 @@ services:
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget -qO- http://localhost:8083/health | grep -q healthy",
-        ]
-      interval: 15s
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/health 2>/dev/null | grep -q healthy"]
+      interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
+      start_period: 20s
 
-  # ── Node Agents (MVP: 2 nodes) ────────────────────────────────────────
+  # ── Node Agents ───────────────────────────────────────────────────────
 
   node-1:
     build:
-      context: ./services/node
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/node/Dockerfile
     environment:
       SERVER_URL: http://gateway:8080
       NODE_NAME: node-1
-      NODE_VERSION: "0.1.0"
+      REGISTRATION_TOKEN: test-token-please-change
       AI_PROVIDER: claude
-      POLL_INTERVAL: "5"
-      HEARTBEAT_INTERVAL: "15"
-      MAX_CONCURRENT_TASKS: "1"
-      WORK_DIR: /tmp/dum360/workspaces
-      LOCAL_API_PORT: "9090"
-      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
-    secrets:
-      - registration_token
     ports:
       - "9091:9090"
-    volumes:
-      - node1-workspace:/tmp/dum360/workspaces
     depends_on:
       gateway:
         condition: service_healthy
 
   node-2:
     build:
-      context: ./services/node
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: services/node/Dockerfile
     environment:
       SERVER_URL: http://gateway:8080
       NODE_NAME: node-2
-      NODE_VERSION: "0.1.0"
+      REGISTRATION_TOKEN: test-token-please-change
       AI_PROVIDER: claude
-      POLL_INTERVAL: "5"
-      HEARTBEAT_INTERVAL: "15"
-      MAX_CONCURRENT_TASKS: "1"
-      WORK_DIR: /tmp/dum360/workspaces
-      LOCAL_API_PORT: "9090"
-      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
-    secrets:
-      - registration_token
     ports:
       - "9092:9090"
-    volumes:
-      - node2-workspace:/tmp/dum360/workspaces
     depends_on:
       gateway:
         condition: service_healthy
-
-# ─── Secrets ─────────────────────────────────────────────────────────────
-
-secrets:
-  postgres_password:
-    file: ./secrets/postgres_password.txt
-  jwt_secret:
-    file: ./secrets/jwt_secret.txt
-  registration_token:
-    file: ./secrets/registration_token.txt
-  github_app_private_key:
-    file: ./secrets/github_app_private_key.pem
-
-# ─── Volumes ─────────────────────────────────────────────────────────────
 
 volumes:
   pgdata:
   redisdata:
   esdata:
-  node1-workspace:
-  node2-workspace:

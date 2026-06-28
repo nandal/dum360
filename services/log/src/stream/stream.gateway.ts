@@ -4,10 +4,11 @@ import {
 	SubscribeMessage,
 	type OnGatewayConnection,
 	type OnGatewayDisconnect,
-	Logger,
+
 } from "@nestjs/websockets";
+import { Logger } from "@nestjs/common";
 import type { Server, Socket } from "socket.io";
-import type { StreamService } from "./stream.service";
+import { StreamService } from "./stream.service";
 
 @WebSocketGateway({
 	namespace: "ws",

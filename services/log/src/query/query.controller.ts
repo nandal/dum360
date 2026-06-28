@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
-import type { QueryService } from './query.service';
+import { QueryService } from './query.service';
 
 @ApiTags('Logs')
 @Controller()

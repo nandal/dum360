@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Param, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import type { LogEntryRequest, LogIngestResponse } from '@dum360/shared';
-import type { IngestService } from './ingest.service';
+import { IngestService } from './ingest.service';
 
 @ApiTags('Logs')
 @Controller()

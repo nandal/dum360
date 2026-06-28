@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Param, Query, Body, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import type { RegisterNodeRequest, RegisterNodeResponse } from '@dum360/shared';
-import type { NodesService } from './nodes.service';
+import { NodesService } from './nodes.service';
 
 @ApiTags('Nodes')
 @Controller()

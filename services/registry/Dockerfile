@@ -1,18 +1,23 @@
-FROM node:22-alpine AS builder
-WORKDIR /app
-COPY package.json ./
-RUN npm install
-COPY tsconfig.json drizzle.config.ts ./
-COPY src/ ./src/
-RUN npx tsc
-
 FROM node:22-alpine
 WORKDIR /app
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules/ ./node_modules/
-COPY --from=builder /app/dist/ ./dist/
-COPY --from=builder /app/drizzle.config.ts ./
+RUN apk add --no-cache python3 make g++
+
+COPY packages/shared/package.json /app/packages/shared/
+COPY packages/shared/src/ /app/packages/shared/src/
+COPY packages/shared/tsconfig.json /app/packages/shared/
+
+COPY services/registry/package.json /app/services/registry/
+COPY services/registry/src/ /app/services/registry/src/
+COPY services/registry/tsconfig.json /app/services/registry/
+COPY services/registry/drizzle.config.ts /app/services/registry/
+
+COPY package.json turbo.json /app/
+
+RUN npm install --ignore-scripts
+
+WORKDIR /app/services/registry
+ENV PORT=8081
 EXPOSE 8081
 HEALTHCHECK --interval=15s --timeout=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8081/health || exit 1
-CMD ["node", "dist/main.js"]
+  CMD wget -qO- http://localhost:8081/health | grep -q healthy || exit 1
+CMD ["npx", "tsx", "src/main.ts"]

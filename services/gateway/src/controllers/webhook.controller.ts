@@ -9,7 +9,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import type { ProxyService } from '../proxy/proxy.service';
+import { ProxyService } from '../proxy/proxy.service';
 
 /**
  * GitHub webhook receiver.

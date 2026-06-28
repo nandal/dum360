@@ -3,8 +3,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import type { CreateTaskRequest, TaskResultRequest, TaskListQuery } from '@dum360/shared';
-import type { TasksService } from './tasks.service';
-import type { TaskStateMachine } from './task-state-machine';
+import { TasksService } from './tasks.service';
+import { TaskStateMachine } from './task-state-machine';
 
 @ApiTags('Tasks')
 @Controller()

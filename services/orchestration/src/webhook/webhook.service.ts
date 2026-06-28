@@ -3,7 +3,7 @@ import { DRIZZLE_DB } from '@dum360/shared';
 import { eq, and } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../database/schema';
-import type { TasksService } from '../tasks/tasks.service';
+import { TasksService } from '../tasks/tasks.service';
 
 const DUM360_TRIGGER = '@dum360';
 

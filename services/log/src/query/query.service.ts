@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import type { ElasticsearchService } from "../elasticsearch/elasticsearch.service";
+import { ElasticsearchService } from "../elasticsearch/elasticsearch.service";
 
 @Injectable()
 export class QueryService {

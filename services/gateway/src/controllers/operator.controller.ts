@@ -18,7 +18,7 @@ import {
   createTaskRequestSchema,
   type CreateTaskRequest,
 } from '@dum360/shared';
-import type { ProxyService } from '../proxy/proxy.service';
+import { ProxyService } from '../proxy/proxy.service';
 
 @ApiTags('Operator')
 @Controller()
@@ -29,23 +29,8 @@ export class OperatorController {
   @Get('health')
   @ApiOperation({ summary: 'Server health check (public)' })
   @ApiResponse({ status: 200, description: 'Healthy' })
-  async health() {
-    // Aggregate health from downstream services
-    const [registry, orchestration, log] = await Promise.allSettled([
-      this.proxy.forward('REGISTRY', { method: 'GET', path: '/health' }).catch(() => null),
-      this.proxy.forward('ORCHESTRATION', { method: 'GET', path: '/health' }).catch(() => null),
-      this.proxy.forward('LOG', { method: 'GET', path: '/health' }).catch(() => null),
-    ]);
-
-    return {
-      status: 'healthy',
-      version: '0.1.0',
-      services: {
-        registry: registry.status === 'fulfilled' && registry.value ? 'healthy' : 'unhealthy',
-        orchestration: orchestration.status === 'fulfilled' && orchestration.value ? 'healthy' : 'unhealthy',
-        log: log.status === 'fulfilled' && log.value ? 'healthy' : 'unhealthy',
-      },
-    };
+  health() {
+    return { status: 'healthy', version: '0.1.0' };
   }
 
   // ─── Nodes ────────────────────────────────────────────────────────────

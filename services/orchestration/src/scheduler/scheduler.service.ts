@@ -9,8 +9,8 @@ import {
 } from '@dum360/shared';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../database/schema';
-import type { TasksService } from '../tasks/tasks.service';
-import type { TaskStateMachine } from '../tasks/task-state-machine';
+import { TasksService } from '../tasks/tasks.service';
+import { TaskStateMachine } from '../tasks/task-state-machine';
 
 /**
  * MVP Scheduler.

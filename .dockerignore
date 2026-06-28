@@ -1,0 +1,7 @@
+node_modules
+dist
+.turbo
+.git
+secrets
+*.md
+!packages/shared/src/**/*.ts

@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import type { LogEntryRequest } from "@dum360/shared";
-import type {
+import {
 	ElasticsearchService,
 	LogDocument,
 } from "../elasticsearch/elasticsearch.service";

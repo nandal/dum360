@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import type { WebhookService } from './webhook.service';
+import { WebhookService } from './webhook.service';
 
 @ApiTags('Webhook')
 @Controller()
