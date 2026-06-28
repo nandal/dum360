@@ -5,8 +5,9 @@ export const heartbeatRequestSchema = z.object({
 	status: z.enum(["online", "offline", "busy"]),
 	resources: z.object({
 		cpu: z.object({
-			used: z.number().int().min(0),
-			total: z.number().int().min(1),
+			// Fractional core usage is normal (e.g. 0.5 cores), so don't force ints.
+			used: z.number().min(0),
+			total: z.number().min(1),
 		}),
 		ram: z.object({
 			used: z.string().min(1),

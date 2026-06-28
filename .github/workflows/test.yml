@@ -10,6 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Least privilege: these jobs only read the checked-out code.
+permissions:
+  contents: read
+
 jobs:
   typecheck:
     name: Type Check
@@ -50,5 +54,11 @@ jobs:
           node-version: 22
           cache: "npm"
       - run: npm ci
-      - run: npm audit --audit-level=high
+        # Hard gate: any critical advisory fails the pipeline.
+      - run: npm audit --audit-level=critical
+        # Visibility: report high advisories without blocking. Several are
+        # transitive (NestJS/multer/drizzle) and only fixable via major bumps;
+        # tracked separately rather than left silently passing.
+      - name: Report high-severity advisories (non-blocking)
+        run: npm audit --audit-level=high
         continue-on-error: true

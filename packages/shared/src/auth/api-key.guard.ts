@@ -16,10 +16,18 @@ export class ApiKeyGuard implements CanActivate {
 
 	constructor() {
 		this.expectedKey = process.env.API_KEY ?? null;
+
+		// Fail closed: refusing to boot is safer than silently serving operator
+		// endpoints unauthenticated in production.
+		if (!this.expectedKey && process.env.NODE_ENV === "production") {
+			throw new Error(
+				"API_KEY is required in production — operator endpoints must not be unauthenticated.",
+			);
+		}
 	}
 
 	canActivate(context: ExecutionContext): boolean {
-		// If no API key configured, skip auth (MVP mode)
+		// In non-production environments an unset API_KEY skips auth (MVP/dev mode).
 		if (!this.expectedKey) return true;
 
 		const request = context.switchToHttp().getRequest();

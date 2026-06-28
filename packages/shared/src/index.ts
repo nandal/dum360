@@ -18,3 +18,6 @@ export * from "./exceptions";
 
 // ─── Constants ──────────────────────────────────────────────────────────
 export * from "./constants";
+
+// ─── Config ─────────────────────────────────────────────────────────────
+export * from "./config/env";

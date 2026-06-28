@@ -35,7 +35,20 @@ export const DB_SCHEMAS = {
 } as const;
 
 // ─── RegEx Patterns ─────────────────────────────────────────────────────
+// Reject leading hyphens (which `git`/`gh` would parse as options) and `..`
+// path-traversal sequences. owner/repo and branch names are interpolated into
+// git commands, so they must never resemble flags or escape the workspace.
 export const PATTERNS = {
-	REPOSITORY: /^[\w.-]+\/[\w.-]+$/,
-	BRANCH: /^[\w./-]+$/,
+	REPOSITORY: /^(?!-)[\w.-]+\/(?!-)[\w.-]+$/,
+	BRANCH: /^(?!-)[\w./-]+$/,
 } as const;
+
+/** True when a value is a safe owner/repo slug (no flags, no traversal). */
+export function isValidRepository(value: string): boolean {
+	return PATTERNS.REPOSITORY.test(value) && !value.includes("..");
+}
+
+/** True when a value is a safe git branch/ref (no flags, no traversal). */
+export function isValidBranch(value: string): boolean {
+	return PATTERNS.BRANCH.test(value) && !value.includes("..");
+}

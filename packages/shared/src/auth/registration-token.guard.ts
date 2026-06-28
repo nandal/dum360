@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import {
 	Injectable,
 	type CanActivate,
@@ -41,10 +42,19 @@ export class RegistrationTokenGuard implements CanActivate {
 			throw new UnauthorizedException("Registration not configured");
 		}
 
-		if (token !== this.expectedToken) {
+		if (!this.tokensMatch(token, this.expectedToken)) {
 			throw new UnauthorizedException("Invalid registration token");
 		}
 
 		return true;
+	}
+
+	/** Constant-time comparison to avoid leaking the token via timing. */
+	private tokensMatch(provided: string, expected: string): boolean {
+		const a = Buffer.from(provided);
+		const b = Buffer.from(expected);
+		// timingSafeEqual requires equal-length buffers; length mismatch ⇒ no match.
+		if (a.length !== b.length) return false;
+		return timingSafeEqual(a, b);
 	}
 }

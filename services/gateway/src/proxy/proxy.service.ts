@@ -28,7 +28,17 @@ export class ProxyService {
 		service: keyof typeof SERVICE_PORTS,
 		req: ProxyRequest,
 	): Promise<T> {
-		const url = new URL(req.path, this.baseUrl(service));
+		const base = this.baseUrl(service);
+		// Treat req.path strictly as a path on the trusted base. Joining a path
+		// that is actually an absolute URL (e.g. "http://evil/…" or "//evil/…")
+		// would let it hijack the origin, so pin it and reject any drift (SSRF).
+		const url = new URL(req.path.replace(/^\/+/, "/"), base);
+		if (url.origin !== new URL(base).origin) {
+			throw new HttpException(
+				{ error: "Bad Request", message: "Invalid proxy path" },
+				HttpStatus.BAD_REQUEST,
+			);
+		}
 		if (req.query) {
 			Object.entries(req.query).forEach(([k, v]) => url.searchParams.set(k, v));
 		}

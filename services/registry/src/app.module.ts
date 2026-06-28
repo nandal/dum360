@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { DrizzleModule } from "@dum360/shared";
+import { DrizzleModule, getJwtSecret } from "@dum360/shared";
 import { BullModule } from "@nestjs/bullmq";
 import { JwtModule } from "@nestjs/jwt";
 import { NodesModule } from "./nodes/nodes.module";
@@ -20,7 +20,7 @@ import { QUEUE_NAMES } from "@dum360/shared";
 
 		// JWT (for signing node tokens)
 		JwtModule.register({
-			secret: process.env.JWT_SECRET ?? "dev-secret-change-me",
+			secret: getJwtSecret(),
 			signOptions: { expiresIn: "168h" },
 		}),
 
