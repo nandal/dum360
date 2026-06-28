@@ -1,0 +1,40 @@
+{
+  "name": "@dum360/gateway",
+  "version": "0.1.0",
+  "description": "DUM360 API Gateway — auth, routing, rate limiting, WebSocket upgrade",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "start:dev": "tsx watch src/main.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@dum360/shared": "workspace:*",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/platform-socket.io": "^11.0.0",
+    "@nestjs/swagger": "^11.0.0",
+    "@nestjs/websockets": "^11.0.0",
+    "compression": "^1.7.0",
+    "express": "^5.0.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0",
+    "socket.io": "^4.8.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/passport-jwt": "^4.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
