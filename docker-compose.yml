@@ -1,0 +1,205 @@
+version: "3.9"
+
+# ─── DUM360 — Distributed AI Execution Mesh ──────────────────────────────
+#  docker compose up  →  PostgreSQL, Redis, Elasticsearch, Kibana,
+#                         API Gateway, Registry, Orchestration, Log Service
+
+services:
+  # ── Infrastructure ────────────────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: dum360
+      POSTGRES_DB: dum360
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dum360 -d dum360"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  elasticsearch:
+    image: elasticsearch:8.15.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health | grep -v red"]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+
+  kibana:
+    image: kibana:8.15.0
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  # ── DUM360 Services ───────────────────────────────────────────────────
+
+  gateway:
+    build:
+      context: ./services/gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
+      CORS_ORIGIN: "*"
+      REGISTRY_HOST: registry
+      ORCHESTRATION_HOST: orchestration
+      LOG_HOST: log
+    secrets:
+      - jwt_secret
+      - registration_token
+    depends_on:
+      registry:
+        condition: service_healthy
+      orchestration:
+        condition: service_healthy
+      log:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health | grep -q healthy"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  registry:
+    build:
+      context: ./services/registry
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: "8081"
+      DATABASE_URL: postgres://dumuser:dumpass@postgres:5432/dum360
+      DATABASE_PASSWORD_FILE: /run/secrets/postgres_password
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      REGISTRATION_TOKEN_FILE: /run/secrets/registration_token
+      NODE_ENV: development
+    secrets:
+      - postgres_password
+      - jwt_secret
+      - registration_token
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/health | grep -q healthy"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  orchestration:
+    build:
+      context: ./services/orchestration
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      PORT: "8082"
+      DATABASE_URL: postgres://dumuser:dumpass@postgres:5432/dum360
+      DATABASE_PASSWORD_FILE: /run/secrets/postgres_password
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      GITHUB_APP_ID: ${GITHUB_APP_ID:-}
+      NODE_ENV: development
+    secrets:
+      - postgres_password
+      - jwt_secret
+      - github_app_private_key
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/health | grep -q healthy"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  log:
+    build:
+      context: ./services/log
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      PORT: "8083"
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      CORS_ORIGIN: "*"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/health | grep -q healthy"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+# ─── Secrets ─────────────────────────────────────────────────────────────
+#
+#  Create these files before running:
+#    mkdir -p secrets
+#    echo "dumpass"       > secrets/postgres_password.txt
+#    openssl rand -hex 32 > secrets/jwt_secret.txt
+#    openssl rand -hex 32 > secrets/registration_token.txt
+#    cp /path/to/github-app.pem secrets/github_app_private_key.pem
+#
+#  Never commit the secrets/ directory.
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+  jwt_secret:
+    file: ./secrets/jwt_secret.txt
+  registration_token:
+    file: ./secrets/registration_token.txt
+  github_app_private_key:
+    file: ./secrets/github_app_private_key.pem
+
+# ─── Volumes ─────────────────────────────────────────────────────────────
+
+volumes:
+  pgdata:
+  redisdata:
+  esdata:

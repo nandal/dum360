@@ -8,3 +8,7 @@
 .firebase/
 .awareness/
 .supervisor/
+
+# Docker secrets — NEVER commit real values
+secrets/*
+!secrets/.gitkeep
