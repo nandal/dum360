@@ -46,7 +46,11 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health | grep -v red"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -sf http://localhost:9200/_cluster/health | grep -v red",
+        ]
       interval: 10s
       timeout: 5s
       retries: 8
@@ -85,7 +89,11 @@ services:
       log:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8080/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -95,8 +103,10 @@ services:
     build:
       context: .
       dockerfile: services/registry/Dockerfile
-    ports:
-      - "8081:8081"
+    # Internal service — reachable only via the gateway on the compose network.
+    # Not published to the host (the gateway is the sole authenticated entry point).
+    expose:
+      - "8081"
     environment:
       PORT: "8081"
       DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
@@ -111,7 +121,11 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8081/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -121,8 +135,11 @@ services:
     build:
       context: .
       dockerfile: services/orchestration/Dockerfile
-    ports:
-      - "8082:8082"
+    # Internal service — not published to the host. The node-facing /tasks/next
+    # endpoint trusts x-node-id, which the gateway sets from the verified JWT;
+    # keeping this off the host prevents direct, unauthenticated impersonation.
+    expose:
+      - "8082"
     environment:
       PORT: "8082"
       DATABASE_URL: postgres://dum360:dum360@postgres:5432/dum360
@@ -136,7 +153,11 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8082/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -146,8 +167,9 @@ services:
     build:
       context: .
       dockerfile: services/log/Dockerfile
-    ports:
-      - "8083:8083"
+    # Internal service — reachable only via the gateway on the compose network.
+    expose:
+      - "8083"
     environment:
       PORT: "8083"
       ELASTICSEARCH_URL: http://elasticsearch:9200
@@ -156,7 +178,11 @@ services:
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8083/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -173,8 +199,14 @@ services:
       NODE_NAME: node-1
       REGISTRATION_TOKEN: test-token-please-change
       AI_PROVIDER: claude
+      AI_API_KEY: ${AI_API_KEY:-}
     ports:
       - "9091:9090"
+    # Docker executor needs a daemon. MVP mounts the host socket — note this
+    # gives the node broad host privileges (sibling containers). DinD is a
+    # hardening follow-up.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       gateway:
         condition: service_healthy
@@ -188,8 +220,11 @@ services:
       NODE_NAME: node-2
       REGISTRATION_TOKEN: test-token-please-change
       AI_PROVIDER: claude
+      AI_API_KEY: ${AI_API_KEY:-}
     ports:
       - "9092:9090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       gateway:
         condition: service_healthy

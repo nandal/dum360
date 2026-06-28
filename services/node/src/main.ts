@@ -15,6 +15,7 @@ import { ServerClient } from "./server-client";
 import { HeartbeatLoop } from "./heartbeat";
 import { TaskPoller } from "./poller";
 import { GitHubExecutor } from "./executors/github.executor";
+import { DockerExecutor } from "./executors/docker.executor";
 import { startLocalApi } from "./api/local-api";
 import { detectCapabilities } from "./capabilities";
 
@@ -65,6 +66,13 @@ async function main(): Promise<void> {
 		new GitHubExecutor({
 			workDir: config.workDir,
 			aiProvider: config.aiProvider,
+		}),
+		new DockerExecutor({
+			workDir: config.workDir,
+			aiProvider: config.aiProvider,
+			aiApiKey: config.aiApiKey,
+			memory: config.dockerMemory,
+			cpus: config.dockerCpus,
 		}),
 	];
 

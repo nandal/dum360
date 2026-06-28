@@ -1,6 +1,7 @@
 import {
-  Controller, Get, Post, Patch, Delete, Body, Param, Query, Headers, HttpCode, HttpStatus,
+  Controller, Get, Post, Patch, Delete, Body, Param, Query, Headers, Res, HttpCode, HttpStatus,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import type { CreateTaskRequest, TaskResultRequest, TaskListQuery } from '@dum360/shared';
 import { TasksService } from './tasks.service';
@@ -68,8 +69,21 @@ export class TasksController {
   }
 
   @Get('tasks/next')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Poll for next assigned task (node-facing)' })
-  async pollNextTask() {
-    return null; // Actual assignment happens via scheduler push
+  async pollNextTask(
+    @Headers('x-node-id') nodeId: string | undefined,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    if (!nodeId) {
+      res.status(HttpStatus.NO_CONTENT);
+      return undefined;
+    }
+    const payload = await this.tasksService.getNextTaskForNode(nodeId);
+    if (!payload) {
+      res.status(HttpStatus.NO_CONTENT);
+      return undefined;
+    }
+    return payload;
   }
 }

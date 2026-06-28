@@ -162,6 +162,50 @@ describe("createTaskRequestSchema", () => {
 			expect(result.data.priority).toBe("normal");
 		}
 	});
+
+	// ── Docker executor ──────────────────────────────────────────────────
+	it("accepts a docker task with an image", () => {
+		const result = createTaskRequestSchema.safeParse({
+			...validCreateTaskRequest,
+			executor: "docker",
+			image: "dum360/agent:latest",
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it("rejects a docker task without an image", () => {
+		const { ...rest } = validCreateTaskRequest;
+		const result = createTaskRequestSchema.safeParse({
+			...rest,
+			executor: "docker",
+		});
+		expect(result.success).toBe(false);
+		expect(result.error?.issues[0].path).toContain("image");
+	});
+
+	it("rejects a flag-like (injection) image reference", () => {
+		const result = createTaskRequestSchema.safeParse({
+			...validCreateTaskRequest,
+			executor: "docker",
+			image: "--privileged",
+		});
+		expect(result.success).toBe(false);
+	});
+
+	it("accepts an optional registry credentials block for docker", () => {
+		const result = createTaskRequestSchema.safeParse({
+			...validCreateTaskRequest,
+			executor: "docker",
+			image: "private.registry.io/org/agent:1.2.3",
+			registryCredentials: { username: "u", password: "p" },
+		});
+		expect(result.success).toBe(true);
+	});
+
+	it("still accepts a github task with no image", () => {
+		const result = createTaskRequestSchema.safeParse(validCreateTaskRequest);
+		expect(result.success).toBe(true);
+	});
 });
 
 // ─── Heartbeat Schema ───────────────────────────────────────────────────

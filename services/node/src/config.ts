@@ -18,6 +18,15 @@ export interface NodeConfig {
 	/** AI provider to use for task execution */
 	aiProvider: string;
 
+	/** AI provider API key, injected into the execution container. */
+	aiApiKey: string;
+
+	/** Memory limit for the docker executor container (e.g. "2g"). */
+	dockerMemory: string;
+
+	/** CPU limit for the docker executor container (e.g. "2"). */
+	dockerCpus: string;
+
 	/** Poll interval in seconds */
 	pollInterval: number;
 
@@ -41,6 +50,9 @@ export function loadConfig(): NodeConfig {
 		version: process.env.NODE_VERSION ?? "0.1.0",
 		registrationToken: process.env.REGISTRATION_TOKEN ?? "",
 		aiProvider: process.env.AI_PROVIDER ?? "claude",
+		aiApiKey: process.env.AI_API_KEY ?? "",
+		dockerMemory: process.env.DOCKER_MEMORY ?? "2g",
+		dockerCpus: process.env.DOCKER_CPUS ?? "2",
 		pollInterval: parseInt(process.env.POLL_INTERVAL ?? "5", 10),
 		heartbeatInterval: parseInt(process.env.HEARTBEAT_INTERVAL ?? "15", 10),
 		maxConcurrentTasks: parseInt(process.env.MAX_CONCURRENT_TASKS ?? "1", 10),

@@ -26,7 +26,10 @@ export const taskPriorityEnum = orchestrationSchema.enum("task_priority", [
 	"critical",
 ]);
 
-export const executorEnum = orchestrationSchema.enum("executor", ["github"]);
+export const executorEnum = orchestrationSchema.enum("executor", [
+	"github",
+	"docker",
+]);
 
 export const aiProviderEnum = orchestrationSchema.enum("ai_provider", [
 	"claude",
@@ -47,6 +50,10 @@ export const tasks = orchestrationSchema.table(
 		issueBody: text("issue_body"),
 		instructions: text("instructions").notNull(),
 		aiProvider: aiProviderEnum("ai_provider").notNull(),
+		// Docker executor: image ref + optional private-registry credentials.
+		// NOTE: credentials stored as-is for MVP; encryption at rest is a follow-up.
+		image: varchar("image", { length: 256 }),
+		registryCredentials: jsonb("registry_credentials"),
 		timeoutSeconds: integer("timeout_seconds").notNull().default(3600),
 		priority: taskPriorityEnum("priority").notNull().default("normal"),
 		nodeId: uuid("node_id"),
