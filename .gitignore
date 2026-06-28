@@ -1,5 +1,8 @@
-# Claude Code local (personal) settings — keep out of version control
-.claude/settings.local.json
+# Claude Code local settings — keep out of version control
+.claude/
+
+# Pi coding agent local state
+.pi/
 
 # Firebase CLI local deploy cache
 .firebase/
