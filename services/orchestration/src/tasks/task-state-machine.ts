@@ -10,6 +10,7 @@ import type { TaskStatus, TaskArtifacts, Task, TaskDetail } from '@dum360/shared
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../database/schema';
 import { toTask, toStateTransition } from './task-mapper';
+import { GitHubTokenService } from '../github/github-token.service';
 
 /** Valid state transitions — enforced in application layer. */
 export const VALID_TRANSITIONS: Record<TaskStatus, TaskStatus[]> = {
@@ -27,6 +28,7 @@ export class TaskStateMachine {
 
   constructor(
     @Inject(DRIZZLE_DB) private db: PostgresJsDatabase<typeof schema>,
+    private readonly gitHubToken: GitHubTokenService,
   ) {}
 
   /** Transition a task to a new status with validation. */
@@ -54,12 +56,21 @@ export class TaskStateMachine {
     }
 
     const now = new Date();
+    const isTerminal = ['completed', 'failed', 'cancelled'].includes(toStatus);
     const updates: Partial<schema.TaskInsert> = { status: toStatus };
 
     if (toStatus === 'running') updates.startedAt = now;
-    if (['completed', 'failed', 'cancelled'].includes(toStatus)) updates.completedAt = now;
+    if (isTerminal) updates.completedAt = now;
     if (artifacts) updates.artifacts = artifacts as Record<string, unknown>;
     if (errorMessage) updates.errorMessage = errorMessage;
+
+    // Revoke the per-task GitHub token the moment the task ends — don't wait for
+    // its TTL. Clear it from the row so a stale token isn't left at rest.
+    if (isTerminal && task.repoToken) {
+      await this.gitHubToken.revoke(task.repoToken);
+      updates.repoToken = null;
+      updates.tokenExpiresAt = null;
+    }
 
     await this.db.update(schema.tasks).set(updates).where(eq(schema.tasks.id, taskId));
     await this.recordTransition(taskId, fromStatus, toStatus, reason);
