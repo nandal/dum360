@@ -1,183 +1,672 @@
-This Product Requirement Document (PRD) takes your original master-slave filesystems design and published research concepts and scales them into a localized, national infrastructure platform.
+# DUM360 MVP — Product Requirements Document
 
-By partnering exclusively with **domestic Indian Cloud Providers and Data Centers** (such as E2E Networks, CtrlS, Yotta, or National Informatics Centre (NIC) public sector clouds), you solve data sovereignty laws (like India's Digital Personal Data Protection Act) right out of the gate. Sensitive government data and national orchestration metadata never leave Indian soil.
-
----
-
-# Product Requirement Document (PRD)
-
-## Project: DUM360 (Distributed Unified Mesh 360)
-
-**Document Version:** 1.0
-
-**Target Region:** India (Sovereign Infrastructure Only)
-
-**Authors:** Sandeep Nandal
+**Version:** MVP v0.1
+**Codename:** Distributed AI Execution Mesh
+**Status:** Draft
 
 ---
 
-## 1. Executive Summary & Vision
+## Table of Contents
 
-### 1.1 Core Mission
-
-DUM360 is India’s first decentralized, citizen-powered, eco-friendly edge supercomputer network. Its founding thesis is simple: **at any given moment, the vast majority of the nation's computing power sits idle** — phones at night, gaming PCs after hours, university and PSU labs over evenings, weekends and vacations, enterprise and MSME workstations outside business hours, and surplus daytime solar-powered GPU rigs. DUM360 aggregates **all of this idle capacity — consumer, institutional, governmental and commercial — across the entire country** into a single massive, secure, sovereign cloud infrastructure mesh.
-
-It pools, among others: consumer electronics (smartphones, desktops, gaming laptops); university and research-institution labs (IITs, NITs, IIITs, central/state universities) interconnected over the National Knowledge Network (NKN); government and PSU compute labs and data centres; private enterprise, MSME and startup workstations and servers; and specialized clean-energy setups — solar-grid GPU rigs in regions like Rajasthan and Gujarat, plus emerging offshore, **seawater-cooled floating rigs** powered by **tidal, wave and offshore-solar** energy along India's long coastline.
-
-### 1.2 Dual-Use Mandate
-
-1. **Commercial Peace-Time Mode:** Provides hyper-affordable, localized AI training, LLM inference, and video rendering services to Indian startups and academics, paying everyday contributors direct micro-incentives via UPI.
-2. **Sovereign Emergency Mode ("Rashtra Seva Mode"):** Instantly mobilizes the collective multi-ExaFLOP pool of national compute to solve public-good crises—such as disaster climate modeling, bio-defense sequencing, or cryptographic cybersecurity defense or even war like situations.
-
-### 1.3 Infrastructure Constraint
-
-**100% Indian Cloud/Data Center Hosting.** The core cluster management control planes, metadata databases, and secure relay proxies will run exclusively on domestic Indian cloud providers and data centers. No data or orchestration protocols will cross geographic borders.
-
-### 1.4 The National Idle-Compute Thesis
-
-DUM360 treats **every powered-on, under-utilized processor in India as latent national infrastructure.** Rather than relying on new data centres alone, it harvests capacity that already exists and is already paid for:
-
-| Source | Typical idle window | Why it matters |
-| --- | --- | --- |
-| Consumer phones & PCs | Nights / off-hours | Largest device count; burst throughput |
-| University & research labs (IIT/NIT/IIIT) | Evenings, weekends, vacations | LAN-clustered + NKN-linked → real parallelism |
-| Government & PSU labs / data centres | Off-hours, spare capacity | High trust, sovereign by default |
-| Enterprise / MSME / startup machines | Outside business hours | Wired, powered, predictable |
-| Solar GPU rigs (GJ / RJ) | Daytime surplus generation | Cheapest, greenest cycles |
-
-The goal is a **single national fabric** in which any idle cycle, anywhere in the country, can be safely and verifiably put to productive use — and instantly reclaimed by its owner.
+1. [Vision](#vision)
+2. [Goals & Non-Goals](#goals--non-goals)
+3. [Core Architecture](#core-architecture)
+4. [System Components](#system-components)
+5. [Data Models](#data-models)
+6. [API Specification](#api-specification)
+7. [Execution Pipeline](#execution-pipeline)
+8. [Scheduler](#scheduler)
+9. [Security Model](#security-model)
+10. [Deployment](#deployment)
+11. [Dashboard](#dashboard)
+12. [MVP Success Criteria](#mvp-success-criteria)
+13. [Future Extensions](#future-extensions)
 
 ---
 
-## 2. Personas & Stakeholders
+## Vision
 
-| Persona | Description | Primary Goal / Motivation |
-| --- | --- | --- |
-| **The Citizen Provider** | Everyday consumer with a smartphone, PC, or gaming laptop. | Earn passive income via UPI by enabling their idle device during specified off-hours (e.g., at night). |
-| **The Solar Arbitrageur** | Operators/investors in solar-heavy states (GJ/RJ) with custom GPU hardware. | Monetize zero-cost surplus daytime solar energy by renting out computing cycles. |
-| **The Institutional Provider** | Universities & research institutions (IITs, NITs, IIITs, central/state universities) and their IT/admin departments. | Convert idle lab & HPC capacity (nights, weekends, vacations) into compute-grants, institutional credits or revenue-share; advance national research. |
-| **The Enterprise & MSME Provider** | Private firms, startups, MSMEs and PSUs with workstations, servers or labs idle outside business hours. | Offset IT spend by renting spare on-prem compute into a sovereign national pool. |
-| **The Enterprise/AI Client** | Indian startups, researchers, and developers. | Access massively scalable GPU/CPU compute at a fraction of standard public cloud costs. |
-| **The Sovereign Admin** | Verified Government officials / Disaster Management teams. | Trigger Emergency Mode to redirect national computing assets toward immediate crisis response. |
+> Allow any trusted computer to become an AI execution node.
+
+A user should be able to assign an AI task (starting with GitHub Issues/PRs), and DUM360 automatically selects an available node, securely executes the task, and reports the results.
+
+The MVP proves that AI work can be executed on **any connected machine** without the user caring where that machine is.
+
+This is **not** about distributed computing. It is about **remote AI task execution on trusted devices**.
 
 ---
 
-## 3. Product Architecture & Component Flow
+## Goals & Non-Goals
+
+### Goals
+
+| # | Goal |
+|---|------|
+| 1 | Demonstrate distributed execution across multiple nodes |
+| 2 | Keep architecture simple and composable |
+| 3 | Support multiple worker nodes registered simultaneously |
+| 4 | Execute real AI coding tasks on real repositories |
+| 5 | Create Pull Requests automatically from completed tasks |
+| 6 | Deployable end-to-end with `docker compose up` |
+
+### Non-Goals (MVP)
+
+- Marketplace / billing / payments
+- Multi-tenant security / RBAC
+- Wasm execution runtime
+- Distributed scheduling optimizations
+- Resource pricing / metering
+- Public node marketplace
+- P2P networking / mesh topology
+- GPU-aware scheduling
+- Mobile / browser / IoT nodes
+
+---
+
+## Core Architecture
+
+DUM360 is built around **four foundational abstractions** that scale from MVP to the full Distributed Unified Mesh vision:
 
 ```
-+------------------------------------------------------------------------+
-|                      SOVEREIGN CORE MANAGEMENT LAYER                   |
-|          (Hosted Exclusively on Indian Public/Private Clouds)          |
-|                                                                        |
-|  +-----------------------+   +-------------------+   +--------------+  |
-|  | Kubernetes Master C.P.|---|  Sovereign DB     |---|  UPI Billing |  |
-|  | (K8s Control Plane)   |   |  & Metadata Store |   |  Engine      |  |
-|  +-----------------------+   +-------------------+   +--------------+  |
-+------------------------------------+-----------------------------------+
-                                     |
-                                     | (Encrypted Virtual Private Network / Mesh)
-                                     |
-+------------------------------------+-----------------------------------+
-|                           DISTRIBUTED EDGE NODES                       |
-|                                                                        |
-|  [Daytime Solar GPU Grid]    [Overnight Gaming PCs]   [Consumer Phones]|
-|     (Gujarat / Rajasthan)       (K3s Worker Agent)       (WASM Client) |
-+------------------------------------------------------------------------+
-
+                    DUM360
+                      │
+           ┌──────────┼──────────┐
+         Tasks     Executors    Nodes
+                      │
+                Capabilities
 ```
 
-### 3.1 The Compute Supply Tiers
+| Abstraction | Question It Answers | Role |
+|-------------|-------------------|------|
+| **Task** | *What* needs to be done? | Unit of work — generic payload with requirements |
+| **Executor** | *How* to perform that class of work? | Execution strategy — understands a task protocol |
+| **Node** | *Where* does it run? | Machine that polls for work, executes, reports back |
+| **Capability** | *What* can the node provide? | Composable, typed attributes the scheduler matches against |
 
-DUM360 ingests idle capacity from every layer of the national compute stack. Each tier has a different capability, interconnect quality and trust profile, and the orchestrator schedules accordingly:
-
-| Tier | Examples | Interconnect | Best-fit workloads |
-| --- | --- | --- | --- |
-| **Institutional labs** | IITs, NITs, IIITs, central/state universities | LAN within campus + **NKN** backbone across campuses | In-cluster & cross-campus model parallelism; HPC-style jobs |
-| **Government / PSU** | Public-sector R&D labs, ministry data centres | Wired / sovereign networks | High-trust, sovereign and emergency workloads |
-| **Enterprise / MSME** | Company servers, startup & MSME workstations | Wired business broadband | Off-hours batch inference, rendering, ETL |
-| **Renewable-powered rigs** | Solar GPU grids (GJ / RJ); emerging offshore *floating, seawater-cooled* rigs on tidal / wave / offshore-solar | Wired / subsea backhaul, multi-GPU | Daytime solar + 24×7 tidal green baseload; in-rig big-model sharding |
-| **Consumer devices** | Gaming PCs, desktops, phones | Consumer broadband | Burst, request-parallel inference, light tasks |
-
-**Design principle:** use the *country-wide* mesh for **request-level parallelism (throughput)**, and confine **model-level parallelism** to LAN/NKN-connected clusters where the interconnect can sustain it.
-
-> **Green-energy roadmap (honest status):** Floating solar + seawater-cooled coastal/barge compute is *deployable today* (cf. Microsoft Project Natick's ~8× lower failure rate at sea; Nautilus's commercial water-cooled floating datacentres). **Tidal and wave** power are still **nascent in India** (best sites: Gulf of Kutch / Khambhat; wave pilots at NIOT) and are treated as a **forward-looking R&D track** — their value is *predictable 24×7 clean baseload* to complement daytime solar, not near-term capacity.
+These four concepts are the **core of DUM's architecture from day one**, even though the initial implementation only includes a single executor (GitHub) and a handful of capabilities.
 
 ---
 
-## 4. Functional Requirements
+## System Components
 
-### 4.1 Node Registration and Enrollment
+### 1. DUM360 Server (`dum360-server/`)
 
-* **FR-1.1 (Desktop/Laptop App):** Users must be able to download a lightweight installer for Windows, Linux, and macOS. The app background-installs a minimized, sandboxed Kubernetes node daemon (`K3s` or `KubeEdge`).
-* **FR-1.2 (Mobile App):** Android/iOS app must feature a lightweight execution sandbox engine using WebAssembly (WASM).
-* **FR-1.3 (Identity & Security Mapping):** All nodes must verify identity through secure, localized verification standards before fetching workloads. Devices must pass a hardware integrity check (Secure Enclave verification) to prevent rogue malicious hosts from manipulating calculation math.
+The orchestration layer. **No task execution happens here.**
 
-### 4.2 Availability Scheduling ("Pre-Informing")
+#### Responsibilities
 
-* **FR-2.1 (The Calendar Booking Switch):** Users can define recurring or one-off availability windows (e.g., Monday–Friday: 11:00 PM to 7:00 AM).
-* **FR-2.2 (Predictive Scheduling):** The central orchestration layer must read these schedules 6 hours in advance to accurately map continuous workloads to specific guaranteed uptime windows.
-* **FR-2.3 (Graceful Eviction / Draining):** 30 minutes before a user’s scheduled exit time, the central master cluster must issue a `Cordon and Drain` command. The node will stop receiving tasks, finish current active operations, upload checkpoints, and exit cleanly without causing processing lag for the user.
+| Function | Description |
+|----------|-------------|
+| Node Registration | Accept node registrations, issue JWTs |
+| Heartbeat Processing | Track node liveness and availability |
+| Capability Discovery | Store and index node capabilities |
+| Task Queue | Accept, persist, and order incoming tasks |
+| Task Scheduling | Match tasks to capable, available nodes |
+| GitHub Webhook Receiver | Ingest `@dum360` commands from GitHub |
+| Task Status Tracking | Maintain task lifecycle state machine |
+| Log Aggregation | Receive and store streaming task logs |
+| REST API | Expose CRUD operations for all entities |
+| Dashboard | Serve a real-time web UI |
 
-### 4.3 The Daytime Solar Arbitrage Mesh
+#### Tech Stack
 
-* **FR-3.1 (Solar Zone Target):** The system must support high-throughput, always-on nodes situated alongside renewable energy grids in Western India.
-* **FR-3.2 (Day/Night Cost Routing):** The orchestration algorithm must actively prioritize Solar Nodes between 10:00 AM and 4:00 PM IST due to lower environmental and power expenses, automatically swinging workloads to civilian laptops and mobile phones as night falls.
-
-### 4.4 "Rashtra Seva" (Sovereign Emergency Protocol)
-
-* **FR-4.1 (Emergency Override Switch):** A cryptographically authenticated government credential must be able to trigger "Emergency Mode" at a national level.
-* **FR-4.2 (Workload Eviction):** Upon activation, all commercial workloads across the entire mesh must immediately pause or drop to lowest priority.
-* **FR-4.3 (Mass Alert Push):** The platform must instantly notify all enrolled devices, moving their processing power straight into dedicated pipelines managed by national teams (e.g., NDMA for climate tracking, medical agencies for genetic tracking).
-
-### 4.5 Financial Clearings (UPI Integration)
-
-* **FR-5.1 (Micro-Transaction Logging):** The system must compute precise usage metrics (CPU cycle hours used, VRAM consumed, bytes processed) and map it to a rupee value.
-* **FR-5.2 (UPI Direct Payouts):** The app must allow providers to input a secure VPA (Virtual Payment Address) to withdraw earnings via instant UPI transfers directly into their Indian bank account.
-* **FR-5.3 (Institutional & Enterprise Settlement):** For non-individual providers (universities, PSUs, enterprises, MSMEs), the system must support organizational billing accounts — settling earnings as **compute-grants, platform credits, or bank/Net-banking revenue-share** rather than personal UPI — with per-department/per-lab usage reporting and electricity-cost reimbursement tracking.
-
-### 4.6 Distributed Inference Architecture
-
-DUM360 serves LLM and AI inference using a **tiered strategy that matches model size to interconnect quality**, rather than naively splitting one model across the public internet.
-
-* **FR-6.1 (Request-Parallel Serving — default):** Models that fit on a single node (e.g. 7B–34B quantized) are replicated; the orchestrator routes **whole requests to whole nodes**. This is embarrassingly parallel and scales linearly to millions of concurrent inferences nationwide — the primary, highest-throughput mode.
-* **FR-6.2 (Intra-Cluster Model Parallelism):** Genuinely large models (70B–400B+) are sharded **only within a well-connected cluster** — a campus lab over LAN, a solar GPU rig, or a PSU data centre — where tensor/pipeline parallelism has the bandwidth and microsecond latency it needs.
-* **FR-6.3 (NKN-Backed Cross-Campus Parallelism):** For models exceeding a single cluster, pipeline parallelism may span institutions **over the National Knowledge Network (NKN)** academic backbone — forming a loosely-coupled national academic grid, not a consumer-broadband mesh.
-* **FR-6.4 (Speculative Decoding):** Small models on phones/PCs draft tokens that larger cluster-hosted models verify, reducing load on scarce big-model capacity.
-* **FR-6.5 (Honest Workload Fit):** The platform targets **massively-parallel, latency-tolerant, checkpointable** workloads (batch inference, rendering, sequencing, Monte-Carlo, parameter sweeps, cryptanalysis). It explicitly does **not** claim to match centralized GPU clusters for tightly-coupled, latency-critical training across consumer-grade links. *(Precedent: Folding@home reached ~exascale FP32 throughput as a distributed network in 2020.)*
+| Component | Technology |
+|-----------|-----------|
+| Language | Go |
+| Database | PostgreSQL |
+| Message Broker / Cache | Redis |
+| API Protocol | REST + WebSocket (for live logs/status) |
+| Auth | JWT (node auth) + GitHub App token (repo access) |
 
 ---
 
-## 5. Non-Functional Requirements (NFRs)
+### 2. DUM360 Node (`dum360-node/`)
 
-### 5.1 Data Sovereignty & Hosting
+Installed on any machine. Polls the server for work.
 
-* **NFR-1.1:** Absolutely zero user operational data, processing fragments, or control plane coordination traffic may be hosted on or routed through servers physically located outside the Republic of India.
-* **NFR-1.2:** Backup infrastructures and secondary nodes must be located within separate physical zones inside India (e.g., Central Data Center in Mumbai, Secondary DR Center in Bengaluru or Delhi-NCR).
+#### Responsibilities
 
-### 5.2 Security & Privacy (Confidential Computing)
+| Function | Description |
+|----------|-------------|
+| Register | Announce presence and capabilities to server |
+| Heartbeat | Periodically report health, load, and status |
+| Advertise Capabilities | Declare resources, tools, runtimes, services, and executors |
+| Poll for Work | Fetch next pending task from server |
+| Execute Tasks | Run the assigned executor with the task payload |
+| Clone Repositories | Fetch target repos for GitHub executor tasks |
+| Invoke AI CLI | Call configurable AI tool (Codex, Claude, Gemini) |
+| Run Tests | Execute test suites and collect results |
+| Commit Changes | Create commits with AI-generated changes |
+| Push Branch | Push to remote repository |
+| Create Pull Request | Open PR via GitHub CLI / API |
+| Upload Logs | Stream execution logs back to server |
+| Return Status | Report completion/failure to server |
 
-* **NFR-2.1:** All workloads dispatched to civilian hardware must run inside an encrypted virtual container sandbox. The host user must not have access to read the RAM or view the data packets undergoing calculations on their machine.
-* **NFR-2.2:** End-to-end data traffic encryption using standard security certificates (such as TLS 1.3) must safeguard transport pipelines between individual worker components and the central sovereign data center networks.
+#### Tech Stack
 
-### 5.3 Reliability and Churn Management
-
-* **NFR-3.1:** The network must operate under a zero-trust model regarding consumer hardware uptime. Tasks distributed to standard consumer edge nodes must feature a **Deterministic Redundancy Factor ($\ge 3x$)**, meaning a calculation chunk is mirrored across multiple independent machines to prevent task failure when a user closes their device prematurely.
+| Component | Technology |
+|-----------|-----------|
+| Language | Go |
+| Git | Native `git` binary |
+| Docker | For isolated execution if needed |
+| AI CLI | Configurable: Claude Code / Codex CLI / Gemini CLI |
+| GitHub CLI | `gh` for PR creation and repo operations |
 
 ---
 
-## 6. Success Metrics & Phases
+### Executors vs. Capabilities
 
-### Phase 1: Alpha (Months 1–3)
+These are **two completely different concepts**, modeled as first-class objects.
 
-* **Goal:** Launch the alpha desktop wrapper (`K3s` based) across 1,000 developer and student machines in select Indian colleges.
-* **Target Metric:** Successfully run a split rendering or data extraction job using 100 concurrent nodes without data loss.
+#### Executor = *How to Execute*
 
-### Phase 2: Beta & Strategic Partnerships (Months 4–6)
+An executor understands a **task protocol**. It defines a class of work the node knows how to perform.
 
-* **Goal:** Partner with an established Indian cloud provider to deploy the central orchestration layer. Secure initial agreements with private solar-grid operators to attach compute nodes.
-* **Target Metric:** Reach 50,000 active nodes; run commercial AI inference workloads for Indian startups at 50% less cost than foreign hyperscalers.
+```
+Node
+  │
+  └── Executors
+        ├── GitHub Executor      (MVP)
+        ├── Docker Executor      (future)
+        ├── Wasm Executor        (future)
+        ├── Python Executor      (future)
+        ├── Flutter Executor     (future)
+        ├── Android Executor     (future)
+        └── ...
+```
 
-### Phase 3: National Scale & Mobile Launch (Months 7–12)
+**Example: GitHub Executor**
 
-* **Goal:** Launch the native mobile WebAssembly app framework on the Google Play Store; establish formal advisory lines with national disaster groups for testing emergency protocols.
-* **Target Metric:** Exceed 1 Million active nodes across the country, building a standby sovereign supercomputer ready for national service.
+```
+Input:  { repository, branch, issue, instructions, aiProvider }
+  │
+  ├── Clone repository
+  ├── Checkout branch
+  ├── Download issue context
+  ├── Invoke AI CLI with instructions
+  ├── Generate code changes
+  ├── Run tests
+  ├── Commit changes
+  ├── Push branch
+  ├── Open Pull Request
+  └── Upload logs → Done
+```
+
+**Example: Docker Executor (future)**
+
+```
+Input:  { image, command, mounts, environment }
+  │
+  ├── Pull image
+  ├── Run container
+  ├── Collect logs
+  └── Return output
+```
+
+#### Capability = *What the Node Can Provide*
+
+Capabilities are **composable, extensible, typed attributes** describing node resources and tools. They are organized into five categories:
+
+```
+Node
+  │
+  └── Capabilities
+        ├── Resources    (CPU, RAM, GPU, disk)
+        ├── Tools        (git, gh, ffmpeg, docker)
+        ├── Runtimes     (python, node, go, rust)
+        ├── Services     (codex, claude, gemini)
+        └── Executors    (github, docker, wasm — what the node *can* run)
+```
+
+**Example capability advertisement:**
+
+```yaml
+executors:
+  - id: github
+
+resources:
+  - id: cpu
+    value: 16
+  - id: ram
+    value: 64GB
+  - id: gpu
+    value: RTX4090
+
+tools:
+  - id: git
+  - id: gh
+  - id: docker
+  - id: ffmpeg
+
+runtimes:
+  - id: python
+    version: "3.13"
+  - id: node
+    version: "22"
+  - id: go
+    version: "1.25"
+  - id: rust
+    version: stable
+
+services:
+  - id: codex
+  - id: claude
+  - id: gemini
+```
+
+Each capability is a first-class object:
+
+```json
+{ "id": "python", "version": "3.13" }
+{ "id": "ram", "value": "64GB" }
+{ "id": "cuda" }
+{ "id": "git" }
+```
+
+This makes capabilities **composable and extensible** — new capabilities can be added without changing the schema or scheduler.
+
+---
+
+### GitHub Workflow (MVP Executor)
+
+```
+User comments "@dum360 fix this issue"
+on a GitHub Issue
+        │
+        ▼
+GitHub Webhook → DUM360 Server
+        │
+        ▼
+Server creates Task with executor: "github"
+        │
+        ▼
+Scheduler selects a Node with matching capabilities
+        │
+        ▼
+Node polls → downloads Task
+        │
+        ▼
+Node executes GitHub Executor pipeline:
+  Clone → AI → Tests → Commit → Push → PR
+        │
+        ▼
+Node uploads results → Server
+        │
+        ▼
+Server comments on GitHub Issue with PR link
+```
+
+---
+
+## Data Models
+
+### Task
+
+```json
+{
+  "taskId": "uuid",
+  "executor": "github",
+  "status": "queued | running | completed | failed | cancelled",
+  "repository": "owner/repo",
+  "branch": "main",
+  "issue": {
+    "number": 42,
+    "title": "Fix authentication bug"
+  },
+  "instructions": "@dum360 fix this issue. Keep API compatible. Run tests. Open PR.",
+  "aiProvider": "claude",
+  "requirements": {
+    "capabilities": [
+      { "id": "git" },
+      { "id": "claude" },
+      { "id": "docker" },
+      { "id": "gh" }
+    ]
+  },
+  "timeout": 3600,
+  "nodeId": "uuid | null",
+  "artifacts": {
+    "branch": "dum360/fix-auth-bug",
+    "prUrl": "https://github.com/owner/repo/pull/99"
+  },
+  "logs": [],
+  "createdAt": "ISO8601",
+  "startedAt": "ISO8601 | null",
+  "completedAt": "ISO8601 | null"
+}
+```
+
+### Node
+
+```json
+{
+  "nodeId": "uuid",
+  "name": "macbook-pro-m2",
+  "status": "online | offline | busy",
+  "version": "0.1.0",
+  "capabilities": {
+    "executors": [{ "id": "github" }],
+    "resources": [
+      { "id": "cpu", "value": 16 },
+      { "id": "ram", "value": "64GB" }
+    ],
+    "tools": [
+      { "id": "git" },
+      { "id": "gh" },
+      { "id": "docker" }
+    ],
+    "runtimes": [
+      { "id": "go", "version": "1.25" },
+      { "id": "python", "version": "3.13" }
+    ],
+    "services": [
+      { "id": "claude" },
+      { "id": "codex" }
+    ]
+  },
+  "currentTask": "uuid | null",
+  "lastHeartbeat": "ISO8601",
+  "registeredAt": "ISO8601"
+}
+```
+
+### Heartbeat
+
+```json
+{
+  "nodeId": "uuid",
+  "status": "online",
+  "resources": {
+    "cpu": { "used": 30, "total": 16 },
+    "ram": { "used": "24GB", "total": "64GB" }
+  },
+  "runningTasks": 1,
+  "version": "0.1.0",
+  "capabilities": { "..." }
+}
+```
+
+---
+
+## API Specification
+
+### Server REST API
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| `POST` | `/register` | Register a new node | None (initial) |
+| `POST` | `/heartbeat` | Node heartbeat + status update | JWT |
+| `GET` | `/tasks/next` | Node polls for next assigned task | JWT |
+| `PATCH` | `/tasks/:id/result` | Node reports task completion | JWT |
+| `POST` | `/tasks/:id/log` | Node streams log entry | JWT |
+| `GET` | `/nodes` | List all registered nodes | — |
+| `GET` | `/nodes/:id` | Get node detail + capabilities | — |
+| `GET` | `/tasks` | List all tasks | — |
+| `GET` | `/tasks/:id` | Get task detail + logs | — |
+| `POST` | `/webhook/github` | GitHub webhook receiver | HMAC |
+
+### Node Registration Flow
+
+```
+Node starts
+    │
+    ▼
+POST /register
+  Payload: { name, version, capabilities }
+    │
+    ▼
+Server returns:
+  { nodeId, jwt, heartbeatInterval: 15, pollInterval: 5 }
+    │
+    ▼
+Node becomes "online"
+    │
+    ▼
+Heartbeat every 15s
+  Payload: { nodeId, status, resources, runningTasks, version, capabilities }
+    │
+    ▼
+Server updates availability
+```
+
+---
+
+## Execution Pipeline
+
+### GitHub Executor — Step by Step
+
+```
+  1. Receive Task
+         │
+  2. Clone Repository       → git clone <repo>
+         │
+  3. Checkout Branch        → git checkout <base-branch>
+         │
+  4. Create Work Branch     → git checkout -b dum360/<task-id>
+         │
+  5. Download Context       → Fetch issue body, comments, repo structure
+         │
+  6. Invoke AI              → <ai-cli> "Fix this issue: <instructions>"
+         │                       Provide repo context + issue details
+         │
+  7. Generate Changes       → AI produces code diff
+         │
+  8. Run Tests              → Execute test suite, collect results
+         │                       ↳ Tests fail? → Feed back to AI → Loop
+         │
+  9. Commit Changes         → git add && git commit
+         │
+ 10. Push Branch            → git push origin dum360/<task-id>
+         │
+ 11. Create Pull Request    → gh pr create
+         │
+ 12. Upload Logs            → Stream full execution log to server
+         │
+ 13. Report Done            → PATCH /tasks/:id/result { status, artifacts }
+```
+
+---
+
+## Scheduler
+
+The MVP scheduler is intentionally **simple**. No complex optimization.
+
+### Algorithm
+
+```
+1. Filter nodes
+   ├── Status = "online"
+   └── Current Task = null (idle)
+
+2. Filter by capability match
+   └── Node has ALL required capabilities for the task
+
+3. Sort descending
+   └── By RAM (highest first)
+
+4. Take first match
+   └── Assign task to that node
+```
+
+### Capability Matching (Future)
+
+The scheduler asks:
+
+> *"Can you satisfy the requirements of this task?"*
+
+Not:
+
+> *"Can you execute GitHub?"*
+
+```yaml
+Task Requirements:
+  capabilities:
+    - id: git
+    - id: claude
+    - id: docker
+    - id: gh
+
+Node matches if:
+  ∀ required ∩ node.available == required
+```
+
+---
+
+## Security Model
+
+| Concern | Approach |
+|---------|----------|
+| **Node Authentication** | JWT issued at registration, verified on every request |
+| **Repository Access** | GitHub App installation token — scoped, revocable |
+| **Network Direction** | Nodes always initiate connections to server — no inbound to nodes |
+| **No Remote Shell** | Nodes execute predefined executor pipelines only — no arbitrary commands |
+| **Approved Task Types** | Server whitelists executable task types |
+| **Task Isolation** | Each task runs in its own worktree / clone |
+| **Secrets** | GitHub tokens never leave the node; server never sees repo credentials |
+
+---
+
+## Deployment
+
+### docker-compose.yaml (root level)
+
+```yaml
+version: "3.9"
+
+services:
+  server:
+    build: ./dum360-server
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgres://dum360:dum360@postgres:5432/dum360
+      - REDIS_URL=redis://redis:6379
+      - GITHUB_APP_ID=
+      - GITHUB_APP_PRIVATE_KEY=
+      - JWT_SECRET=
+    depends_on:
+      - postgres
+      - redis
+
+  node:
+    build: ./dum360-node
+    environment:
+      - SERVER_URL=http://server:8080
+      - NODE_NAME=local-node
+      - AI_PROVIDER=claude
+      - GITHUB_TOKEN=
+    depends_on:
+      - server
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=dum360
+      - POSTGRES_PASSWORD=dum360
+      - POSTGRES_DB=dum360
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  pgdata:
+```
+
+### Running
+
+```bash
+docker compose up
+```
+
+Starts: **Server**, **PostgreSQL**, **Redis**, **One Local Node**
+
+Additional nodes simply point `SERVER_URL` to the server and run independently.
+
+---
+
+## Dashboard
+
+### Pages
+
+| Page | Content |
+|------|---------|
+| **Nodes** | Online / Offline / Busy status, last seen, capabilities grid |
+| **Tasks** | Queued, Running, Completed, Failed, Cancelled — with filters |
+| **Task Detail** | Full lifecycle timeline, live streaming logs, artifacts (PR link) |
+| **Logs** | Per-task live log viewer via WebSocket |
+
+---
+
+## MVP Success Criteria
+
+| # | Criterion | Verification |
+|---|-----------|-------------|
+| 1 | Two nodes connected simultaneously | Dashboard shows both online |
+| 2 | User comments `@dum360` on a GitHub Issue | Webhook received by server |
+| 3 | Server creates a task from the webhook | Task appears in queue |
+| 4 | Scheduler allocates the task to an available node | Task assigned, node shows busy |
+| 5 | Node clones the target repository | Log shows clone step complete |
+| 6 | AI completes the requested work | Code diff generated |
+| 7 | Tests pass | Test output logged, all green |
+| 8 | Pull Request created on the repository | PR URL in task artifacts |
+| 9 | GitHub Issue updated with execution results | Comment posted with PR link + summary |
+
+> ✅ **All 9 criteria met = MVP proven.** This demonstrates that DUM360 can transform any trusted machine into a remotely orchestrated AI execution node.
+
+---
+
+## Future Extensions
+
+Post-MVP, the architecture naturally extends to:
+
+| Extension | How It Fits |
+|-----------|-------------|
+| **Wasm Executor** | New executor — server unchanged |
+| **Docker Executor** | New executor — server unchanged |
+| **GPU Scheduling** | New capability: `{ id: "cuda", memory: "24GB" }` |
+| **Capability-Based Scheduler** | Match on richer capability requirements |
+| **Marketplace** | Nodes publish capabilities + price; users bid |
+| **P2P Networking** | Nodes discover each other via server → mesh |
+| **AI Agent Graphs** | Tasks become DAGs of sub-tasks across executors |
+| **Mobile / Browser / IoT Nodes** | Lightweight node implementations |
+| **Enterprise Deployments** | Multi-tenancy, RBAC, audit logging |
+| **Custom AI Agents** | Executor = custom agent protocol |
+
+---
+
+## Repository Structure
+
+```
+dum360/
+├── dum360-server/          # Orchestration server (Go)
+│   ├── cmd/
+│   ├── internal/
+│   │   ├── api/
+│   │   ├── scheduler/
+│   │   ├── models/
+│   │   └── webhook/
+│   ├── Dockerfile
+│   └── go.mod
+│
+├── dum360-node/            # Worker node (Go)
+│   ├── cmd/
+│   ├── internal/
+│   │   ├── executors/
+│   │   │   └── github/
+│   │   ├── capabilities/
+│   │   ├── heartbeat/
+│   │   └── poller/
+│   ├── Dockerfile
+│   └── go.mod
+│
+├── docker-compose.yml      # Full stack deployment
+├── docs/
+│   └── PRD.md              # This document
+└── ...
+```
+
+---
+
+*This PRD captures the design discussion and architectural decisions for DUM360 MVP v0.1. The four core abstractions — Tasks, Executors, Nodes, Capabilities — form the foundation that scales from a simple remote AI executor to the full Distributed Unified Mesh vision.*
