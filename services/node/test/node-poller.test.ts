@@ -4,7 +4,7 @@
  * Tests the node's task polling concurrency control and heartbeat
  * reporting (intervals, resource utilization, graceful shutdown).
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 describe("Heartbeat Loop", () => {
 	it("sends heartbeat at configured interval", () => {
 		const interval = 15; // seconds
