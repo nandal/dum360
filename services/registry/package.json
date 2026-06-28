@@ -1,0 +1,35 @@
+{
+  "name": "@dum360/registry",
+  "version": "0.1.0",
+  "description": "DUM360 Registry Service — node registration, heartbeat, capability attestation, liveness",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "start:dev": "tsx watch src/main.ts",
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "@dum360/shared": "workspace:*",
+    "@nestjs/bullmq": "^11.0.0",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/swagger": "^11.0.0",
+    "bullmq": "^5.0.0",
+    "drizzle-orm": "^0.40.0",
+    "postgres": "^3.4.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "drizzle-kit": "^0.30.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
