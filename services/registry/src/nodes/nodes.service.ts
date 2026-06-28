@@ -14,6 +14,7 @@ import {
   type RegisterNodeResponse,
   type DeclaredCapability,
   type FailedAttestation,
+  type Node,
   type NodeDetail,
 } from '@dum360/shared';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
@@ -154,8 +155,8 @@ export class NodesService {
       .where(conditions.length ? and(...conditions) : undefined)
       .orderBy(desc(schema.nodes.registeredAt));
 
-    const nodes = rows.map((row) => ({
-      ...row,
+    const nodes: NodeDetail[] = rows.map((row) => ({
+      ...this.toNodeBase(row),
       capabilities: {
         executors: [],
         resources: [],
@@ -211,10 +212,23 @@ export class NodesService {
     }
 
     return {
-      ...row,
+      ...this.toNodeBase(row),
       capabilities: { executors, resources, tools, runtimes, services },
       resources: { cpu: { used: 0, total: 0 }, ram: { used: '0GB', total: '0GB' } },
       taskHistory: { total: 0, completed: 0, failed: 0 },
+    };
+  }
+
+  /** Map a node DB row to the API Node type (timestamps as ISO strings). */
+  private toNodeBase(row: schema.NodeRow): Node {
+    return {
+      id: row.id,
+      name: row.name,
+      status: row.status,
+      version: row.version,
+      registeredAt: row.registeredAt.toISOString(),
+      lastHeartbeatAt: row.lastHeartbeatAt?.toISOString() ?? null,
+      currentTaskId: row.currentTaskId,
     };
   }
 

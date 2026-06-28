@@ -176,7 +176,7 @@ Node
   │
   └── Executors
         ├── GitHub Executor      (MVP)
-        ├── Docker Executor      (future)
+        ├── Docker Executor      (MVP — see ADR-004)
         ├── Wasm Executor        (future)
         ├── Python Executor      (future)
         ├── Flutter Executor     (future)
@@ -201,15 +201,21 @@ Input:  { repository, branch, issue, instructions, aiProvider }
   └── Upload logs → Done
 ```
 
-**Example: Docker Executor (future)**
+**Example: Docker Executor (MVP — [ADR-004](architecture/decisions/ADR-004-docker-executor.md))**
+
+A *self-contained agent image*: the node injects task context as env vars and
+runs the container, which performs the full clone → AI → tests → PR pipeline
+itself and writes `/artifacts/result.json`.
 
 ```
-Input:  { image, command, mounts, environment }
+Input:  { image, registryCredentials?, repository, branch, issue, instructions, repoToken }
   │
-  ├── Pull image
-  ├── Run container
-  ├── Collect logs
-  └── Return output
+  ├── (optional) docker login   (private registry)
+  ├── docker pull <image>
+  ├── docker run --rm  (env: DUM360_*, AI_API_KEY, GITHUB_TOKEN; volume: /artifacts)
+  │      └── container does clone → AI → tests → commit → push → PR
+  ├── Read /artifacts/result.json  (prUrl, branch, commitSha, diff)
+  └── Report status + exit code → Done
 ```
 
 #### Capability = *What the Node Can Provide*

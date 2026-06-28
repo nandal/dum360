@@ -2,6 +2,7 @@
   "name": "dum360",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@10.9.2",
   "description": "DUM360 — Distributed AI Execution Mesh",
   "workspaces": [
     "packages/*",

@@ -5,9 +5,9 @@
  *   Data mapping is delegated to task-mapper.ts.
  */
 import { Injectable, Inject, NotFoundException, Logger } from '@nestjs/common';
-import { eq, and, desc, sql } from 'drizzle-orm';
+import { eq, and, desc, sql, isNull } from 'drizzle-orm';
 import { DRIZZLE_DB } from '@dum360/shared';
-import type { CreateTaskRequest, Task, TaskDetail, TaskListQuery, TaskStatus } from '@dum360/shared';
+import type { CreateTaskRequest, Task, TaskAssignPayload, TaskDetail, TaskListQuery, TaskStatus } from '@dum360/shared';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../database/schema';
 import { toTask, toStateTransition } from './task-mapper';
@@ -25,10 +25,11 @@ export class TasksService {
 
   /** Create a new task from an API/webhook request. Sets initial state to queued. */
   async create(req: CreateTaskRequest): Promise<Task> {
-    const [count] = await this.db
+    const [queued] = await this.db
       .select({ count: sql<number>`count(*)` })
       .from(schema.tasks)
       .where(eq(schema.tasks.status, 'queued'));
+    const queuedCount = Number(queued?.count ?? 0);
 
     const [task] = await this.db
       .insert(schema.tasks)
@@ -41,15 +42,23 @@ export class TasksService {
         issueBody: req.issue?.body ?? null,
         instructions: req.instructions,
         aiProvider: req.aiProvider,
+        image: req.image ?? null,
+        registryCredentials: req.registryCredentials ?? null,
         timeoutSeconds: req.timeout ?? 3600,
         priority: req.priority ?? 'normal',
-        position: count + 1,
+        position: queuedCount + 1,
       })
       .returning();
 
-    if (req.requirements?.length) {
+    // Route docker tasks only to nodes that advertise a "docker" capability.
+    const capabilityNames = new Set(
+      (req.requirements ?? []).map((r) => r.capabilityName),
+    );
+    if (req.executor === 'docker') capabilityNames.add('docker');
+
+    if (capabilityNames.size) {
       await this.db.insert(schema.taskRequirements).values(
-        req.requirements.map((r) => ({ taskId: task.id, capabilityName: r.capabilityName })),
+        [...capabilityNames].map((capabilityName) => ({ taskId: task.id, capabilityName })),
       );
     }
 
@@ -121,16 +130,13 @@ export class TasksService {
   }
 
   /** Build task payload for node assignment including ephemeral repo token. */
-  async getTaskPayload(taskId: string): Promise<{
-    taskId: string; executor: string; timeout: number; repository: string;
-    branch: string; instructions: string; aiProvider: string;
-    repoToken: string; tokenExpiresAt: string;
-  } | null> {
+  async getTaskPayload(taskId: string): Promise<TaskAssignPayload | null> {
     const [task] = await this.db
       .select().from(schema.tasks).where(eq(schema.tasks.id, taskId)).limit(1);
 
     if (!task) return null;
 
+    // MVP: static delegated token. Real GitHub App minting is a follow-up.
     const repoToken = process.env.GITHUB_TOKEN ?? 'ghs_placeholder';
     const expiresAt = new Date(Date.now() + 3600 * 1000).toISOString();
 
@@ -139,9 +145,55 @@ export class TasksService {
       .where(eq(schema.tasks.id, taskId));
 
     return {
-      taskId: task.id, executor: task.executor, timeout: task.timeoutSeconds,
-      repository: task.repository, branch: task.branch, instructions: task.instructions,
-      aiProvider: task.aiProvider, repoToken, tokenExpiresAt: expiresAt,
+      taskId: task.id,
+      executor: task.executor,
+      timeout: task.timeoutSeconds,
+      repository: task.repository,
+      branch: task.branch,
+      issue: task.issueNumber
+        ? {
+            number: task.issueNumber,
+            title: task.issueTitle ?? '',
+            body: task.issueBody ?? undefined,
+          }
+        : null,
+      instructions: task.instructions,
+      aiProvider: task.aiProvider,
+      image: task.image ?? undefined,
+      registryCredentials:
+        (task.registryCredentials as TaskAssignPayload['registryCredentials']) ?? undefined,
+      repoToken,
+      tokenExpiresAt: expiresAt,
     };
+  }
+
+  /**
+   * Node-facing poll: return the payload for a task assigned to this node that
+   * has not yet been delivered (startedAt is set on first delivery to avoid
+   * redelivering). Returns null when the node has no pending task.
+   */
+  async getNextTaskForNode(nodeId: string): Promise<TaskAssignPayload | null> {
+    const [task] = await this.db
+      .select()
+      .from(schema.tasks)
+      .where(
+        and(
+          eq(schema.tasks.nodeId, nodeId),
+          eq(schema.tasks.status, 'running'),
+          isNull(schema.tasks.startedAt),
+        ),
+      )
+      .orderBy(schema.tasks.priority, schema.tasks.position)
+      .limit(1);
+
+    if (!task) return null;
+
+    // Mark as delivered so a subsequent poll won't hand out the same task.
+    await this.db
+      .update(schema.tasks)
+      .set({ startedAt: new Date() })
+      .where(eq(schema.tasks.id, task.id));
+
+    return this.getTaskPayload(task.id);
   }
 }

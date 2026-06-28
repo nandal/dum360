@@ -17,5 +17,3 @@ export const heartbeatRequestSchema = z.object({
 	runningTasks: z.number().int().min(0),
 	version: z.string().max(32),
 });
-
-export type HeartbeatRequest = z.infer<typeof heartbeatRequestSchema>;

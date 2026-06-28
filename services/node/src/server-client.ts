@@ -63,7 +63,7 @@ export class ServerClient {
 	// ─── Task Result ─────────────────────────────────────────────────────
 
 	async reportTaskResult(
-		req: TaskResultRequest & { nodeId: string },
+		req: TaskResultRequest & { nodeId: string; taskId: string },
 	): Promise<void> {
 		return this.request("PATCH", `/tasks/${req.taskId}/result`, req);
 	}

@@ -46,7 +46,11 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health | grep -v red"]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -sf http://localhost:9200/_cluster/health | grep -v red",
+        ]
       interval: 10s
       timeout: 5s
       retries: 8
@@ -85,7 +89,11 @@ services:
       log:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8080/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -111,7 +119,11 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8081/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -136,7 +148,11 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8082/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -156,7 +172,11 @@ services:
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/health 2>/dev/null | grep -q healthy"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:8083/health 2>/dev/null | grep -q healthy",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -173,8 +193,14 @@ services:
       NODE_NAME: node-1
       REGISTRATION_TOKEN: test-token-please-change
       AI_PROVIDER: claude
+      AI_API_KEY: ${AI_API_KEY:-}
     ports:
       - "9091:9090"
+    # Docker executor needs a daemon. MVP mounts the host socket — note this
+    # gives the node broad host privileges (sibling containers). DinD is a
+    # hardening follow-up.
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       gateway:
         condition: service_healthy
@@ -188,8 +214,11 @@ services:
       NODE_NAME: node-2
       REGISTRATION_TOKEN: test-token-please-change
       AI_PROVIDER: claude
+      AI_API_KEY: ${AI_API_KEY:-}
     ports:
       - "9092:9090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       gateway:
         condition: service_healthy

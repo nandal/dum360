@@ -1,6 +1,7 @@
 FROM node:22-alpine
 
-RUN apk add --no-cache git openssh-client curl wget bash
+# docker-cli lets the Docker executor drive the host daemon via the mounted socket
+RUN apk add --no-cache git openssh-client curl wget bash docker-cli
 
 # CLI stubs (MPP — production uses real gh, claude, codex, gemini)
 RUN printf '#!/bin/sh\necho "[gh stub] $@"' | tee /usr/local/bin/gh > /dev/null && chmod +x /usr/local/bin/gh

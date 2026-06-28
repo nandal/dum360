@@ -9,5 +9,3 @@ export const logEntryRequestSchema = z.object({
 	step: z.string().min(1).max(64),
 	message: z.string().min(1),
 });
-
-export type LogEntryRequest = z.infer<typeof logEntryRequestSchema>;

@@ -13,7 +13,6 @@ type ProbeMap = {
 const PROBES: ProbeMap[] = [
 	{ tool: "git", category: "tool" },
 	{ tool: "gh", category: "tool" },
-	{ tool: "docker", category: "tool" },
 	{ tool: "go", category: "runtime" },
 	{ tool: "python3", category: "runtime" },
 	{ tool: "node", category: "runtime" },
@@ -39,6 +38,16 @@ async function probeBinary(
 	}
 }
 
+/** True when a Docker daemon is reachable (CLI present + `docker info` works). */
+async function dockerDaemonAvailable(): Promise<boolean> {
+	try {
+		execSync("docker info", { timeout: 10_000, stdio: "pipe" });
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 export async function detectCapabilities(): Promise<DeclaredCapabilities> {
 	const result: DeclaredCapabilities = {
 		executors: [],
@@ -55,6 +64,12 @@ export async function detectCapabilities(): Promise<DeclaredCapabilities> {
 		{ id: "cpu", value: String(cpuCount) },
 		{ id: "ram", value: `${ramGb}GB` },
 	);
+
+	// Docker executor: only advertised when the daemon is actually reachable,
+	// so the scheduler never routes container tasks to a CLI-only node.
+	if (await dockerDaemonAvailable()) {
+		result.executors.push({ id: "docker" });
+	}
 
 	// Probe binaries
 	for (const { tool, category } of PROBES) {

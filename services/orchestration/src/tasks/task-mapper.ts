@@ -25,6 +25,7 @@ export function toTask(row: schema.TaskRow): Task {
 		issueBody: row.issueBody,
 		instructions: row.instructions,
 		aiProvider: row.aiProvider,
+		image: row.image ?? null,
 		timeoutSeconds: row.timeoutSeconds,
 		priority: row.priority,
 		nodeId: row.nodeId,

@@ -23,5 +23,3 @@ export const registerNodeRequestSchema = z.object({
 });
 
 export const nodeStatusSchema = z.enum(["online", "offline", "busy"]);
-
-export type RegisterNodeRequest = z.infer<typeof registerNodeRequestSchema>;

@@ -102,7 +102,8 @@ export class SchedulerService {
             ) ASC`,
     );
 
-    const nodes = availableNodes.rows as Array<{
+    // postgres-js `db.execute` returns the row list directly (array-like).
+    const nodes = availableNodes as unknown as Array<{
       id: string;
       status: string;
       cpu_used: number;

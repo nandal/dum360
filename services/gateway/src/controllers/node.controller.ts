@@ -6,10 +6,12 @@ import {
   Body,
   Param,
   Query,
+  Req,
   UseGuards,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import type { Request } from 'express';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import {
   JwtNodeGuard,
@@ -78,12 +80,16 @@ export class NodeController {
   @ApiResponse({ status: 200, description: 'Task available' })
   @ApiResponse({ status: 204, description: 'No task available' })
   async pollNextTask(
+    @Req() req: Request,
     @Query('wait') wait?: string,
   ): Promise<TaskAssignPayload | undefined> {
+    // Identity comes from the validated node JWT (sub = nodeId), never the client.
+    const nodeId = (req as Request & { user?: { sub?: string } }).user?.sub;
     return this.proxy.forward<TaskAssignPayload | undefined>('ORCHESTRATION', {
       method: 'GET',
       path: '/tasks/next',
       query: wait ? { wait } : undefined,
+      headers: nodeId ? { 'x-node-id': nodeId } : undefined,
     });
   }
 
