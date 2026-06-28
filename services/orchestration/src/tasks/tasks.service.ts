@@ -11,6 +11,7 @@ import type { CreateTaskRequest, Task, TaskAssignPayload, TaskDetail, TaskListQu
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../database/schema';
 import { toTask, toStateTransition } from './task-mapper';
+import { GitHubTokenService } from '../github/github-token.service';
 
 @Injectable()
 /** Handles task lifecycle from creation to completion. Delegates state transitions to TaskStateMachine. */
@@ -19,6 +20,7 @@ export class TasksService {
 
   constructor(
     @Inject(DRIZZLE_DB) private db: PostgresJsDatabase<typeof schema>,
+    private readonly gitHubToken: GitHubTokenService,
   ) {}
 
   // ─── Create ───────────────────────────────────────────────────────────
@@ -132,12 +134,15 @@ export class TasksService {
 
     if (!task) return null;
 
-    // MVP: static delegated token. Real GitHub App minting is a follow-up.
-    const repoToken = process.env.GITHUB_TOKEN ?? 'ghs_placeholder';
-    const expiresAt = new Date(Date.now() + 3600 * 1000).toISOString();
+    // Mint a per-task, repo-scoped, short-lived credential (GitHub App when
+    // configured; dev static token otherwise). Never a shared placeholder.
+    // NOTE: self-hosted tier (#17) will skip minting and use node-local creds.
+    const minted = await this.gitHubToken.mintForRepo(task.repository);
+    const repoToken = minted.token;
+    const expiresAt = minted.expiresAt.toISOString();
 
     await this.db
-      .update(schema.tasks).set({ repoToken, tokenExpiresAt: new Date(expiresAt) })
+      .update(schema.tasks).set({ repoToken, tokenExpiresAt: minted.expiresAt })
       .where(eq(schema.tasks.id, taskId));
 
     return {

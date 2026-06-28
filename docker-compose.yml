@@ -147,6 +147,12 @@ services:
       REDIS_PORT: "6379"
       JWT_SECRET: test-jwt-secret-32-bytes-minimum!!
       NODE_ENV: development
+      # Per-task GitHub credentials. Prefer a GitHub App (scoped, revocable);
+      # GITHUB_TOKEN is a dev-only static fallback. With none set, task
+      # assignment fails closed (no shared placeholder token).
+      GITHUB_APP_ID: ${GITHUB_APP_ID:-}
+      GITHUB_APP_PRIVATE_KEY: ${GITHUB_APP_PRIVATE_KEY:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
     depends_on:
       postgres:
         condition: service_healthy
