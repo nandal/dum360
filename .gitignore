@@ -12,3 +12,5 @@
 # Docker secrets — NEVER commit real values
 secrets/*
 !secrets/.gitkeep
+node_modules
+.turbo
