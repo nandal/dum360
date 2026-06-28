@@ -8,10 +8,12 @@
     "start:dev": "tsx watch src/main.ts",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "build": "tsc",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@dum360/shared": "workspace:*",
+    "@dum360/shared": "*",
     "@nestjs/bullmq": "^11.0.0",
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",

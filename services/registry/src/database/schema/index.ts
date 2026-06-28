@@ -1,10 +1,16 @@
-export { registrySchema, nodes, nodeStatusEnum } from './nodes';
-export type { NodeRow, NodeInsert } from './nodes';
-export { capabilities, capabilityCategoryEnum } from './capabilities';
-export type { CapabilityRow, CapabilityInsert } from './capabilities';
-export { nodeCapabilities } from './node-capabilities';
-export type { NodeCapabilityRow, NodeCapabilityInsert } from './node-capabilities';
-export { attestationResults } from './attestation-results';
-export type { AttestationResultRow, AttestationResultInsert } from './attestation-results';
-export { heartbeats } from './heartbeats';
-export type { HeartbeatRow, HeartbeatInsert } from './heartbeats';
+export { registrySchema, nodes, nodeStatusEnum } from "./nodes";
+export type { NodeRow, NodeInsert } from "./nodes";
+export { capabilities, capabilityCategoryEnum } from "./capabilities";
+export type { CapabilityRow, CapabilityInsert } from "./capabilities";
+export { nodeCapabilities } from "./node-capabilities";
+export type {
+	NodeCapabilityRow,
+	NodeCapabilityInsert,
+} from "./node-capabilities";
+export { attestationResults } from "./attestation-results";
+export type {
+	AttestationResultRow,
+	AttestationResultInsert,
+} from "./attestation-results";
+export { heartbeats } from "./heartbeats";
+export type { HeartbeatRow, HeartbeatInsert } from "./heartbeats";

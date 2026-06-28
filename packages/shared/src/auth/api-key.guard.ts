@@ -1,9 +1,9 @@
 import {
-  Injectable,
-  type CanActivate,
-  type ExecutionContext,
-  UnauthorizedException,
-} from '@nestjs/common';
+	Injectable,
+	type CanActivate,
+	type ExecutionContext,
+	UnauthorizedException,
+} from "@nestjs/common";
 
 /**
  * Guard that validates the operator API key.
@@ -12,27 +12,27 @@ import {
  */
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  private readonly expectedKey: string | null;
+	private readonly expectedKey: string | null;
 
-  constructor() {
-    this.expectedKey = process.env.API_KEY ?? null;
-  }
+	constructor() {
+		this.expectedKey = process.env.API_KEY ?? null;
+	}
 
-  canActivate(context: ExecutionContext): boolean {
-    // If no API key configured, skip auth (MVP mode)
-    if (!this.expectedKey) return true;
+	canActivate(context: ExecutionContext): boolean {
+		// If no API key configured, skip auth (MVP mode)
+		if (!this.expectedKey) return true;
 
-    const request = context.switchToHttp().getRequest();
-    const apiKey = request.headers['x-api-key'];
+		const request = context.switchToHttp().getRequest();
+		const apiKey = request.headers["x-api-key"];
 
-    if (!apiKey) {
-      throw new UnauthorizedException('Missing X-API-Key header');
-    }
+		if (!apiKey) {
+			throw new UnauthorizedException("Missing X-API-Key header");
+		}
 
-    if (apiKey !== this.expectedKey) {
-      throw new UnauthorizedException('Invalid API key');
-    }
+		if (apiKey !== this.expectedKey) {
+			throw new UnauthorizedException("Invalid API key");
+		}
 
-    return true;
-  }
+		return true;
+	}
 }

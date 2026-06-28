@@ -1,10 +1,13 @@
-import { Module, Global, Logger } from '@nestjs/common';
-import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './drizzle.module-definition';
-import type { DrizzleModuleOptions } from './drizzle.module-definition';
+import { Module, Global, Logger } from "@nestjs/common";
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import {
+	ConfigurableModuleClass,
+	MODULE_OPTIONS_TOKEN,
+} from "./drizzle.module-definition";
+import type { DrizzleModuleOptions } from "./drizzle.module-definition";
 
-export const DRIZZLE_DB = 'DRIZZLE_DB';
+export const DRIZZLE_DB = "DRIZZLE_DB";
 
 /**
  * Global database module.
@@ -18,30 +21,32 @@ export const DRIZZLE_DB = 'DRIZZLE_DB';
  */
 @Global()
 @Module({
-  providers: [
-    {
-      provide: DRIZZLE_DB,
-      inject: [MODULE_OPTIONS_TOKEN],
-      useFactory: (options: DrizzleModuleOptions) => {
-        const logger = new Logger('DrizzleModule');
+	providers: [
+		{
+			provide: DRIZZLE_DB,
+			inject: [MODULE_OPTIONS_TOKEN],
+			useFactory: (options: DrizzleModuleOptions) => {
+				const logger = new Logger("DrizzleModule");
 
-        const client = postgres(options.connectionString, {
-          max: options.maxConnections ?? 10,
-          idle_timeout: options.idleTimeout ?? 30,
-        });
+				const client = postgres(options.connectionString, {
+					max: options.maxConnections ?? 10,
+					idle_timeout: options.idleTimeout ?? 30,
+				});
 
-        logger.log('PostgreSQL connection pool created');
+				logger.log("PostgreSQL connection pool created");
 
-        return drizzle(client, {
-          logger: options.logging ? {
-            logQuery(query, params) {
-              logger.debug({ query, params }, 'SQL');
-            },
-          } : undefined,
-        });
-      },
-    },
-  ],
-  exports: [DRIZZLE_DB],
+				return drizzle(client, {
+					logger: options.logging
+						? {
+								logQuery(query, params) {
+									logger.debug({ query, params }, "SQL");
+								},
+							}
+						: undefined,
+				});
+			},
+		},
+	],
+	exports: [DRIZZLE_DB],
 })
 export class DrizzleModule extends ConfigurableModuleClass {}

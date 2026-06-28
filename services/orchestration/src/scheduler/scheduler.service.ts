@@ -30,6 +30,7 @@ export class SchedulerService {
     @Inject(DRIZZLE_DB) private db: PostgresJsDatabase<typeof schema>,
     @InjectQueue(QUEUE_NAMES.TASK_DISPATCH) private queue: Queue,
     private readonly tasksService: TasksService,
+    private readonly stateMachine: TaskStateMachine,
   ) {
     void this.scheduleCycle();
   }
@@ -116,7 +117,7 @@ export class SchedulerService {
 
     // Assign to first (least utilized) node
     const node = nodes[0];
-    await this.tasksService.assignTask(task.id, node.id);
+    await this.stateMachine.assign(task.id, node.id);
 
     // Enqueue dispatch notification for the node
     await this.queue.add('dispatch', {

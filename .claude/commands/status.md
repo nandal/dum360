@@ -3,71 +3,87 @@ description: "CEO Dashboard — cross-team status report on DUM360 progress"
 argument-hint: "[--detailed]"
 ---
 
-You are running a **status check** across the **DUM360** project. Act as a Chief of Staff reporting to the CEO (Sandeep Nandal).
+You are running a **status check** across the **DUM360 — Distributed AI Execution Mesh** project. Act as a Chief of Staff reporting to the CEO (Sandeep Nandal).
 
 ## Context
 
-DUM360 is currently early-stage: a public **landing page** (`index.html` → dum360.com) plus a **PRD** and **research docs** in `docs/`. There is no application code yet — so "status" is largely about how complete and consistent the docs, narrative, and plans are, and what should be built next.
+DUM360 is building the MVP defined in `docs/PRD.md`: a server-node architecture that allows any trusted computer to become an AI execution node. The MVP demonstrates remote AI task execution on GitHub Issues via a GitHub executor.
+
+The project has a PRD, scaffolded server/node directories, and is moving toward implementation.
 
 ## What To Check
 
 ### PRODUCT & DOCS
-1. **PRD** — Is `docs/PRD.md` current and internally consistent? Any gaps vs the stated vision?
-2. **Benchmark/claims** — Does `docs/compute-benchmark.md` exist and are its numbers reflected honestly in the landing page and any marketing?
-3. **Partnership materials** — `docs/partnership-note.md` and anything in `docs/bizdev/`.
-4. **Roadmap** — Does `docs/ROADMAP.md` exist? Are the PRD phases (Alpha → Beta/Partnerships → National Scale & Mobile) tracked?
+1. **PRD** — Is `docs/PRD.md` current and internally consistent? Any gaps?
+2. **README** — Does `README.md` reflect the current MVP vision? Clear for first-time visitors?
+3. **Roadmap** — Is `ROADMAP.md` aligned with the PRD's MVP success criteria?
+4. **Architecture docs** — Anything in `docs/architecture/`? Component designs, sequence diagrams?
 
-### ENGINEERING (mostly not-yet-started — report honestly)
-5. **Architecture** — anything in `docs/architecture/`? Orchestrator / node-agent / inference design specced?
-6. **Web** — `index.html` state: does the messaging match the PRD and benchmark? CTAs working?
-7. **Node agent / SDK** — any code or spec yet?
-8. **Mobile** — any provider-app code or spec yet?
+### ENGINEERING
+5. **Server** — `dum360-server/`: any Go code yet? Which endpoints are implemented?
+6. **Node** — `dum360-node/`: any Go code yet? GitHub executor implemented?
+7. **Dashboard** — Any frontend code? Which pages exist?
+8. **CLI** — Any CLI tooling?
+9. **Docker Compose** — Does `docker-compose.yml` exist and work?
 
-### BUSINESS & OPS (check for artifacts in docs/)
-9. **BD** — `docs/bizdev/` partnership pipeline (universities, cloud providers, solar, govt, AI clients)?
-10. **Marketing** — `docs/marketing/` positioning/content?
-11. **Community** — `docs/community/` onboarding/contributor materials?
-12. **Legal** — `docs/legal/` DPDP/sovereignty/payments analysis?
-13. **Security** — `docs/security/` threat models, sandbox/attestation design?
-14. **Research** — `docs/research/` memos beyond the benchmark?
+### TESTING
+10. **Tests** — Server tests? Node tests? Integration tests? Coverage?
+11. **CI** — GitHub Actions workflows? Linting, testing, building?
+
+### COMMUNITY & OPS
+12. **Contributor docs** — `CONTRIBUTING.md` up to date?
+13. **Issues/PRs** — Open issues count, stale PRs, community engagement.
+14. **Security** — `docs/security/` artifacts? Recent security review?
 
 ### INFRASTRUCTURE
-15. **Consistency** — any claim anywhere (site/docs) that contradicts `docs/compute-benchmark.md`? (Honesty is the moat — flag drift.)
-16. **Git** — branch, uncommitted changes, recent commits.
+15. **Git** — Current branch, uncommitted changes, recent commits.
+16. **Consistency** — Any claim in docs/site that contradicts the PRD or current code state?
 
 ## How To Run
-- Use `ls`/glob over `docs/` and the repo, read key files, and run `git status` / `git log --oneline -5`.
-- Be honest about what does NOT exist yet — this is an early project; the value is an accurate picture, not a green dashboard.
+- Use `ls`/glob over the repo, read key files, and run `git status` / `git log --oneline -10`.
+- Be honest about what does NOT exist yet — this is an early project; accuracy matters more than a green report.
 
 ## Output Format
 
 ```
 DUM360 — CEO STATUS REPORT
-==========================
+===========================
 
 --- PRODUCT & DOCS ---
 PRD:        [current / gaps]
-BENCHMARK:  [present] [claims consistent with site: yes/no]
-ROADMAP:    [exists / missing] [phase tracking]
-PARTNER:    [materials present?]
+README:     [reflects MVP? clear for visitors?]
+ROADMAP:    [aligned with MVP criteria?]
+ARCHITECTURE: [docs/architecture/ artifacts present?]
 
 --- ENGINEERING ---
-ARCH:       [specced / not started]
-WEB:        [index.html — messaging matches docs? CTAs ok?]
-AGENT/SDK:  [code/spec / not started]
-MOBILE:     [code/spec / not started]
+SERVER:     [endpoints implemented / total]
+NODE:       [components built / total]
+DASHBOARD:  [pages built / total]
+CLI:        [commands built / total]
+DOCKER:     [compose file exists? works?]
 
---- BUSINESS & OPS ---
-BD:         [summary]
-MARKETING:  [summary]
-COMMUNITY:  [summary]
-LEGAL:      [summary]
-SECURITY:   [summary]
-RESEARCH:   [summary]
+--- TESTING ---
+TESTS:      [coverage summary]
+CI:         [workflows active?]
+
+--- COMMUNITY ---
+CONTRIBUTING: [up to date?]
+ISSUES/PRs:   [open / stale / active]
 
 --- INFRA ---
-CONSISTENCY:[claims drift vs benchmark? yes/no — list any]
-GIT:        [branch] [clean/dirty] [last commit]
+GIT:        [branch] [clean/dirty] [last 5 commits]
+CONSISTENCY: [claims consistent? any drift?]
+
+MVP SUCCESS CRITERIA STATUS:
+1. [ ] Two nodes connected simultaneously
+2. [ ] @dum360 webhook received
+3. [ ] Task created from webhook
+4. [ ] Scheduler allocates to node
+5. [ ] Node clones repository
+6. [ ] AI completes work
+7. [ ] Tests pass
+8. [ ] PR created
+9. [ ] GitHub updated with results
 
 TOP 3 PRIORITIES:
 1. ...
@@ -78,4 +94,4 @@ BLOCKERS / DECISIONS NEEDED (CEO):
 - ...
 ```
 
-If `--detailed` is passed, expand each section with specifics and file references.
+If `--detailed` is passed, expand each section with specifics, file references, and line counts.

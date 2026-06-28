@@ -11,139 +11,144 @@
  *   7. Push branch
  *   8. Create Pull Request
  */
-import { execSync, exec } from 'node:child_process';
-import { mkdirSync, existsSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { promisify } from 'node:util';
-import type { TaskAssignPayload, TaskResultRequest } from '@dum360/shared';
-import type { Executor, LogEntry } from './executor.interface';
+import { execSync, exec } from "node:child_process";
+import { mkdirSync, existsSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { promisify } from "node:util";
+import type { TaskAssignPayload, TaskResultRequest } from "@dum360/shared";
+import type { Executor, LogEntry } from "./executor.interface";
 
 const execAsync = promisify(exec);
 
 export class GitHubExecutor implements Executor {
-  private readonly gitPath: string;
-  private readonly ghPath: string;
-  private readonly aiCli: string;
-  private readonly workDir: string;
+	private readonly gitPath: string;
+	private readonly ghPath: string;
+	private readonly aiCli: string;
+	private readonly workDir: string;
 
-  constructor(options: {
-    gitPath?: string;
-    ghPath?: string;
-    aiCli?: string;
-    workDir: string;
-    aiProvider: string;
-  }) {
-    this.gitPath = options.gitPath ?? 'git';
-    this.ghPath = options.ghPath ?? 'gh';
-    this.workDir = options.workDir;
-    this.aiCli = options.aiProvider;
-  }
+	constructor(options: {
+		gitPath?: string;
+		ghPath?: string;
+		aiCli?: string;
+		workDir: string;
+		aiProvider: string;
+	}) {
+		this.gitPath = options.gitPath ?? "git";
+		this.ghPath = options.ghPath ?? "gh";
+		this.workDir = options.workDir;
+		this.aiCli = options.aiProvider;
+	}
 
-  id(): string {
-    return 'github';
-  }
+	id(): string {
+		return "github";
+	}
 
-  canHandle(task: TaskAssignPayload): boolean {
-    return task.executor === 'github';
-  }
+	canHandle(task: TaskAssignPayload): boolean {
+		return task.executor === "github";
+	}
 
-  async execute(
-    task: TaskAssignPayload,
-    onLog: (entry: LogEntry) => Promise<void>,
-  ): Promise<TaskResultRequest['artifacts']> {
-    const workDir = join(this.workDir, task.taskId);
-    mkdirSync(workDir, { recursive: true });
+	async execute(
+		task: TaskAssignPayload,
+		onLog: (entry: LogEntry) => Promise<void>,
+	): Promise<TaskResultRequest["artifacts"]> {
+		const workDir = join(this.workDir, task.taskId);
+		mkdirSync(workDir, { recursive: true });
 
-    const log = (step: string, message: string, level: LogEntry['level'] = 'info') =>
-      onLog({ timestamp: new Date().toISOString(), level, step, message });
+		const log = (
+			step: string,
+			message: string,
+			level: LogEntry["level"] = "info",
+		) => onLog({ timestamp: new Date().toISOString(), level, step, message });
 
-    const branch = `dum360/${task.taskId}`;
+		const branch = `dum360/${task.taskId}`;
 
-    try {
-      // 1. Clone repository
-      await log('clone', `Cloning ${task.repository}...`);
-      const cloneUrl = `https://x-access-token:${task.repoToken}@github.com/${task.repository}.git`;
-      await this.run(`git clone --depth 1 ${cloneUrl} ${workDir}`);
+		try {
+			// 1. Clone repository
+			await log("clone", `Cloning ${task.repository}...`);
+			const cloneUrl = `https://x-access-token:${task.repoToken}@github.com/${task.repository}.git`;
+			await this.run(`git clone --depth 1 ${cloneUrl} ${workDir}`);
 
-      // 2. Checkout base branch
-      await log('checkout', `Checking out ${task.branch}`);
-      await this.run(`git checkout ${task.branch}`, workDir);
+			// 2. Checkout base branch
+			await log("checkout", `Checking out ${task.branch}`);
+			await this.run(`git checkout ${task.branch}`, workDir);
 
-      // 3. Create work branch
-      await log('branch', `Creating branch ${branch}`);
-      await this.run(`git checkout -b ${branch}`, workDir);
+			// 3. Create work branch
+			await log("branch", `Creating branch ${branch}`);
+			await this.run(`git checkout -b ${branch}`, workDir);
 
-      // 4. Invoke AI CLI
-      await log('ai', `Invoking ${this.aiCli}...`);
-      const promptFile = join(workDir, '.dum360-prompt.txt');
-      writeFileSync(promptFile, task.instructions);
+			// 4. Invoke AI CLI
+			await log("ai", `Invoking ${this.aiCli}...`);
+			const promptFile = join(workDir, ".dum360-prompt.txt");
+			writeFileSync(promptFile, task.instructions);
 
-      await this.run(
-        `${this.aiCli} --prompt-file ${promptFile} --output-dir ${workDir}`,
-        workDir,
-      );
+			await this.run(
+				`${this.aiCli} --prompt-file ${promptFile} --output-dir ${workDir}`,
+				workDir,
+			);
 
-      // 5. Run tests
-      await log('test', 'Running tests...');
-      try {
-        await this.run('npm test', workDir);
-        await log('test', 'Tests passed', 'info');
-      } catch {
-        await log('test', 'Tests failed — continuing', 'warn');
-      }
+			// 5. Run tests
+			await log("test", "Running tests...");
+			try {
+				await this.run("npm test", workDir);
+				await log("test", "Tests passed", "info");
+			} catch {
+				await log("test", "Tests failed — continuing", "warn");
+			}
 
-      // 6. Commit changes
-      await log('commit', 'Committing changes...');
-      await this.run('git add -A', workDir);
-      await this.run(
-        `git commit -m "dum360: ${task.issue?.title ?? task.instructions.slice(0, 72)}"`,
-        workDir,
-      );
+			// 6. Commit changes
+			await log("commit", "Committing changes...");
+			await this.run("git add -A", workDir);
+			await this.run(
+				`git commit -m "dum360: ${task.issue?.title ?? task.instructions.slice(0, 72)}"`,
+				workDir,
+			);
 
-      // 7. Push branch
-      await log('push', `Pushing ${branch}...`);
-      await this.run(`git push origin ${branch}`, workDir);
+			// 7. Push branch
+			await log("push", `Pushing ${branch}...`);
+			await this.run(`git push origin ${branch}`, workDir);
 
-      // 8. Create Pull Request
-      await log('pr', 'Creating Pull Request...');
-      const prResult = await this.run(
-        `gh pr create --title "${task.issue?.title ?? 'DUM360: AI Fix'}" --body "🤖 Automated PR by DUM360\n\nCloses #${task.issue?.number ?? '?'}" --base ${task.branch}`,
-        workDir,
-      );
+			// 8. Create Pull Request
+			await log("pr", "Creating Pull Request...");
+			const prResult = await this.run(
+				`gh pr create --title "${task.issue?.title ?? "DUM360: AI Fix"}" --body "🤖 Automated PR by DUM360\n\nCloses #${task.issue?.number ?? "?"}" --base ${task.branch}`,
+				workDir,
+			);
 
-      const prUrl = prResult.stdout.trim();
+			const prUrl = prResult.stdout.trim();
 
-      await log('done', `PR created: ${prUrl}`);
+			await log("done", `PR created: ${prUrl}`);
 
-      return {
-        branch,
-        prUrl,
-        diff: await this.run('git diff --stat', workDir).then((r) => r.stdout.trim()),
-      };
-    } catch (error) {
-      await log('error', `Execution failed: ${error}`, 'error');
-      throw error;
-    }
-  }
+			return {
+				branch,
+				prUrl,
+				diff: await this.run("git diff --stat", workDir).then((r) =>
+					r.stdout.trim(),
+				),
+			};
+		} catch (error) {
+			await log("error", `Execution failed: ${error}`, "error");
+			throw error;
+		}
+	}
 
-  async probe(): Promise<{ passed: boolean; reason?: string }> {
-    try {
-      execSync(`${this.gitPath} --version`, { stdio: 'pipe' });
-      execSync(`${this.ghPath} --version`, { stdio: 'pipe' });
-      return { passed: true };
-    } catch {
-      return { passed: false, reason: 'git or gh CLI not found' };
-    }
-  }
+	async probe(): Promise<{ passed: boolean; reason?: string }> {
+		try {
+			execSync(`${this.gitPath} --version`, { stdio: "pipe" });
+			execSync(`${this.ghPath} --version`, { stdio: "pipe" });
+			return { passed: true };
+		} catch {
+			return { passed: false, reason: "git or gh CLI not found" };
+		}
+	}
 
-  private async run(
-    command: string,
-    cwd?: string,
-  ): Promise<{ stdout: string; stderr: string }> {
-    return execAsync(command, {
-      cwd,
-      timeout: 300_000, // 5 min per step
-      env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
-    });
-  }
+	private async run(
+		command: string,
+		cwd?: string,
+	): Promise<{ stdout: string; stderr: string }> {
+		return execAsync(command, {
+			cwd,
+			timeout: 300_000, // 5 min per step
+			env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
+		});
+	}
 }
