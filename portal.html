@@ -247,6 +247,50 @@
       .btn-danger:hover {
         background: #fff5f5;
       }
+      .contrib-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      @media (max-width: 520px) {
+        .contrib-links {
+          grid-template-columns: 1fr;
+        }
+      }
+      .contrib-link {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        text-decoration: none;
+        color: var(--ink);
+        background: #fff;
+        transition:
+          border-color 0.18s,
+          transform 0.18s,
+          box-shadow 0.2s;
+      }
+      .contrib-link:hover {
+        border-color: var(--brand);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+      }
+      .contrib-link .ci {
+        font-size: 18px;
+        line-height: 1.4;
+      }
+      .contrib-link .lk {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .contrib-link .sub {
+        display: block;
+        font-weight: 400;
+        font-size: 12.5px;
+        color: var(--ink-soft);
+      }
       .toast {
         display: none;
         margin-bottom: 20px;
@@ -370,6 +414,112 @@
               Questions? <a href="mailto:hello@dum360.com">hello@dum360.com</a>
             </p>
           </div>
+        </div>
+
+        <!-- Contribute on GitHub -->
+        <div class="card" style="margin-top: 20px">
+          <h2>Contribute on GitHub</h2>
+          <p class="muted" style="margin-bottom: 18px">
+            DUM360 is open source and MIT-licensed — the
+            <a
+              href="https://github.com/nandal/dum360"
+              target="_blank"
+              rel="noopener"
+              >repo is public</a
+            >. You don't need to wait for rollout to help build it: raise
+            issues, post comments, open pull requests, run and write tests,
+            and shape the protocol specs.
+          </p>
+          <div class="contrib-links">
+            <a
+              class="contrib-link"
+              href="https://github.com/nandal/dum360/issues/new/choose"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="ci" aria-hidden="true">🐛</span>
+              <span class="lk"
+                >Raise an issue<span class="sub"
+                  >Report a bug or request a feature</span
+                ></span
+              >
+            </a>
+            <a
+              class="contrib-link"
+              href="https://github.com/nandal/dum360/discussions"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="ci" aria-hidden="true">💬</span>
+              <span class="lk"
+                >Join discussions<span class="sub"
+                  >Post comments, ask, propose ideas</span
+                ></span
+              >
+            </a>
+            <a
+              class="contrib-link"
+              href="https://github.com/nandal/dum360/blob/main/CONTRIBUTING.md#4-open-a-pull-request"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="ci" aria-hidden="true">🔀</span>
+              <span class="lk"
+                >Open a pull request<span class="sub"
+                  >Fork, branch, and send a PR</span
+                ></span
+              >
+            </a>
+            <a
+              class="contrib-link"
+              href="https://github.com/nandal/dum360/blob/main/CONTRIBUTING.md#2-set-up-locally"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="ci" aria-hidden="true">🧪</span>
+              <span class="lk"
+                >Run &amp; write tests<span class="sub"
+                  >Set up locally and add coverage</span
+                ></span
+              >
+            </a>
+            <a
+              class="contrib-link"
+              href="https://github.com/nandal/dum360/tree/main/docs/architecture"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="ci" aria-hidden="true">📐</span>
+              <span class="lk"
+                >Write protocol specs<span class="sub"
+                  >Help design agents &amp; orchestrator</span
+                ></span
+              >
+            </a>
+            <a
+              class="contrib-link"
+              href="https://github.com/nandal/dum360/contribute"
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="ci" aria-hidden="true">🌱</span>
+              <span class="lk"
+                >Good first issues<span class="sub"
+                  >Start small with starter tasks</span
+                ></span
+              >
+            </a>
+          </div>
+          <p class="muted" style="margin-top: 16px; font-size: 13px">
+            New to the codebase? Read the
+            <a
+              href="https://github.com/nandal/dum360/blob/main/CONTRIBUTING.md"
+              target="_blank"
+              rel="noopener"
+              >contributing guide</a
+            >
+            first.
+          </p>
         </div>
       </div>
     </div>
