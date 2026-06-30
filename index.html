@@ -1258,6 +1258,92 @@
         }
       }
 
+      /* OPEN SOURCE / CONTRIBUTE */
+      .contrib {
+        margin-top: 52px;
+        border-top: 1px solid var(--line);
+        padding-top: 48px;
+      }
+      .contrib-head {
+        text-align: center;
+        max-width: 680px;
+        margin: 0 auto;
+      }
+      .contrib-head h3 {
+        font-size: 26px;
+        font-weight: 800;
+        margin: 10px 0 10px;
+        color: var(--ink);
+      }
+      .contrib-head p {
+        color: var(--ink-soft);
+        font-size: 16px;
+      }
+      .contrib-cta {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 22px;
+      }
+      .contrib-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 36px;
+      }
+      .contrib-card {
+        display: block;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 22px;
+        text-decoration: none;
+        box-shadow: var(--shadow);
+        transition:
+          transform 0.18s,
+          box-shadow 0.2s,
+          border-color 0.2s;
+      }
+      .contrib-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--brand);
+      }
+      .contrib-card .ci {
+        font-size: 22px;
+        display: block;
+        margin-bottom: 10px;
+      }
+      .contrib-card h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        margin-bottom: 6px;
+      }
+      .contrib-card p {
+        font-size: 14px;
+        color: var(--ink-soft);
+        margin: 0;
+      }
+      .contrib-card .go {
+        display: inline-block;
+        margin-top: 12px;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--brand-ink);
+      }
+      @media (max-width: 900px) {
+        .contrib-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 520px) {
+        .contrib-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
       /* SOVEREIGNTY BANNER */
       .sov {
         border-radius: var(--radius-lg);
@@ -3145,6 +3231,124 @@
               <span class="go">Contribute code →</span>
             </button>
           </div>
+
+          <!-- OPEN SOURCE / CONTRIBUTE ON GITHUB -->
+          <div class="contrib reveal" id="contribute">
+            <div class="contrib-head">
+              <span class="eyebrow">Open source · public repo</span>
+              <h3>Build it in the open on GitHub</h3>
+              <p>
+                DUM360 is public and MIT-licensed — no waitlist needed to
+                contribute. Star the repo, raise issues, open pull requests,
+                run and write tests, join the discussions, or help shape the
+                protocol specs. Everything happens in the open.
+              </p>
+              <div class="contrib-cta">
+                <a
+                  class="btn btn-primary"
+                  href="https://github.com/nandal/dum360"
+                  target="_blank"
+                  rel="noopener"
+                  >★ Star the repo on GitHub</a
+                >
+                <a
+                  class="btn btn-ghost"
+                  href="https://github.com/nandal/dum360/blob/main/CONTRIBUTING.md"
+                  target="_blank"
+                  rel="noopener"
+                  >Read the contributing guide</a
+                >
+              </div>
+            </div>
+            <div class="contrib-grid">
+              <a
+                class="contrib-card"
+                href="https://github.com/nandal/dum360/issues/new/choose"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="ci" aria-hidden="true">🐛</span>
+                <h4>Raise an issue</h4>
+                <p>
+                  Report a bug, request a feature, or flag a gap in the docs —
+                  pick a template and tell us what you found.
+                </p>
+                <span class="go">Open an issue →</span>
+              </a>
+              <a
+                class="contrib-card"
+                href="https://github.com/nandal/dum360/discussions"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="ci" aria-hidden="true">💬</span>
+                <h4>Join the discussion</h4>
+                <p>
+                  Post comments, ask questions, share ideas and weigh in on
+                  direction in GitHub Discussions.
+                </p>
+                <span class="go">Start talking →</span>
+              </a>
+              <a
+                class="contrib-card"
+                href="https://github.com/nandal/dum360/blob/main/CONTRIBUTING.md#4-open-a-pull-request"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="ci" aria-hidden="true">🔀</span>
+                <h4>Open a pull request</h4>
+                <p>
+                  Fork, branch, and send a PR against <code>main</code>. We use
+                  conventional commits and review every change.
+                </p>
+                <span class="go">Send a PR →</span>
+              </a>
+              <a
+                class="contrib-card"
+                href="https://github.com/nandal/dum360/blob/main/CONTRIBUTING.md#2-set-up-locally"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="ci" aria-hidden="true">🧪</span>
+                <h4>Run &amp; write tests</h4>
+                <p>
+                  Clone the repo, run the suite locally, and add tests that keep
+                  the mesh honest and reliable.
+                </p>
+                <span class="go">Set up locally →</span>
+              </a>
+              <a
+                class="contrib-card"
+                href="https://github.com/nandal/dum360/tree/main/docs/architecture"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="ci" aria-hidden="true">📐</span>
+                <h4>Write protocol specs</h4>
+                <p>
+                  Help design the node agent, orchestrator, confidential
+                  sandbox and Rashtra Seva protocol via architecture decision
+                  records.
+                </p>
+                <span class="go">Shape the specs →</span>
+              </a>
+              <a
+                class="contrib-card"
+                href="https://github.com/nandal/dum360/contribute"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="ci" aria-hidden="true">🌱</span>
+                <h4>Find a good first issue</h4>
+                <p>
+                  New here? Start with issues tagged
+                  <code>good-first-issue</code> and
+                  <code>help-wanted</code>.
+                </p>
+                <span class="go">Browse starter tasks →</span>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -3254,18 +3458,33 @@
               </button>
               <div class="faq-a">
                 <div class="faq-a-inner">
-                  Developer contributions are welcome — pick "Developer" in the
-                  <button
-                    class="back-link"
-                    data-join
-                    data-audience="developer"
-                    style="font-size: 15px"
-                  >
-                    join flow
-                  </button>
-                  to get pointed to the repo and contributor list. Rollout is
-                  phased (campus alpha → beta → mobile). Sign up and we'll
-                  notify you for your segment.
+                  Yes — the code is public and MIT-licensed on
+                  <a
+                    href="https://github.com/nandal/dum360"
+                    target="_blank"
+                    rel="noopener"
+                    >GitHub</a
+                  >. No waitlist needed to contribute: you can
+                  <a
+                    href="https://github.com/nandal/dum360/issues/new/choose"
+                    target="_blank"
+                    rel="noopener"
+                    >raise issues</a
+                  >,
+                  <a
+                    href="https://github.com/nandal/dum360/discussions"
+                    target="_blank"
+                    rel="noopener"
+                    >join discussions</a
+                  >, open pull requests, run and write tests, and help shape the
+                  protocol specs — see the
+                  <a
+                    href="https://github.com/nandal/dum360/blob/main/CONTRIBUTING.md"
+                    target="_blank"
+                    rel="noopener"
+                    >contributing guide</a
+                  >. Product rollout is phased (campus alpha → beta → mobile);
+                  sign up and we'll notify you for your segment.
                 </div>
               </div>
             </div>
@@ -3336,6 +3555,13 @@
             <div class="foot-col">
               <h4>Company</h4>
               <button class="linkish" data-join>Join the mesh</button>
+              <a href="#contribute">Contribute</a>
+              <a
+                href="https://github.com/nandal/dum360"
+                target="_blank"
+                rel="noopener"
+                >GitHub</a
+              >
               <a href="#faq">FAQ</a>
               <a href="/privacy.html">Privacy Policy</a>
               <a href="/terms.html">Terms</a>
