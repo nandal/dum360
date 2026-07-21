@@ -197,6 +197,9 @@ export interface ProviderDriver {
   /**
    * Destroy previously provisioned machines.
    * 'drain' waits for the node's current task to finish; 'immediate' does not.
+   *
+   * MUST reject with NotSupportedError if capabilities().supportsOnDemand
+   * is false — see "Drivers that cannot provision" below.
    */
   release(refs: ProviderNodeRef[], mode: 'drain' | 'immediate'): Promise<void>;
 
@@ -206,6 +209,9 @@ export interface ProviderDriver {
    * This is a REPORT, not a cleanup: it MUST NOT delete anything. The caller
    * owns disposal — see "Leak disposal" below. Leaked instances cost the
    * customer real money, so implementing this is required, not optional.
+   *
+   * Unlike provision/release, this returns [] rather than throwing when the
+   * driver provisions nothing — "nothing leaked" is a truthful answer.
    */
   reconcile(owner: AccountId): Promise<ProviderNodeRef[]>;
 }
@@ -214,25 +220,40 @@ export interface ProvisionRequest {
   owner: AccountId;
   /** Bound at registration (#15); the driver does not choose this. */
   tier: 'self-hosted' | 'community' | 'fully-self-hosted';
-  count: number;
   /** Capability names the provisioned image must satisfy. */
   requires: string[];
-  /** Single-use, short-lived; the machine registers with this. */
-  registrationToken: string;
+  /**
+   * One grant per requested machine — grants.length IS the requested count.
+   * Each carries its own single-use token, so instances cannot share one.
+   */
+  grants: ProvisionGrant[];
   deadline: Date;
+}
+
+/** Minted per machine by the provisioning layer, before any resource exists. */
+export interface ProvisionGrant {
+  /** Non-secret correlation id. Survives; joins provider-side to Registry. */
+  provisioningRef: string;
+  /** Secret, single-use, minutes-scale expiry. Scrubbed after redemption. */
+  registrationToken: string;
 }
 
 export interface ProvisionResult {
   provisioned: ProviderNodeRef[];
-  /** Non-fatal partial-failure detail, for operator visibility. */
-  failures: { reason: string; count: number }[];
+  /**
+   * Per-grant failure detail. Names the refs so the caller can revoke their
+   * unredeemed tokens and retry precisely, rather than guessing from a count.
+   */
+  failures: { reason: string; provisioningRefs: string[] }[];
 }
 
 /** Provider-side handle. Deliberately NOT a DUM360 nodeId — the node does not
- *  exist to us until it registers itself. Correlation happens at registration. */
+ *  exist to us until it registers itself. See "Correlation" below. */
 export interface ProviderNodeRef {
   kind: ProviderKind;
   externalId: string;      // e.g. OpenStack server UUID
+  /** The grant this machine was built from — the join key to Registry. */
+  provisioningRef: string;
   provisionedAt: Date;
 }
 
@@ -247,6 +268,61 @@ export interface DriverCapabilities {
   maxConcurrent?: number;
 }
 ```
+
+### Correlation (bridging provisioning and registration)
+
+An earlier draft said "correlation happens at registration" without specifying a mechanism —
+a genuine gap. Without one, a `ProviderNodeRef` returned by `reconcile()` cannot be mapped to a
+registered node, so the caller cannot drain before teardown, cannot avoid deleting a node
+mid-task, and cannot detect double-disposal.
+
+The join key is the **`provisioningRef`**, not the `externalId`. The ordering forces this: the
+provider assigns `externalId` only *after* the create call, but the machine's user-data must be
+written *at* create time — so the identifier that both sides can agree on has to be minted by us,
+beforehand.
+
+```
+provisioning layer mints grant  ──►  { provisioningRef, registrationToken }
+         │                                        │
+         │ passes grant to driver                 │ injected into user-data
+         ▼                                        ▼
+driver creates instance                   machine boots, agent reads grant
+returns ProviderNodeRef{externalId,               │
+        provisioningRef}                          │ POST /register
+         │                                        ▼
+         │                            Registry: validate + consume token,
+         │                            persist provisioningRef on node row
+         └────────────── join on provisioningRef ─┘
+```
+
+Requirements:
+
+- `provisioningRef` is a **non-secret** UUID, distinct from `registrationToken`. The token is a
+  secret that is consumed and scrubbed; it must never be used as a database join key.
+- Registry persists `provisioningRef` on the node row at registration (nullable — manually
+  registered nodes have none).
+- A `ProviderNodeRef` whose `provisioningRef` matches no node row is what "leaked" means, and is
+  exactly what `reconcile()` reports.
+- Disposal resolves `provisioningRef → node` first, so a node with a running task can be drained
+  rather than destroyed under load.
+
+### Drivers that cannot provision
+
+`ManualDriver` represents nodes a human installed; DUM360 cannot conjure or destroy a
+volunteer's laptop. Expressing that as silently-successful no-ops would be a trap: a caller that
+forgot to check `supportsOnDemand` would get an empty-but-successful `ProvisionResult` and
+conclude capacity was requested when nothing happened — a silent failure whose consequence is
+"work never executes."
+
+Following the same principle as tier enforcement — *the flag informs, the throw enforces*:
+
+- `provision()` and `release()` MUST throw `NotSupportedError` when
+  `capabilities().supportsOnDemand` is false.
+- `reconcile()` is the deliberate exception: it MUST return `[]`. A driver that provisions
+  nothing leaks nothing, so an empty result is truthful, and the `provider:reconcile` sweep can
+  iterate every driver uniformly instead of special-casing by capability. (This is the one place
+  where the review's "throw on all three" recommendation is not followed, and the asymmetry is
+  intentional: an empty `provision()` result is a lie, an empty `reconcile()` result is a fact.)
 
 ### Tier enforcement (hard guard, not convention)
 
@@ -299,9 +375,15 @@ owner's account, and (b) a token that outlives the boot it was minted for.
 
 Requirements:
 
+- **One token per machine** — tokens are minted per `ProvisionGrant`, never shared across a
+  batch. A shared token is not single-use by construction, and one compromised instance would
+  otherwise taint its whole cohort.
 - **Single-use and short-lived** — Registry MUST reject reuse and MUST expire the token on the
   order of minutes, not hours. A token valid only until first successful registration bounds the
   window regardless of who reads it.
+- **Unredeemed grants revoked** — tokens for machines that failed to provision (reported in
+  `ProvisionResult.failures`) MUST be revoked immediately rather than left to expire, since they
+  are valid credentials for a node that will never exist.
 - **Scoped** — the token binds `ownerAccountId` and `tier` at mint time ([#15](https://github.com/nandal/dum360/issues/15)), so a stolen token
   cannot be redeemed for a node in a different account or a different tier.
 - **Scrubbed after use** — the node agent removes the token from cloud-init/user-data once
@@ -315,7 +397,7 @@ Requirements:
 
 | Driver | Tier(s) | Notes |
 |---|---|---|
-| `ManualDriver` | community, self-hosted | The status quo, expressed as a driver: `supportsOnDemand: false`, `provision()` is a no-op. Existing behaviour is unchanged. |
+| `ManualDriver` | community, self-hosted | The status quo, expressed as a driver: `supportsOnDemand: false`; `provision()`/`release()` throw `NotSupportedError`, `reconcile()` returns `[]`. Existing behaviour is unchanged. |
 | `OpenStackDriver` | self-hosted, fully-self-hosted | Keystone application credential scoped to a project; Nova or Zun to create workers; teardown on drain. |
 | `KubernetesDriver` | self-hosted | Customers with an existing cluster. |
 
@@ -402,9 +484,16 @@ substitute for the controls above.
   should not start before that lands; `ManualDriver` and the interface itself can.
 - **`DriverCapabilities` must not become a dumping ground.** Each field has to change a real
   decision; descriptive-only fields belong in documentation.
-- **`TierNotPermittedError` and `provider:reconcile` are load-bearing names.** Both are specified
-  above as normative; implementers should not quietly substitute a soft warning for the former or
-  an ad-hoc cron for the latter.
+- **`TierNotPermittedError`, `NotSupportedError` and `provider:reconcile` are load-bearing
+  names.** All are specified above as normative; implementers should not quietly substitute a
+  soft warning for the errors or an ad-hoc cron for the sweep.
+- **`provisioningRef` requires a Registry schema change** — a nullable column on `registry.nodes`
+  plus acceptance of the field in the registration payload. Small, but it is the one place this
+  ADR touches an existing service, and it should land with the interface rather than with
+  `OpenStackDriver`.
+- **Interface Segregation is knowingly traded off.** `ManualDriver` implements three methods it
+  cannot honour, two of which throw. At three drivers this is acceptable; if the roster grows
+  past ~5, split provisioning out of `ProviderDriver` rather than accumulating throwers.
 - **ADR numbering has drifted.** The "Open Architecture Decisions" table in
   [the architecture overview](../README.md) pre-assigned ADR-004 to "monorepo tooling" and
   ADR-005 to "service-to-service auth", but the written ADR-004 and ADR-005 took those numbers
