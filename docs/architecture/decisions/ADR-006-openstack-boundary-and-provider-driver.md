@@ -175,12 +175,19 @@ export type ProviderKind =
 export interface ProviderDriver {
   readonly kind: ProviderKind;
 
-  /** Static description of what this provider can offer. */
+  /**
+   * Static description of what this provider may offer.
+   *
+   * `tiers` is an ALLOW-LIST, not an advertisement. See "Tier enforcement"
+   * below — it is checked, and a driver must also enforce it itself.
+   */
   capabilities(): DriverCapabilities;
 
   /**
    * Create machines that will self-register with Registry.
    *
+   * MUST reject with TierNotPermittedError if req.tier is not in
+   * capabilities().tiers — before creating any resource.
    * MUST embed the supplied registrationToken so the node registers through
    * the normal flow. MUST NOT write to registry.* directly.
    * Partial fulfilment is valid — return what was created.
@@ -194,9 +201,11 @@ export interface ProviderDriver {
   release(refs: ProviderNodeRef[], mode: 'drain' | 'immediate'): Promise<void>;
 
   /**
-   * Reconcile provider-side reality against our records, returning machines we
-   * provisioned that Registry no longer knows about. Leaked VMs cost the
-   * customer real money, so this is required, not optional.
+   * Report machines we provisioned that Registry no longer knows about.
+   *
+   * This is a REPORT, not a cleanup: it MUST NOT delete anything. The caller
+   * owns disposal — see "Leak disposal" below. Leaked instances cost the
+   * customer real money, so implementing this is required, not optional.
    */
   reconcile(owner: AccountId): Promise<ProviderNodeRef[]>;
 }
@@ -239,6 +248,69 @@ export interface DriverCapabilities {
 }
 ```
 
+### Tier enforcement (hard guard, not convention)
+
+An earlier draft of this ADR stated only that `OpenStackDriver` "must never be configured for
+the community tier". A convention in prose is not an enforcement mechanism, so the guard is
+specified here at two layers.
+
+**What actually goes wrong.** The `community` tier means *other people's* public/OSS work runs
+on that node. If a customer's own OpenStack tenancy were registered as `community`, DUM360 would
+schedule untrusted third-party tasks onto that customer's private infrastructure — they would
+bear the compute cost and the blast radius of workloads they never agreed to run. (Note this is
+the inverse of the more obvious fear: the ADR-005 routing invariant already prevents *private*
+work reaching community nodes. The risk introduced by provisioning is the other direction.)
+
+1. **Provisioning layer (caller):** MUST verify `req.tier ∈ driver.capabilities().tiers` before
+   calling `provision()`, and fail closed if not.
+2. **Driver (callee):** MUST re-check and throw `TierNotPermittedError` before creating any
+   resource. `OpenStackDriver` additionally rejects a `community` tier at **construction**, so a
+   bad configuration fails at startup rather than at first provision.
+
+Defence in depth is warranted because these are different failure modes — a caller bug versus a
+deployment misconfiguration. Neither layer may be treated as the other's backstop.
+
+### Leak disposal (who deletes what)
+
+`reconcile()` reports; it does not delete. Disposal is the caller's obligation, and it is explicit:
+
+- The caller **MUST** pass everything `reconcile()` returns to `release(refs, 'immediate')`.
+  A reported-but-undisposed instance is a billing leak on the customer's account.
+- This runs as a **repeatable BullMQ job (`provider:reconcile`)**, following the existing
+  `liveness:sweep` pattern in Registry rather than inventing a second scheduling mechanism.
+- Disposal is deliberately **not** folded into `reconcile()` itself: a delete-on-detect
+  implementation that mis-detects destroys live customer machines, and separating report from
+  action keeps the destructive step logged, attributable, and independently testable.
+- Reconciliation results (found / disposed / failed) must be logged, since silent success here is
+  indistinguishable from a driver that never ran.
+
+### Registration token handling
+
+The `OpenStackDriver` sketch injects `registrationToken` via cloud-init user-data, which on a
+typical OpenStack deployment is readable by **any process on the instance** through the metadata
+service at `169.254.169.254`. Given ADR-005's premise about node operators, this deserves
+explicit treatment rather than being left implicit.
+
+The precise threat is narrower than it first appears, and worth stating accurately: on a
+`self-hosted` node the operator *is* the account owner, so the operator reading their own token
+grants them nothing they do not already have. The real exposures are (a) an unprivileged or
+compromised process on the instance escalating to a **rogue node registration** against the
+owner's account, and (b) a token that outlives the boot it was minted for.
+
+Requirements:
+
+- **Single-use and short-lived** — Registry MUST reject reuse and MUST expire the token on the
+  order of minutes, not hours. A token valid only until first successful registration bounds the
+  window regardless of who reads it.
+- **Scoped** — the token binds `ownerAccountId` and `tier` at mint time ([#15](https://github.com/nandal/dum360/issues/15)), so a stolen token
+  cannot be redeemed for a node in a different account or a different tier.
+- **Scrubbed after use** — the node agent removes the token from cloud-init/user-data once
+  consumed, so it does not persist in instance metadata for the machine's lifetime.
+- **Transport** — delivered and redeemed over HTTPS only.
+- **Post-MVP:** consider delivering the token out of band (short-lived pre-signed URL, or mTLS
+  client credentials baked into a customer-specific image) instead of user-data. Recorded here so
+  the metadata-service exposure is a known, accepted MVP trade-off rather than an oversight.
+
 ### Planned implementations
 
 | Driver | Tier(s) | Notes |
@@ -258,6 +330,27 @@ carrying our metadata tag and reports those Registry has lost track of.
 Because the tenancy belongs to the customer, provisioned nodes are `self-hosted` tier — the
 operator *is* the owner, so [ADR-005](ADR-005-trust-model-and-node-tiers.md)'s secret-theft
 problem does not arise and private repositories are in scope.
+
+#### Prerequisite: customer cloud credential handling (merge gate)
+
+Holding a customer's Keystone application credential is a **new class of secret for DUM360**.
+ADR-005 analysed secrets travelling *to* nodes; this is a long-lived secret held *by the server*
+that grants the ability to create billable infrastructure in someone else's cloud. It is a
+high-value target and enables lateral movement into customer infrastructure if leaked.
+
+This ADR does not solve that, and `OpenStackDriver` **must not merge before it is solved**. The
+design must be recorded (ADR or security spec) and must cover, at minimum:
+
+- **Encryption at rest** — envelope encryption under a KMS; never plaintext in PostgreSQL or env
+- **Least privilege** — the credential is scoped to a single project, with only the roles needed
+  to create and delete instances; broad or admin-scoped credentials are rejected at onboarding
+- **Rotation and revocation** — routine rotation, plus a customer-facing revoke path that is
+  effective immediately
+- **Audit logging** — every access to the credential is attributable to a task or operator
+
+Keystone application credentials are the right primitive precisely because they are scoped,
+independently revocable, and not the user's password — but that is a starting condition, not a
+substitute for the controls above.
 
 ---
 
@@ -289,24 +382,29 @@ problem does not arise and private repositories are in scope.
 
 - We own the entire orchestration core, including the parts OpenStack would have supplied.
 - Provisioning introduces a genuinely new failure class: **leaked instances cost the customer
-  money**. `reconcile()` is mandatory for this reason and must be exercised in tests, not just
-  implemented.
+  money**. `reconcile()` plus the `provider:reconcile` disposal job are mandatory for this reason
+  and must be exercised in tests — including the mis-detection case, since disposal deletes real
+  customer machines.
 - The interface is designed against `ManualDriver` (trivial) and `OpenStackDriver`
   (hypothetical). Expect at least one breaking revision once the latter is real.
 - Holding customer cloud credentials is a new and meaningful security responsibility, adjacent
-  to but distinct from the ADR-005 credential analysis. It needs its own review.
+  to but distinct from the ADR-005 credential analysis. It is now a **merge gate** on
+  `OpenStackDriver` rather than a deferred note — which means that driver cannot be built
+  incrementally without the credential design landing first.
+- The MVP accepts a known weakness: the registration token is exposed to any process on the
+  provisioned instance via the metadata service. It is bounded by single-use, short expiry and
+  owner/tier scoping rather than eliminated.
 
 ### Neutral / Requires Attention
 
 - **Depends on [#15](https://github.com/nandal/dum360/issues/15) (node ownership).** `ProvisionRequest.owner` and `.tier` are
   meaningless until nodes are bound to an account and tier at registration. `OpenStackDriver`
   should not start before that lands; `ManualDriver` and the interface itself can.
-- **`OpenStackDriver` must never be configured to supply the community tier.** A customer's
-  tenancy is theirs; classifying it as community would place OSS-only work on private
-  infrastructure and invert the ADR-005 routing invariant. This deserves a guard, not just a
-  convention.
 - **`DriverCapabilities` must not become a dumping ground.** Each field has to change a real
   decision; descriptive-only fields belong in documentation.
+- **`TierNotPermittedError` and `provider:reconcile` are load-bearing names.** Both are specified
+  above as normative; implementers should not quietly substitute a soft warning for the former or
+  an ad-hoc cron for the latter.
 - **ADR numbering has drifted.** The "Open Architecture Decisions" table in
   [the architecture overview](../README.md) pre-assigned ADR-004 to "monorepo tooling" and
   ADR-005 to "service-to-service auth", but the written ADR-004 and ADR-005 took those numbers
