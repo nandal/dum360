@@ -274,19 +274,25 @@ curl http://localhost:8080/health
 | [ADR-001](decisions/ADR-001-technology-stack.md) | Technology stack — NestJS, Drizzle, BullMQ, Redis Pub/Sub | Proposed |
 | [ADR-002](decisions/ADR-002-database-schemas.md) | Database schemas — 10 tables across registry + orchestration | Proposed |
 | [ADR-003](decisions/ADR-003-logging-infrastructure.md) | Logging infrastructure — ELK stack over PostgreSQL | Proposed |
+| [ADR-004](decisions/ADR-004-docker-executor.md) | Docker executor — containerised agentic execution | Proposed |
+| [ADR-005](decisions/ADR-005-trust-model-and-node-tiers.md) | Trust model & node tiers — self-hosted / community / fully self-hosted | Proposed |
+| [ADR-006](decisions/ADR-006-openstack-boundary-and-provider-driver.md) | OpenStack boundary & the ProviderDriver interface | Proposed |
 
 ---
 
 ## Open Architecture Decisions
 
-| ID | Decision | Context |
-|----|----------|---------|
-| ADR-004 | Monorepo tooling | Turborepo vs Nx vs npm workspaces |
-| ADR-005 | Service-to-service auth | mTLS vs API keys vs internal trust (MVP) |
-| ADR-006 | API Gateway evolution | Stay NestJS vs migrate to Kong/Traefik |
-| ADR-007 | Cross-service data access | Direct DB queries (MVP) vs HTTP API + caching |
-| ADR-008 | Testing strategy | Vitest + Supertest with test containers |
-| ADR-009 | CI/CD pipeline | GitHub Actions vs alternative |
+> IDs are assigned when an ADR is written, not reserved in advance — pre-assigning them caused
+> ADR-004 and ADR-005 to be claimed by other topics.
+
+| Decision | Context |
+|----------|---------|
+| Monorepo tooling | Turborepo vs Nx vs npm workspaces |
+| Service-to-service auth | mTLS vs API keys vs internal trust (MVP) |
+| API Gateway evolution | Stay NestJS vs migrate to Kong/Traefik |
+| Cross-service data access | Direct DB queries (MVP) vs HTTP API + caching |
+| Testing strategy | Vitest + Supertest with test containers |
+| CI/CD pipeline | GitHub Actions vs alternative |
 
 ---
 
