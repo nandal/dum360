@@ -1,0 +1,30 @@
+name: Posture Smoke
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+# Least privilege: this workflow only checks out code and runs a shell script.
+permissions:
+  contents: read
+
+# Cancel superseded runs on the same ref so hung/queued runs don't pile up.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Posture Smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 1
+
+      - name: Run posture smoke test
+        run: sh tests/posture-smoke.sh
