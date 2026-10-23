@@ -7,17 +7,29 @@ on:
     branches: [main, dev]
   workflow_dispatch:
 
+# Least privilege: this workflow only needs read access to scan the tree.
+# GITHUB_TOKEN is passed to the gitleaks step so it can scan pull requests
+# via the API (see commit 2e4955a).
+permissions:
+  contents: read
+
+# Cancel superseded runs on the same ref so hung/queued runs don't pile up.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   gitleaks:
     name: Secret Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 0
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_CONFIG: .gitleaks.toml
