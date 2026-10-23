@@ -1,0 +1,10 @@
+# Dependabot keeps pinned Actions and Docker images current.
+# Because workflows pin to commit SHAs, Dependabot is what proposes the
+# SHA bumps — review and merge them like any other PR.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5

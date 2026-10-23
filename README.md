@@ -71,6 +71,36 @@ See [`ROADMAP.md`](ROADMAP.md) for the full phased plan.
 
 ---
 
+## Setup — Run It Locally
+
+Prerequisites: any static file server. Python 3 is enough; Node tooling is
+only needed for the Firebase CLI.
+
+```bash
+git clone https://github.com/nandal/dum360.git
+cd dum360
+
+# 1. Preview the site (no build step — plain HTML/CSS/JS)
+python3 -m http.server 8000
+# open http://localhost:8000
+
+# 2. Run the same secret scan CI runs (needs gitleaks installed)
+gitleaks detect --no-git --source .
+
+# 3. Wire Firebase + deploy (needs firebase-tools + project access;
+#    manual Console steps remain — see docs/website/DEPLOY.md)
+npm install -g firebase-tools
+firebase login
+./scripts/setup-firebase.sh <project-id> [--create]
+```
+
+With placeholder config the page renders normally and sign-up shows a
+"sign-ups opening soon" message instead of crashing. There is no test suite
+on this branch (static site only); backend services and their vitest suite
+live on the `mvp` branch.
+
+---
+
 ## Contributing
 
 We need builders across the stack — distributed systems, WASM/K3s edge agents, secure enclaves, UPI integration, and more. This is an early-stage project, which means early contributors shape the architecture.
